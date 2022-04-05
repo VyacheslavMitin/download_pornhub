@@ -37,4 +37,4 @@ for item in NAMES:
 
 
 print("Список моделей для скачки:\n", *NAMES, sep='\n')
-# pprint(DICT_LINKS)
+pprint(DICT_LINKS)

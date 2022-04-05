@@ -20,9 +20,9 @@ COMMAND = (
 )
 
 
-for key in DICT_LINKS.keys():
-    PATH = os.path.join(DICT_LINKS.get(key)[0])
-    LINK = DICT_LINKS.get(key)[1]
+for model in DICT_LINKS.keys():
+    PATH = os.path.join(DICT_LINKS.get(model)[0])
+    LINK = DICT_LINKS.get(model)[1]
 
     if not os.path.isdir(PATH):
         os.mkdir(PATH)
