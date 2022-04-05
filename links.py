@@ -1,42 +1,27 @@
+# Модуль генерации путей и ссылок
+
+# Импорты
+import os
+import configparser
 from pprint import pprint
 
-NAMES = (
-    'adventurescouple',
-    'amadani',
-    'aprileighteen',
-    'arrestme',
-    'behindthemaskk',
-    'booty_ass',
-    'bouncingfucks',
-    'broudal',
-    'comerzz',
-    'daisydabs',
-    'danika_mori',
-    'denata',
-    'egg2025',
-    'like2fingers',
-    'lindseylove',
-    'loadsonlucy',
-    'madeincanarias',
-    'marshmallowpussy',
-    'miss-fantasy',
-    'njfromrus',
-    'no1syg',
-    'nofacegirl',
-    'officialbf',
-    'pareja-hub',
-    'sexyyennifer',
-    'svetlanalicious',
-    'that_txguy',
-    'theperfectcpl',
-    'vampirecollective',
-    'leolulu',
-    'mysweetapple',
-)
+# Константы
+config = configparser.ConfigParser()
+config.read('config.ini')
+
+PATH = config.get('SETTINGS', 'path')
+FILE_NAMES = config.get('SETTINGS', 'file_names')
+NAMES = []
+
+with open(FILE_NAMES, 'r') as file:
+    for line in file:  # читать файл построчно
+        NAMES.append(line[:-1].lower())  # откусывая перенос строк и в нижнем регистре
 
 
+# Функции
 def return_path(name):
-    path = f"/Users/sonic/PycharmProjects/download_pornhub/test/{name}"
+    path = f"{PATH}/{name}"
+    path = os.path.join(path)
     return path
 
 
@@ -45,24 +30,11 @@ def return_link(name):
     return link
 
 
-# DICT_LINKS = {
-#     # "denata": (
-#     #     "/Users/sonic/PycharmProjects/download_pornhub/test/denata",
-#     #     "https://www.pornhub.com/model/denata/videos/upload"
-#     # ),
-#     'meredithmilf': (
-#         "/Users/sonic/PycharmProjects/download_pornhub/test/meredithmilf",
-#         "https://rt.pornhub.com/model/meredithmilf/videos/upload"
-#     ),
-#     'sonya-blaze': (
-#         "/Users/sonic/PycharmProjects/download_pornhub/test/sonya-blaze",
-#         "https://rt.pornhub.com/model/sonya-blaze/videos/upload"
-#     ),
-# }
-
 DICT_LINKS = {}
 
 for item in NAMES:
     DICT_LINKS.update({item: (return_path(item), return_link(item))})
 
-pprint(DICT_LINKS)
+
+print("Список моделей для скачки:\n", *NAMES, sep='\n')
+# pprint(DICT_LINKS)
