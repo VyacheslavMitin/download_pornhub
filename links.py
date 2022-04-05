@@ -15,7 +15,8 @@ NAMES = []
 
 with open(FILE_NAMES, 'r') as file:
     for line in file:  # читать файл построчно
-        NAMES.append(line[:-1].lower())  # откусывая перенос строк и в нижнем регистре
+        if line[0] != '#':
+            NAMES.append(line[:-1].lower())  # откусывая перенос строк и в нижнем регистре
 
 
 # Функции
@@ -37,4 +38,4 @@ for item in NAMES:
 
 
 print("Список моделей для скачки:\n", *NAMES, sep='\n')
-pprint(DICT_LINKS)
+# pprint(DICT_LINKS)
