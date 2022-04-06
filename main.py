@@ -21,6 +21,8 @@ COMMAND = (
 )
 
 
+print("Начало загрузки роликов\n".upper())
+
 for model in DICT_LINKS.keys():
     PATH = os.path.join(DICT_LINKS.get(model)[0])
     LINK = DICT_LINKS.get(model)[1]
