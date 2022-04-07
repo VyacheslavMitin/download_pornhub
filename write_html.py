@@ -9,6 +9,7 @@ def write_html(path, name, link):
 
     message = f"""<html>
     <head>Загрузка {name.upper()}</head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <body>
     <p>Ссылка <a href={link}>{link}</a></p>
     <p>Время начала загрузки: {datetime.datetime.now().strftime("%H:%M, %d.%m.%Y г.")}</p>
