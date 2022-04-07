@@ -5,6 +5,7 @@
 # Импорты
 import os
 import subprocess
+from write_html import write_html
 from links import return_dict_downloads, return_models
 
 
@@ -34,6 +35,8 @@ def starting_download():
         if not os.path.isdir(path):
             os.mkdir(path)
         os.chdir(path)
+
+        write_html(path=path, name=model)
 
         print(f"Загрузка модели {model.upper()}")
         download = subprocess.call([
