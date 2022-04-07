@@ -1,14 +1,14 @@
 #!/opt/bin/python
-# Модуль скачки с порнхаба, в зависимостях aria2c и youtube-dl как отдельная программа в PATH
+# Модуль скачки с Порнхаба, в зависимостях aria2c и youtube-dl как отдельная программа в PATH
 # "youtube-dl --external-downloader aria2c -i --console-title"
 
 # Импорты
 import os
 import subprocess
+from links import return_dict_downloads, return_models
 
-from links import DICT_LINKS
 
-COMMAND = (
+COMMAND = (  # команда с параметрами youtube-dl
     "youtube-dl",
     "--ignore-errors",
     "--no-warnings",
@@ -21,17 +21,25 @@ COMMAND = (
 )
 
 
-print("Начало загрузки роликов\n".upper())
+def starting_download():
+    """Функция загрузки контента"""
+    print("\nНачало загрузки роликов\n".upper())
 
-for model in DICT_LINKS.keys():
-    PATH = os.path.join(DICT_LINKS.get(model)[0])
-    LINK = DICT_LINKS.get(model)[1]
+    for model in return_dict_downloads().keys():
+        path = os.path.join(return_dict_downloads().get(model)[0])
+        link = return_dict_downloads().get(model)[1]
 
-    if not os.path.isdir(PATH):
-        os.mkdir(PATH)
-    os.chdir(PATH)
+        if not os.path.isdir(path):
+            os.mkdir(path)
+        os.chdir(path)
 
-    start_download = subprocess.call([
-        *COMMAND,  # распаковка списка с командой youtube-dl
-        LINK,  # передаваемая ссылка
-    ])
+        download = subprocess.call([
+            *COMMAND,  # распаковка списка с командой youtube-dl
+            link,  # передаваемая ссылка
+        ])
+
+
+if __name__ == '__main__':
+    print("Загрузка роликов с PornHub\n".upper())
+    print("Список моделей для скачки:\n".upper(), *return_models(), sep='\n')
+    starting_download()

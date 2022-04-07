@@ -8,34 +8,42 @@ from pprint import pprint
 # Константы
 config = configparser.ConfigParser()
 config.read('config.ini')
-
 PATH = config.get('SETTINGS', 'path')
 FILE_NAMES = config.get('SETTINGS', 'file_names')
+# Массивы данных для будущей работы
 NAMES = []
-
-with open(FILE_NAMES, 'r') as file:
-    for line in file:  # читать файл построчно
-        if line[0] != '#':
-            NAMES.append(line[:-1].lower())  # откусывая перенос строк и в нижнем регистре
+DICT_LINKS = {}
 
 
 # Функции
-def return_path(name):
-    path = f"{PATH}/{name}"
-    path = os.path.join(path)
+def return_models() -> list:
+    """Функция формирования имен моделей для загрузки"""
+    with open(FILE_NAMES, 'r') as file:
+        for line in file:  # читать файл построчно
+            if line[0] != '#':  # если строка не закомментирована
+                NAMES.append(line[:-1].lower())  # откусывая перенос строк и в нижнем регистре
+    return NAMES
+
+
+def return_path(name) -> str:
+    """Функция возврата пути папки для загрузки"""
+    path = f"{PATH}/{name}"  # путь вида '/Users/sonic/PycharmProjects/download_pornhub/test/wettmelons'
+    path = os.path.join(path)  # превращение пути в формат для путей
     return path
 
 
-def return_link(name):
+def return_link(name) -> str:
+    """Функция возврата ссылки для загрузки"""
     link = f"https://www.pornhub.com/model/{name}/videos/upload"
     return link
 
 
-DICT_LINKS = {}
+def return_dict_downloads() -> dict:
+    """Функция возврата данных для загрузки"""
+    for item in return_models():
+        DICT_LINKS.update({item: (return_path(item), return_link(item))})
+    return DICT_LINKS
 
-for item in NAMES:
-    DICT_LINKS.update({item: (return_path(item), return_link(item))})
 
-
-print("Список моделей для скачки:\n", *NAMES, sep='\n')
-# pprint(DICT_LINKS)
+if __name__ == '__main__':
+    pprint(return_dict_downloads())
