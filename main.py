@@ -36,7 +36,7 @@ def starting_download():
             os.mkdir(path)
         os.chdir(path)
 
-        write_html(path=path, name=model)
+        write_html(path=path, name=model, link=link)
 
         print(f"Загрузка модели {model.upper()}")
         download = subprocess.call([
