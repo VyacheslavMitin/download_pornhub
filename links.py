@@ -2,6 +2,7 @@
 
 # Импорты
 import os
+import random
 import configparser
 from pprint import pprint
 
@@ -47,4 +48,5 @@ def return_dict_downloads() -> dict:
 
 
 if __name__ == '__main__':
+    pprint(return_models())
     pprint(return_dict_downloads())
