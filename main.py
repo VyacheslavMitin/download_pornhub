@@ -8,10 +8,12 @@ import subprocess
 from links import return_dict_downloads, return_models
 
 
-COMMAND = (  # команда с параметрами youtube-dl
-    "youtube-dl",
+COMMAND = "youtube-dl"  # команда для вызова youtube-dl
+
+COMMAND_OPTIONS = (  # параметры youtube-dl
     "--ignore-errors",
     "--no-warnings",
+    "--console-title",
     # "--external-downloader", "aria2c",
     # "--external-downloader-arg",
     # "--max-concurrent-downloads=5",
@@ -33,9 +35,11 @@ def starting_download():
             os.mkdir(path)
         os.chdir(path)
 
+        print(f"Загрузка модели {model.upper()}")
         download = subprocess.call([
-            *COMMAND,  # распаковка списка с командой youtube-dl
+            COMMAND,  # распаковка списка с командой youtube-dl
             link,  # передаваемая ссылка
+            *COMMAND_OPTIONS,  # параметры youtube-dl
         ])
 
 

@@ -18,6 +18,7 @@ DICT_LINKS = {}
 # Функции
 def return_models() -> list:
     """Функция формирования имен моделей для загрузки"""
+    # TODO грузить список по разному
     with open(FILE_NAMES, 'r') as file:
         for line in file:  # читать файл построчно
             if line[0] != '#':  # если строка не закомментирована
