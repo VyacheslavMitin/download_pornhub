@@ -5,6 +5,8 @@
 # Импорты
 import os
 import subprocess
+import time
+
 from write_html import write_html
 from links import return_dict_downloads, return_models
 
@@ -15,6 +17,7 @@ COMMAND_OPTIONS = (  # параметры youtube-dl
     "--ignore-errors",
     "--no-warnings",
     "--console-title",
+    "--fixup", "warn",  # давить попытки "починить" аудио
     # "--external-downloader", "aria2c",
     # "--external-downloader-arg",
     # "--max-concurrent-downloads=5",
@@ -44,6 +47,8 @@ def starting_download():
             link,  # передаваемая ссылка
             *COMMAND_OPTIONS,  # параметры youtube-dl
         ])
+
+        time.sleep(5)
 
 
 if __name__ == '__main__':

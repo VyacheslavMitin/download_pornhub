@@ -5,7 +5,7 @@ name_html = '+info.html'
 
 
 def write_html(path, name, link):
-    file = open(f'{path}/{name_html}', 'w', encoding='utf-8')
+    file = open(f'{path}/{name_html}', 'w')
 
     message = f"""<html>
     <head>Загрузка {name.upper()}</head>
