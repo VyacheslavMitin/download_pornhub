@@ -14,11 +14,12 @@ from links import return_dict_downloads, return_models
 COMMAND = "youtube-dl"  # команда для вызова youtube-dl
 
 COMMAND_OPTIONS = (  # параметры youtube-dl
+    "--ignore-config",
     "--ignore-errors",
     "--no-warnings",
     "--console-title",
     "--fixup", "warn",  # давить попытки "починить" аудио
-    # "--external-downloader", "aria2c",
+    # "--external-downloader", "aria2c",  # не работает на маке, ест много памяти на роутере
     # "--external-downloader-arg",
     # "--max-concurrent-downloads=5",
     # "--max-connection-per-server=5",
