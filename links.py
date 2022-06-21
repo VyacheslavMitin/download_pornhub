@@ -37,12 +37,12 @@ def return_path(name) -> str:
 def return_link(name) -> str:
     """Функция возврата ссылки для загрузки"""
 
-    link = f"https://www.pornhub.com/pornstar/{name}/"
+    # link = f"https://www.pornhub.com/pornstar/{name}/"
     # link = f"https://www.pornhub.com/pornstar/{name}/videos/"
     # link = f"https://www.pornhub.com/pornstar/{name}/videos/upload/"
     # link = f"https://www.pornhub.com/pornstar/{name}/public/videos/"
 
-    # link = f"https://www.pornhub.com/model/{name}/"
+    link = f"https://www.pornhub.com/model/{name}/"
     # link = f"https://www.pornhub.com/model/{name}/videos/upload/"
     # link = f"https://www.pornhub.com/model/{name}/videos/"
     # link = f"https://www.pornhub.com/model/{name}/public/videos/"

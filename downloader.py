@@ -8,6 +8,9 @@ from check_parts import searching_parts
 from links2 import DICT_LINKS, return_path
 
 COMMAND = "yt-dlp"  # команда для вызова youtube-dl
+COMMAND_OPTIONS = (
+    '--abort-on-unavailable-fragment',
+)
 
 # COMMAND_OPTIONS = (  # параметры youtube-dl
 #     "--ignore-config",
@@ -43,8 +46,8 @@ def starting_download():
         print(f"Загрузка модели {model.upper()}")
         download_pron = subprocess.call([
             COMMAND,  # распаковка списка с командой youtube-dl
+            *COMMAND_OPTIONS,  # параметры youtube-dl, распаковка
             link,  # передаваемая ссылка
-            # *COMMAND_OPTIONS,  # параметры youtube-dl, распаковка
         ])
 
         time.sleep(3)
@@ -53,8 +56,8 @@ def starting_download():
             if searching_parts():
                 download_pron = subprocess.call([
                     COMMAND,  # распаковка списка с командой youtube-dl
+                    *COMMAND_OPTIONS,  # параметры youtube-dl, распаковка
                     link,  # передаваемая ссылка
-                    # *COMMAND_OPTIONS,  # параметры youtube-dl, распаковка
                 ])
             else:
                 break
