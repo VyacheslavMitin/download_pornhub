@@ -3,7 +3,7 @@
 # "youtube-dl --external-downloader aria2c -i --console-title"
 
 # Импорты
-from links import return_dict_downloads, return_models
+from links3 import return_models
 from downloader import starting_download
 
 

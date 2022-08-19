@@ -3,9 +3,9 @@ import subprocess
 import time
 
 from write_html import write_html
-from links import return_dict_downloads, return_models
+# from links import return_dict_downloads, return_models
 from check_parts import searching_parts
-from links2 import DICT_LINKS, return_path
+from links3 import DICT_LINKS, return_dict_downloads
 
 COMMAND = "yt-dlp"  # команда для вызова youtube-dl
 COMMAND_OPTIONS = (
