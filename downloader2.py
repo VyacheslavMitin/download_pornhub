@@ -9,12 +9,14 @@ from links4 import return_dict_downloads
 COMMAND = "yt-dlp"  # команда для вызова youtube-dl или аналогов
 COMMAND_OPTIONS = (
     '--abort-on-unavailable-fragment',
+    # '--quiet',
+    # '--progress'
 )
 
 
 def macos_notifications(title='Title', subtitle='Subtitle'):
     """Функция уведомления в macOS"""
-    #from functools import partial
+    from functools import partial
     from mac_notifications import client
     if __name__ == "__main__":
         client.create_notification(title=title, subtitle=subtitle)
@@ -33,7 +35,7 @@ def starting_download():
         os.chdir(path)
 
         print(f"####### Загрузка модели {model.upper()} #######")
-        now_time = time.strftime("%H:%M:%S, %d.%m.%Y")
+        now_time = time.strftime("%d.%m.%Y г. %H:%M:%S")
         download_pron = subprocess.call([
             COMMAND,  # распаковка списка с командой youtube-dl
             *COMMAND_OPTIONS,  # параметры youtube-dl, распаковка

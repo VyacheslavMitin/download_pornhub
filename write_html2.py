@@ -37,20 +37,22 @@ def write_html(path, name, link, now_time):
         os.chdir(path)
         a = ''
         count = 0
-        for i in os.listdir():
-            if os.path.isfile(i):
-                date_file = datetime.fromtimestamp(getctime(i)).strftime("%d.%m.%Y, %H:%M")
-                a += f'{count}. {i} - {human_read_format(os.path.getsize(i))} - {date_file}#####'
+        for f in os.listdir():
+            if os.path.isfile(f):
+                file_date = datetime.fromtimestamp(getctime(f)).strftime("%d.%m.%Y, %H:%M")
+                file_size = human_read_format(os.path.getsize(f))
+                a += f'{count}. {f} - {file_size} - {file_date}#####'  # Решетки ##### для будущей замены в HTML на br
             count += 1
         return a
 
     message = f"""<html>
-    <head>Загрузка модели {name.upper()}</head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>Модель {name.upper()}</title>
+    <head><h1>{name.upper()}</h1></head>
     <body>
-    <p>Ссылка <a href={link}>{link}</a></p>
+    <p><a href={link}>{link}</a></p>
     <p>Время начала загрузки: {now_time} г. <br>
-    Время окончания загрузки: {time.strftime("%H:%M:%S, %d.%m.%Y")} г.</p>
+    Время окончания загрузки: {time.strftime("%d.%m.%Y г. %H:%M:%S")}</p>
     <p>Общий размер файлов - {get_size_file_in_direct()}</p>
     <p>Список файлов: <br>
     {get_files_sizes_dates().replace('#####', '<br>')}</p>
