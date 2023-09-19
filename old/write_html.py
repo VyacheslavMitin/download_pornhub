@@ -1,11 +1,13 @@
 # write-html.py
 import datetime
+import os
 
 name_html = '+info.html'
 
 
 def write_html(path, name, link):
-    file = open(f'{path}/{name_html}', 'w')
+    """Функция записи HTML файла с информацией о файлах и загрузках"""
+    file = open(f'{path}{os.sep}{name_html}', 'w')
 
     message = f"""<html>
     <head>Загрузка {name.upper()}</head>

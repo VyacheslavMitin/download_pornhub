@@ -3,8 +3,8 @@
 # "youtube-dl --external-downloader aria2c -i --console-title"
 
 # Импорты
-from links3 import return_models
-from downloader import starting_download
+from links4 import return_models
+from downloader2 import starting_download
 
 
 if __name__ == '__main__':
