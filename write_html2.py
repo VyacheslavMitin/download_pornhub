@@ -11,7 +11,7 @@ def write_html(path, name, link, now_time):
     file = open(f'{path}{os.sep}{name_html}', 'w')
 
     def human_read_format(size):
-        """Функция человекочетаемого размера файлов"""
+        """Функция человеко-читаемого размера файлов"""
         sizes = [' Б', ' КБ', ' МБ', ' ГБ']
         index = 0
         for i in range(len(sizes)):
@@ -29,14 +29,18 @@ def write_html(path, name, link, now_time):
                 size += os.path.getsize(fp)
         return human_read_format(size)
 
-    def get_files_sizes() -> str:
-        """Функция вывода имен и размеров файлов"""
+    def get_files_sizes_dates() -> str:
+        """Функция вывода имен и размеров файлов в строках"""
+        from os.path import getctime
+        from datetime import datetime
+
         os.chdir(path)
         a = ''
         count = 0
         for i in os.listdir():
             if os.path.isfile(i):
-                a += f'{count}. {i} - {human_read_format(os.path.getsize(i))}#####'
+                date_file = datetime.fromtimestamp(getctime(i)).strftime("%d.%m.%Y, %H:%M")
+                a += f'{count}. {i} - {human_read_format(os.path.getsize(i))} - {date_file}#####'
             count += 1
         return a
 
@@ -49,7 +53,7 @@ def write_html(path, name, link, now_time):
     Время окончания загрузки: {time.strftime("%H:%M:%S, %d.%m.%Y")} г.</p>
     <p>Общий размер файлов - {get_size_file_in_direct()}</p>
     <p>Список файлов: <br>
-    {get_files_sizes().replace('#####', '<br>')}</p>
+    {get_files_sizes_dates().replace('#####', '<br>')}</p>
     </body>
     </html>"""
 

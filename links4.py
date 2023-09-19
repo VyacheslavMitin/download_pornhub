@@ -21,7 +21,7 @@ def return_path(name) -> str:
     return path
 
 
-def return_dict_downloads() -> dict:
+def return_dict_downloads(sorting='sort') -> dict:
     """Функция возврата данных для загрузки.
 
     Здесь создаются ссылки для передачи в программу для скачивания видео"""
@@ -29,10 +29,14 @@ def return_dict_downloads() -> dict:
         DICT_LINKS.update({item: (return_path(item), f"https://www.pornhub.com/model/{item}/")})
     for item in PORNSTARS:
         DICT_LINKS.update({item: (return_path(item), f"https://www.pornhub.com/pornstar/{item}/")})
-
-    links = dict(sorted(DICT_LINKS.items()))
-    return links
-
+    if sorting == 'sort':
+        links_sort = dict(sorted(DICT_LINKS.items()))
+        return links_sort
+    elif sorting == 'mix':  # TODO
+        links_mixed = {}
+        import random
+    else: pass
+          
 
 def return_models() -> list:
     """Функция формирования имен моделей для загрузки"""
@@ -46,3 +50,4 @@ if __name__ == '__main__':
     from pprint import pprint
     pprint(return_models())
     pprint(return_dict_downloads())
+    pprint(return_dict_downloads(sorting='mix'))

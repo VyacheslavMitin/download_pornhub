@@ -12,6 +12,14 @@ COMMAND_OPTIONS = (
 )
 
 
+def macos_notifications(title='Title', subtitle='Subtitle'):
+    """Функция уведомления в macOS"""
+    #from functools import partial
+    from mac_notifications import client
+    if __name__ == "__main__":
+        client.create_notification(title=title, subtitle=subtitle)
+
+
 def starting_download():
     """Функция загрузки контента"""
     print("\nНачало загрузки роликов\n".upper())
@@ -47,3 +55,11 @@ def starting_download():
         write_html(path=path, name=model, link=link, now_time=now_time)
 
         print(f"####### Окончание загрузки модели {model.upper()} #######" + '\n'*2)
+        # Уведомления
+        from sys import platform
+        if platform == "linux" or platform == "linux2":
+            pass  # linux
+        elif platform == "darwin":
+            macos_notifications(title='Youtube-dl', subtitle=f'{model.upper} загружено')
+        elif platform == "win32":
+            pass  # Windows...
