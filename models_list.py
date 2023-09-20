@@ -46,3 +46,6 @@ PORNSTARS = [
     'ashley-rosi',
     'lindsey-love',
 ]
+
+if __name__ == '__main__':
+    pass

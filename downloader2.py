@@ -1,6 +1,7 @@
 import os
 import subprocess
 import time
+import sys
 
 from write_html2 import write_html
 from check_parts import searching_parts
@@ -15,7 +16,9 @@ COMMAND_OPTIONS = (
 
 
 def macos_notifications(title='Title', subtitle='Subtitle'):
-    """Функция уведомления в macOS"""
+    """Функция уведомления в macOS.
+
+    Не понятно как заставить работать"""
     from functools import partial
     from mac_notifications import client
     if __name__ == "__main__":
@@ -34,6 +37,8 @@ def starting_download():
             os.mkdir(path)
         os.chdir(path)
 
+        for i in range(4):
+            sys.stdout.write(f"\x1b]2;Загрузка модели {model.upper()}\x07")  # подстановка заголовка в терминал
         print(f"####### Загрузка модели {model.upper()} #######")
         now_time = time.strftime("%d.%m.%Y г. %H:%M:%S")
         download_pron = subprocess.call([
@@ -44,7 +49,7 @@ def starting_download():
 
         time.sleep(1)
 
-        while True:
+        while True:  # Поиск не докаченных файлов
             if searching_parts():
                 download_pron = subprocess.call([
                     COMMAND,  # распаковка списка с командой youtube-dl
@@ -58,10 +63,9 @@ def starting_download():
 
         print(f"####### Окончание загрузки модели {model.upper()} #######" + '\n'*2)
         # Уведомления
-        from sys import platform
-        if platform == "linux" or platform == "linux2":
+        if sys.platform == "linux" or sys.platform == "linux2":
             pass  # linux
-        elif platform == "darwin":
+        elif sys.platform == "darwin":
             macos_notifications(title='Youtube-dl', subtitle=f'{model.upper} загружено')
-        elif platform == "win32":
-            pass  # Windows...
+        elif sys.platform == "win32":
+            pass  # Windows

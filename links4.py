@@ -33,9 +33,11 @@ def return_dict_downloads(sorting='sort') -> dict:
         links_sort = dict(sorted(DICT_LINKS.items()))
         return links_sort
     elif sorting == 'mix':  # TODO
-        links_mixed = {}
-        import random
-    else: pass
+        pass
+        # links_mixed = {}
+        # import random
+    else:
+        return DICT_LINKS
           
 
 def return_models() -> list:
