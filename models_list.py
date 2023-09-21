@@ -1,4 +1,4 @@
-MODELS = [
+MODELS = {
     'amyhide',
     'anja-amelia',
     'arrestme',
@@ -40,12 +40,25 @@ MODELS = [
     'papaxmama',
     'luxurymur',
     'candy-love',
-]
+}
 
-PORNSTARS = [
+PORNSTARS = {
     'ashley-rosi',
     'lindsey-love',
-]
+}
+
+
+UNION_SET_MODELS = MODELS.union(PORNSTARS)
+UNION_LIST_MODELS = list(UNION_SET_MODELS)
+UNION_LIST_MODELS.sort()
+import random
+UNION_LIST_MODELS_SHUFFLE = UNION_LIST_MODELS.copy()
+random.shuffle(UNION_LIST_MODELS_SHUFFLE)
+
 
 if __name__ == '__main__':
-    pass
+    import pprint
+    pprint.pprint(UNION_LIST_MODELS)
+    print('+'*50)
+    pprint.pprint(UNION_LIST_MODELS_SHUFFLE)
+

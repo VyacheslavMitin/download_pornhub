@@ -1,0 +1,53 @@
+# Модуль генерации путей и ссылок
+
+# Импорты
+import os
+import configparser
+from models_list import MODELS, PORNSTARS
+
+# Константы
+config = configparser.ConfigParser()
+config.read('config.ini')
+PATH = config.get('SETTINGS', 'path')
+# Массивы данных для будущей работы
+DICT_LINKS = {}
+
+
+# Функции
+def return_path(name) -> str:
+    """Функция возврата пути папки для загрузки"""
+    path = f"{PATH}{os.sep}{name}"  # путь вида '/Users/sonic/PycharmProjects/download_pornhub/test/wettmelons'
+    path = os.path.join(path)  # превращение пути в формат для путей
+    return path
+
+
+def return_dict_downloads(sorting='sort') -> dict:
+    """Функция возврата данных для загрузки.
+
+    Здесь создаются ссылки для передачи в программу для скачивания видео"""
+    for item in MODELS:
+        DICT_LINKS.update({item: (return_path(item), f"https://www.pornhub.com/model/{item}/")})
+    for item in PORNSTARS:
+        DICT_LINKS.update({item: (return_path(item), f"https://www.pornhub.com/pornstar/{item}/")})
+    if sorting == 'sort':
+        links_sort = dict(sorted(DICT_LINKS.items()))
+        return links_sort
+    elif sorting == 'mix':
+        pass
+    else:
+        return DICT_LINKS
+          
+
+def return_models() -> list:
+    """Функция формирования имен моделей для загрузки"""
+    names = []
+    for name in return_dict_downloads().keys():
+        names.append(name)
+    return names
+
+
+if __name__ == '__main__':
+    from pprint import pprint
+    pprint(return_models())
+    pprint(return_dict_downloads())
+    pprint(return_dict_downloads(sorting='mix'))

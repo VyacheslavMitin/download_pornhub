@@ -3,7 +3,6 @@
 # Импорты
 import os
 import configparser
-from models_list import MODELS, PORNSTARS
 
 # Константы
 config = configparser.ConfigParser()
@@ -21,24 +20,27 @@ def return_path(name) -> str:
     return path
 
 
-def return_dict_downloads(sorting='sort') -> dict:
+def return_dict_downloads(sorting='mix') -> dict:
     """Функция возврата данных для загрузки.
 
     Здесь создаются ссылки для передачи в программу для скачивания видео"""
-    for item in MODELS:
-        DICT_LINKS.update({item: (return_path(item), f"https://www.pornhub.com/model/{item}/")})
-    for item in PORNSTARS:
-        DICT_LINKS.update({item: (return_path(item), f"https://www.pornhub.com/pornstar/{item}/")})
+    from models_list import PORNSTARS
+    list_ = []
+
     if sorting == 'sort':
-        links_sort = dict(sorted(DICT_LINKS.items()))
-        return links_sort
-    elif sorting == 'mix':  # TODO
-        pass
-        # links_mixed = {}
-        # import random
-    else:
-        return DICT_LINKS
-          
+        from models_list import UNION_LIST_MODELS
+        list_ = UNION_LIST_MODELS
+    elif sorting == 'mix':  # перемешанный список моделей
+        from models_list import  UNION_LIST_MODELS_SHUFFLE
+        list_ = UNION_LIST_MODELS_SHUFFLE
+
+    for item in list_:
+        if item not in PORNSTARS:
+            DICT_LINKS.update({item: (return_path(item), f"https://www.pornhub.com/model/{item}/")})
+        else:
+            DICT_LINKS.update({item: (return_path(item), f"https://www.pornhub.com/pornstar/{item}/")})
+    return DICT_LINKS
+
 
 def return_models() -> list:
     """Функция формирования имен моделей для загрузки"""
@@ -52,4 +54,3 @@ if __name__ == '__main__':
     from pprint import pprint
     pprint(return_models())
     pprint(return_dict_downloads())
-    pprint(return_dict_downloads(sorting='mix'))

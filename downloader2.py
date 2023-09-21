@@ -5,7 +5,7 @@ import sys
 
 from write_html2 import write_html
 from check_parts import searching_parts
-from links4 import return_dict_downloads
+from links5 import return_dict_downloads
 
 COMMAND = "yt-dlp"  # команда для вызова youtube-dl или аналогов
 COMMAND_OPTIONS = (
@@ -13,16 +13,6 @@ COMMAND_OPTIONS = (
     # '--quiet',
     # '--progress'
 )
-
-
-def macos_notifications(title='Title', subtitle='Subtitle'):
-    """Функция уведомления в macOS.
-
-    Не понятно как заставить работать"""
-    from functools import partial
-    from mac_notifications import client
-    if __name__ == "__main__":
-        client.create_notification(title=title, subtitle=subtitle)
 
 
 def starting_download():
@@ -37,7 +27,7 @@ def starting_download():
             os.mkdir(path)
         os.chdir(path)
 
-        for i in range(4):
+        for i in range(5):
             sys.stdout.write(f"\x1b]2;Загрузка модели {model.upper()}\x07")  # подстановка заголовка в терминал
         print(f"####### Загрузка модели {model.upper()} #######")
         now_time = time.strftime("%d.%m.%Y г. %H:%M:%S")
@@ -62,10 +52,3 @@ def starting_download():
         write_html(path=path, name=model, link=link, now_time=now_time)
 
         print(f"####### Окончание загрузки модели {model.upper()} #######" + '\n'*2)
-        # Уведомления
-        if sys.platform == "linux" or sys.platform == "linux2":
-            pass  # linux
-        elif sys.platform == "darwin":
-            macos_notifications(title='Youtube-dl', subtitle=f'{model.upper} загружено')
-        elif sys.platform == "win32":
-            pass  # Windows
