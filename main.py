@@ -8,6 +8,8 @@ from downloader2 import starting_download
 
 
 if __name__ == '__main__':
-    print("Загрузка роликов с PornHub\n".upper())
-    print("Список моделей для скачки:\n".upper(), *return_models(), sep='\n')
+    print("Загрузка роликов с PornHub".upper())
+    print(f"Количество моделей для загрузки: {len(return_models()):}\n")
+    print("Список моделей для скачки:\n".upper(),
+          *return_models(), sep='\n')
     starting_download()

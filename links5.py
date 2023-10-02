@@ -24,15 +24,13 @@ def return_dict_downloads(sorting='mix') -> dict:
     """Функция возврата данных для загрузки.
 
     Здесь создаются ссылки для передачи в программу для скачивания видео"""
-    from models_list import PORNSTARS
+    from models_list import union_models, PORNSTARS
     list_ = []
-
-    if sorting == 'sort':
-        from models_list import UNION_LIST_MODELS
-        list_ = UNION_LIST_MODELS
-    elif sorting == 'mix':  # перемешанный список моделей
-        from models_list import  UNION_LIST_MODELS_SHUFFLE
-        list_ = UNION_LIST_MODELS_SHUFFLE
+    match sorting:
+        case 'sort':
+            list_ = union_models('sorted')
+        case 'mix':
+            list_ = union_models('mixed')
 
     for item in list_:
         if item not in PORNSTARS:
