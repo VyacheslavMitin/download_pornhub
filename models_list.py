@@ -1,62 +1,22 @@
-PRIORITY = {
-    'playboyandnympho',
-    'casaltafoda',
-    'juicy-xenia',
-    'sofia-luvin',
-}
+def read_files(filename) -> list:
+    """Функция чтения файлов"""
+    list_ = []
+    try:
+        with open(filename, 'r') as models_file:
+            for item in models_file:
+                slice_item = item[:-1]  # удаление переноса строк
+                list_.append(slice_item)
+    except FileNotFoundError as err_FileNotFoundError:
+        import sys
+        print(err_FileNotFoundError)
+        sys.exit('Файл не найден, выход с ошибкой')
 
-MODELS = {
-    # 'no1sygirl',
-    'amyhide',
-    'anja-amelia',
-    'arrestme',
-    'aryaholes',
-    'behindthemaskk',
-    'bellamurr',
-    'booty_ass',
-    'bootyass-girl',
-    'candy-love',
-    'casaltafoda',
-    'cattly-angel',
-    'dickforlily',
-    'divine_tits',
-    'egg2025',
-    'emma-modric',
-    'hansel-grettel',
-    'hidden-kitten',
-    'honey-sasha',
-    'juicy-xenia',
-    'kisankanna',
-    'like2fingers',
-    'littleprincess199',
-    'loadsonlucy',
-    'luxurymur',
-    'mastophiliac',
-    'mia-queen',
-    'misslexa',
-    'mynewprofession',
-    'mysexymodel',
-    'nini_divine',
-    'papaxmama',
-    'playboyandnympho',
-    'satanikweed',
-    'sexyyennifer',
-    'sofia-luvin',
-    'sonya-kalfa',
-    'sweetie-fox',
-    'that-tx-couple',
-    'theperfectcpl',
-    'thiccivelvet',
-    'vampirecollective',
-    'wetslavs',
-    'wettmelons',
-    'winterlotus',
-}
+    return list_
 
-PORNSTARS = {
-    'ashley-rosi',
-    'lindsey-love',
-}
+
+PORNSTARS = read_files('+pornstars.txt')
+MODELS = read_files('+models.txt')
+PRIORITY = read_files('+priority.txt')
 
 
 def union_models(mode) -> list:
@@ -65,12 +25,10 @@ def union_models(mode) -> list:
     Режимы 'sorted' или 'mixed'"""
 
     sets_models = (*PORNSTARS, *MODELS, *PRIORITY)
-    united_set = set()
-    for item in sets_models:  # чтение распакованных множеств с добавлением объектов в новое множество
-        united_set.add(item)
-    united_list = list(united_set)
+    united_list = list(sets_models)
     united_list.sort()  # отсортированный список
     def priority_models(list_):
+        """Функция для работы  приоритетными (новыми) моделями"""
         for model in PRIORITY:
             list_.remove(model)
             list_.insert(0, model)
@@ -88,5 +46,6 @@ def union_models(mode) -> list:
 
 
 if __name__ == '__main__':
-    print(union_models(mode='sorted'))
-    print(union_models(mode='mixed'))
+    # print(read_files('+pornstars.txt'))
+    print('СОРТИРОВАНО ->', union_models(mode='sorted'))
+    print('ПЕРЕМЕШАНО ->', union_models(mode='mixed'))
