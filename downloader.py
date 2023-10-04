@@ -5,8 +5,8 @@ import time
 import sys
 
 from write_html2 import write_html
-from check_parts import searching_parts
-from links5 import return_dict_downloads
+from check_fragments import searching_parts
+from links import return_dict_downloads
 
 COMMAND = "yt-dlp"  # команда для вызова youtube-dl или аналогов
 COMMAND_OPTIONS = (

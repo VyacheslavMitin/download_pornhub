@@ -1,19 +1,14 @@
-# Модуль генерации путей и ссылок
+# Модуль для генерации путей и ссылок
 
-# Импорты
 import os
 import configparser
-from models_list import MODELS, PORNSTARS
 
 # Константы
 config = configparser.ConfigParser()
 config.read('config.ini')
-PATH = config.get('SETTINGS', 'path')
-# Массивы данных для будущей работы
-DICT_LINKS = {}
+PATH = config.get('SETTINGS', 'path')  # получение из конфига пути к каталогу для записи файлов
 
 
-# Функции
 def return_path(name) -> str:
     """Функция возврата пути папки для загрузки"""
     path = f"{PATH}{os.sep}{name}"  # путь вида '/Users/sonic/PycharmProjects/download_pornhub/test/wettmelons'
@@ -21,22 +16,26 @@ def return_path(name) -> str:
     return path
 
 
-def return_dict_downloads(sorting='sort') -> dict:
+def return_dict_downloads(sorting='mix') -> dict:
     """Функция возврата данных для загрузки.
 
     Здесь создаются ссылки для передачи в программу для скачивания видео"""
-    for item in MODELS:
-        DICT_LINKS.update({item: (return_path(item), f"https://www.pornhub.com/model/{item}/")})
-    for item in PORNSTARS:
-        DICT_LINKS.update({item: (return_path(item), f"https://www.pornhub.com/pornstar/{item}/")})
-    if sorting == 'sort':
-        links_sort = dict(sorted(DICT_LINKS.items()))
-        return links_sort
-    elif sorting == 'mix':
-        pass
-    else:
-        return DICT_LINKS
-          
+    dict_links = {}
+    from models_list import union_models, PORNSTARS
+    list_ = []
+    match sorting:
+        case 'sort':
+            list_ = union_models('sorted')
+        case 'mix':
+            list_ = union_models('mixed')
+
+    for item in list_:
+        if item not in PORNSTARS:
+            dict_links.update({item: (return_path(item), f"https://www.pornhub.com/model/{item}/")})
+        else:
+            dict_links.update({item: (return_path(item), f"https://www.pornhub.com/pornstar/{item}/")})
+    return dict_links
+
 
 def return_models() -> list:
     """Функция формирования имен моделей для загрузки"""
@@ -50,4 +49,3 @@ if __name__ == '__main__':
     from pprint import pprint
     pprint(return_models())
     pprint(return_dict_downloads())
-    pprint(return_dict_downloads(sorting='mix'))

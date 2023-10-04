@@ -1,9 +1,7 @@
 # Модуль для скачки с pornhub, в зависимостях ytp-dl как отдельная программа в PATH
-# "youtube-dl --external-downloader aria2c -i --console-title"
 
-# Импорты
-from links5 import return_models
-from downloader2 import starting_download
+from links import return_models
+from downloader import starting_download
 
 
 def main():
