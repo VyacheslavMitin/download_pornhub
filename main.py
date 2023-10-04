@@ -1,5 +1,4 @@
-#!/opt/bin/python
-# Модуль скачки с Порнхаба, в зависимостях aria2c и youtube-dl как отдельная программа в PATH
+# Модуль для скачки с pornhub, в зависимостях ytp-dl как отдельная программа в PATH
 # "youtube-dl --external-downloader aria2c -i --console-title"
 
 # Импорты

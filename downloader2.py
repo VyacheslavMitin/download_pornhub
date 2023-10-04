@@ -1,3 +1,4 @@
+# Модуль для работы с backend для загрузки
 import os
 import subprocess
 import time
@@ -13,7 +14,7 @@ COMMAND_OPTIONS = (
     # '--quiet',
     # '--progress'
 )
-
+SEPARATOR = '#######'
 
 def starting_download():
     """Функция загрузки контента"""
@@ -33,9 +34,9 @@ def starting_download():
 
         for i in range(5):
             sys.stdout.write(f"\x1b]2;Загрузка модели {model.upper()}\x07")  # подстановка заголовка в терминал
-        print(f"####### Загрузка модели {model.upper()} #######")
+        print(f"{SEPARATOR} Загрузка модели {model.upper()} {SEPARATOR}\n")
         now_time = time.strftime("%d.%m.%Yг., %H:%M:%S")
-        download_pron = subprocess.call([
+        subprocess.call([
             COMMAND,  # распаковка списка с командой youtube-dl
             *COMMAND_OPTIONS,  # параметры youtube-dl, распаковка
             link,  # передаваемая ссылка
@@ -45,7 +46,7 @@ def starting_download():
 
         while True:  # Поиск не докаченных файлов
             if searching_parts():
-                download_pron = subprocess.call([
+                subprocess.call([
                     COMMAND,  # распаковка списка с командой youtube-dl
                     *COMMAND_OPTIONS,  # параметры youtube-dl, распаковка
                     link,  # передаваемая ссылка
@@ -59,4 +60,4 @@ def starting_download():
                    now_time=now_time
                    )
 
-        print(f"####### Окончание загрузки модели {model.upper()} #######" + '\n'*2)
+        print(f"{SEPARATOR} Окончание загрузки модели {model.upper()} {SEPARATOR}" + '\n'*10)

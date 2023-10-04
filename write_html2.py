@@ -1,4 +1,4 @@
-# write-html.py
+# Модуль для записи HTML файла с информацией по каталогу
 import os
 import time
 
@@ -52,7 +52,7 @@ def write_html(path, name, link, now_time):
                     file_date = datetime.fromtimestamp(getctime(f)).strftime("%d.%m.%Y, %H:%M")
                     file_size = human_read_format(os.path.getsize(f))
                     a += f'{count}. {f} - {file_size} - {file_date}#####'  # Решетки ##### для будущей замены в HTML на br
-            count += 1
+                    count += 1
         return a
 
     message = f"""<html>
