@@ -4,8 +4,12 @@ def read_files(filename) -> list:
     try:
         with open(filename, 'r') as models_file:
             for item in models_file:
-                slice_item = item[:-1]  # удаление переноса строк
-                list_.append(slice_item)
+                if '#' not in item:
+                    if '\n' in item:  # проверка на перенос строк
+                        item = item[:-1]  # удаление переноса строк
+                    list_.append(item)
+                else:
+                    pass
     except FileNotFoundError as err_FileNotFoundError:
         import sys
         print(err_FileNotFoundError)
@@ -24,14 +28,14 @@ def union_models(mode) -> list:
 
     Режимы 'sorted' или 'mixed'"""
 
-    sets_models = (*PORNSTARS, *MODELS, *PRIORITY)
-    united_list = list(sets_models)
-    united_list.sort()  # отсортированный список
+    tuple_models = *PORNSTARS, *MODELS, *PRIORITY  # создание кортежа из распакованных списков
+    united_list = list(set(tuple_models))  # превращение в множество и потом в список
+    united_list.sort()  # сортировка списка
     def priority_models(list_):
-        """Функция для работы  приоритетными (новыми) моделями"""
+        """Функция для работы приоритетными (новыми) моделями"""
         for model in PRIORITY:
-            list_.remove(model)
-            list_.insert(0, model)
+            list_.remove(model)  # удаление модели из общего списка
+            list_.insert(0, model)  # добавление модели из приоритетного списка в начало общего списка
 
     match mode:
         case 'sorted':
@@ -39,13 +43,13 @@ def union_models(mode) -> list:
             return united_list
         case 'mixed':
             import random
-            united_list_shuffle = united_list.copy()
-            random.shuffle(united_list_shuffle)
+            united_list_shuffle = united_list.copy()  # копия списка для работы
+            random.shuffle(united_list_shuffle)  # смешивание содержимого списка
             priority_models(united_list_shuffle)
             return united_list_shuffle
 
 
 if __name__ == '__main__':
-    # print(read_files('+pornstars.txt'))
+    # print(read_files('+models.txt'))
     print('СОРТИРОВАНО ->', union_models(mode='sorted'))
     print('ПЕРЕМЕШАНО ->', union_models(mode='mixed'))
