@@ -24,6 +24,7 @@ def read_files(filename) -> list:
 
     return list_
 
+
 # Чтение файлов в списки ля последующей обработки
 PORNSTARS = read_files('+pornstars.txt')
 MODELS = read_files('+models.txt')
@@ -38,6 +39,7 @@ def union_models(mode='mixed') -> list:
     tuple_models = *PORNSTARS, *MODELS, *PRIORITY  # создание кортежа из распакованных списков
     united_list = list(set(tuple_models))  # превращение в множество и потом в список
     united_list.sort()  # сортировка списка
+
     def priority_models(list_):
         """Функция для работы приоритетными (новыми) моделями"""
         for model in PRIORITY:

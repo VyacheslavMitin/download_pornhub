@@ -37,15 +37,21 @@ def return_dict_downloads(sorting='mix') -> dict:
     return dict_links
 
 
+RETURN_DICT_DOWNLOADS = return_dict_downloads(sorting='mix')
+
+
 def return_models() -> list:
     """Функция формирования имен моделей для загрузки"""
     names = []
-    for name in return_dict_downloads().keys():
+    for name in RETURN_DICT_DOWNLOADS.keys():
         names.append(name)
     return names
 
 
+RETURN_MODELS = return_models()
+
+
 if __name__ == '__main__':
     from pprint import pprint
-    pprint(return_models())
+    pprint(RETURN_MODELS)
     pprint(return_dict_downloads())

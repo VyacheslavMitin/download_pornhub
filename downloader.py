@@ -4,9 +4,11 @@ import subprocess
 import time
 import sys
 
+import telegram_send
+
 from write_html import write_html
 from check_fragments import searching_parts
-from links import return_dict_downloads
+from links import RETURN_DICT_DOWNLOADS
 
 COMMAND = "yt-dlp"  # команда для вызова youtube-dl или аналогов
 COMMAND_OPTIONS = (
@@ -16,13 +18,14 @@ COMMAND_OPTIONS = (
 )
 SEPARATOR = '~' * 8
 
+
 def starting_download():
     """Функция загрузки контента"""
     print("\n\n\nНачало загрузки роликов\n\n\n".upper())
     count = 0
-    for model in return_dict_downloads().keys():
-        path = os.path.join(return_dict_downloads().get(model)[0])
-        link = return_dict_downloads().get(model)[1]
+    for model in RETURN_DICT_DOWNLOADS.keys():
+        path = os.path.join(RETURN_DICT_DOWNLOADS.get(model)[0])
+        link = RETURN_DICT_DOWNLOADS.get(model)[1]
 
         if not os.path.isdir(path):
             try:
@@ -33,7 +36,7 @@ def starting_download():
         os.chdir(path)
 
         count += 1  # счетчик скачиваемой модели
-        progress = f'{count}/{len(return_dict_downloads().keys())}'
+        progress = f'{count}/{len(RETURN_DICT_DOWNLOADS.keys())}'
         for i in range(5):
             sys.stdout.write(f"\x1b]2;Загрузка {progress}, модель {model.upper()}\x07")  # подстановка заголовка в терминал
 
