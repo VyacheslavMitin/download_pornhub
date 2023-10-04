@@ -24,7 +24,11 @@ def starting_download():
         link = return_dict_downloads().get(model)[1]
 
         if not os.path.isdir(path):
-            os.mkdir(path)
+            try:
+                os.mkdir(path)
+            except FileNotFoundError as err:
+                print(err)
+                sys.exit('Нет доступа к каталогу! Выход с ошибкой.')
         os.chdir(path)
 
         for i in range(5):
@@ -49,6 +53,10 @@ def starting_download():
             else:
                 break
         # Запись HTML файла с описанием
-        write_html(path=path, name=model, link=link, now_time=now_time)
+        write_html(path=path,
+                   name=model,
+                   link=link,
+                   now_time=now_time
+                   )
 
         print(f"####### Окончание загрузки модели {model.upper()} #######" + '\n'*2)
