@@ -5,10 +5,16 @@ from downloader import starting_download
 
 
 def main():
+    """Основная функция"""
     print("Загрузка роликов с PornHub".upper()),
     print(f"Количество моделей для загрузки: {len(return_models()):}\n")
-    print("Список моделей для скачки:\n".upper(),
-          *return_models(), sep='\n')
+    print("Список моделей для скачки:".upper())
+
+    count = 0
+    for item in return_models():
+        count += 1
+        print(f'{count:2} ~ {item}')
+
     starting_download()
 
 
