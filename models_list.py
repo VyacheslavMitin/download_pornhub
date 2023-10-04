@@ -4,16 +4,21 @@ def read_files(filename) -> list:
     try:
         with open(filename, 'r') as models_file:
             for item in models_file:
-                if '#' not in item:
-                    if '\n' in item:  # проверка на перенос строк
-                        item = item[:-1]  # удаление переноса строк
-                    list_.append(item)
-                else:
-                    pass
+                if '\n' in item:  # проверка на перенос строк
+                    item = item[:-1]  # удаление переноса строк
+                list_.append(item)
+
     except FileNotFoundError as err_FileNotFoundError:
         import sys
         print(err_FileNotFoundError)
-        sys.exit('Файл не найден, выход с ошибкой')
+        sys.exit('Файл не найден, выход с ошибкой!')
+
+    else:  # если не было исключения при работе с файлами моделей - почистить списки от пустых строк и прочего
+        for item in list_:
+            if item == '' or item == ' ':
+                list_.remove(item)
+            if '#' in item:
+                list_.remove(item)
 
     return list_
 
