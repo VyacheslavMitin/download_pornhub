@@ -1,6 +1,7 @@
 def read_files(filename) -> list:
     """Функция чтения файлов"""
-    list_ = []
+    list_ = []  # создание пустого списка для дальнейшей работы
+
     try:
         with open(filename, 'r') as models_file:
             for item in models_file:
@@ -11,7 +12,7 @@ def read_files(filename) -> list:
     except FileNotFoundError as err_FileNotFoundError:
         import sys
         print(err_FileNotFoundError)
-        sys.exit('Файл не найден, выход с ошибкой!')
+        sys.exit(f'Файл {filename} не найден, выход с ошибкой!')
 
     else:  # если не было исключения при работе с файлами моделей - почистить списки от пустых строк и прочего
         for item in list_:
@@ -22,13 +23,13 @@ def read_files(filename) -> list:
 
     return list_
 
-
+# Чтение файлов в списки ля последующей обработки
 PORNSTARS = read_files('+pornstars.txt')
 MODELS = read_files('+models.txt')
 PRIORITY = read_files('+priority.txt')
 
 
-def union_models(mode) -> list:
+def union_models(mode='mixed') -> list:
     """Функция подготовки списка моделей.
 
     Режимы 'sorted' или 'mixed'"""
@@ -44,14 +45,14 @@ def union_models(mode) -> list:
 
     match mode:
         case 'sorted':
-            priority_models(united_list)
-            return united_list
+            priority_models(united_list)  # работа по списку приоритетных моделей
+            return united_list  # возвращение отсортированного в алфавитном порядке списка
         case 'mixed':
             import random
             united_list_shuffle = united_list.copy()  # копия списка для работы
             random.shuffle(united_list_shuffle)  # смешивание содержимого списка
-            priority_models(united_list_shuffle)
-            return united_list_shuffle
+            priority_models(united_list_shuffle)  # работа по списку приоритетных моделей
+            return united_list_shuffle  # возвращение смешанного списка
 
 
 if __name__ == '__main__':

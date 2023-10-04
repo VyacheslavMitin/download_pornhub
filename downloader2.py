@@ -34,7 +34,7 @@ def starting_download():
         for i in range(5):
             sys.stdout.write(f"\x1b]2;Загрузка модели {model.upper()}\x07")  # подстановка заголовка в терминал
         print(f"####### Загрузка модели {model.upper()} #######")
-        now_time = time.strftime("%d.%m.%Y г. %H:%M:%S")
+        now_time = time.strftime("%d.%m.%Yг., %H:%M:%S")
         download_pron = subprocess.call([
             COMMAND,  # распаковка списка с командой youtube-dl
             *COMMAND_OPTIONS,  # параметры youtube-dl, распаковка

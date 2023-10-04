@@ -2,13 +2,13 @@
 import os
 import time
 
-name_html = '+info.html'
+NAME_HTML = '+info.html'
 
 
 def write_html(path, name, link, now_time):
     """Функция записи HTML файла с информацией о файлах и загрузках"""
 
-    file = open(f'{path}{os.sep}{name_html}', 'w')
+    file = open(f'{path}{os.sep}{NAME_HTML}', 'w')
 
     def human_read_format(size):
         """Функция человеко-читаемого размера файлов"""
@@ -20,14 +20,23 @@ def write_html(path, name, link, now_time):
             index = i
         return f'{round(size / (1024 ** index))}{sizes[index]}'
 
-    def get_size_file_in_direct():
-        """Функция получения размера каталога"""
+    def get_size_file_in_directory():
+        """Функция получения размера файлов в каталоге"""
         size = 0
         for dirpath, dirnames, filenames in os.walk(path):
             for f in filenames:
                 fp = os.path.join(dirpath, f)
                 size += os.path.getsize(fp)
         return human_read_format(size)
+
+    def amount_files_in_directory():
+        """Функция получения размера файлов в каталоге"""
+        amount_files = 0
+        for dirpath, dirnames, filenames in os.walk(path):
+            for f in filenames:
+                if f != NAME_HTML:  # проверка на html файл и вычитание его из счетчика
+                    amount_files += 1
+        return amount_files
 
     def get_files_sizes_dates() -> str:
         """Функция вывода имен и размеров файлов в строках"""
@@ -36,12 +45,13 @@ def write_html(path, name, link, now_time):
 
         os.chdir(path)
         a = ''
-        count = 0
+        count = 1  # начинаем счетчик с 1
         for f in os.listdir():
             if os.path.isfile(f):
-                file_date = datetime.fromtimestamp(getctime(f)).strftime("%d.%m.%Y, %H:%M")
-                file_size = human_read_format(os.path.getsize(f))
-                a += f'{count}. {f} - {file_size} - {file_date}#####'  # Решетки ##### для будущей замены в HTML на br
+                if f != NAME_HTML:  # проверка на html файл и удаление его из списка
+                    file_date = datetime.fromtimestamp(getctime(f)).strftime("%d.%m.%Y, %H:%M")
+                    file_size = human_read_format(os.path.getsize(f))
+                    a += f'{count}. {f} - {file_size} - {file_date}#####'  # Решетки ##### для будущей замены в HTML на br
             count += 1
         return a
 
@@ -51,9 +61,10 @@ def write_html(path, name, link, now_time):
     <head><h1>{name.upper()}</h1></head>
     <body>
     <p><a href={link}>{link}</a></p>
-    <p>Время начала загрузки: {now_time} г. <br>
-    Время окончания загрузки: {time.strftime("%d.%m.%Y г. %H:%M:%S")}</p>
-    <p>Общий размер файлов - {get_size_file_in_direct()}</p>
+    <p>Время начала загрузки: {now_time}<br>
+    Время окончания загрузки: {time.strftime("%d.%m.%Yг., %H:%M:%S")}</p>
+    <p>Количество файлов {amount_files_in_directory()}<br>
+    Общий размер файлов - {get_size_file_in_directory()}</p>
     <p>Список файлов: <br>
     {get_files_sizes_dates().replace('#####', '<br>')}</p>
     </body>
