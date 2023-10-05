@@ -3,7 +3,6 @@ import os
 import subprocess
 import time
 import sys
-
 import telegram_send
 
 from write_html import write_html
@@ -19,7 +18,7 @@ COMMAND_OPTIONS = (
 SEPARATOR = '~' * 8
 
 
-def starting_download():
+def starting_download() -> None:
     """Функция загрузки контента"""
     print("\n\n\nНачало загрузки роликов\n\n\n".upper())
     count = 0
@@ -38,10 +37,15 @@ def starting_download():
         count += 1  # счетчик скачиваемой модели
         progress = f'{count}/{len(RETURN_DICT_DOWNLOADS.keys())}'
         for i in range(5):
-            sys.stdout.write(f"\x1b]2;Загрузка {progress}, модель {model.upper()}\x07")  # подстановка заголовка в терминал
+            # подстановка заголовка в терминал
+            sys.stdout.write(f"\x1b]2;Загрузка {progress}, модель {model.upper()}\x07")
 
-        print(f"{SEPARATOR} Загрузка {progress}, модель {model.upper()} {SEPARATOR}\n")
         now_time = time.strftime("%d.%m.%Yг., %H:%M:%S")
+        message_start_model_download_print = f"{SEPARATOR} Загрузка {progress}, модель {model.upper()} {SEPARATOR}\n"
+        message_start_model_download_send = f"Началась загрузка {progress}, модель {model.upper()}\n{now_time}"
+        print(message_start_model_download_print)
+        telegram_send.send(messages=[message_start_model_download_send])
+
         subprocess.call([
             COMMAND,  # распаковка списка с командой youtube-dl
             *COMMAND_OPTIONS,  # параметры youtube-dl, распаковка
@@ -65,5 +69,9 @@ def starting_download():
                    link=link,
                    now_time=now_time
                    )
-
-        print(f"\n{SEPARATOR} Окончание загрузки модели {model.upper()} {SEPARATOR}" + '\n'*10)
+        # Сообщение об окончании загрузки
+        now_time_finish = time.strftime("%d.%m.%Yг., %H:%M:%S")
+        message_finish_model_download_print = f"\n{SEPARATOR} Окончание загрузки модели {model.upper()} {SEPARATOR}" + '\n'*10
+        message_finish_model_download_send = f"Окончание загрузки модели {model.upper()}\n{now_time_finish}"
+        print(message_finish_model_download_print)
+        telegram_send.send(messages=[message_finish_model_download_send])

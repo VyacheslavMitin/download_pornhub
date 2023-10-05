@@ -1,14 +1,16 @@
 # Модуль для скачки с pornhub, в зависимостях ytp-dl как отдельная программа в PATH
 # Зависимости
 # pip3 install telegram-send ; pip3 install --force-reinstall -v "python-telegram-bot==13.5" ; telegram-send --configure
+import sys
 import time
 from links import RETURN_MODELS
 from downloader import starting_download
 import telegram_send
 
-__version__ = '3.1.0'
+__version__ = '3.2.1'
 
 now_time = time.strftime("%d.%m.%Yг., %H:%M:%S")
+# TODO через сисаргс получать команду на правку текстовых файлов с моделям
 
 
 def models_list() -> str:
@@ -35,8 +37,9 @@ def main():
     print(message_start)
     telegram_send.send(messages=[message_start])
     starting_download()
+    telegram_send.send(messages={f'Все успешно загружено\n{now_time}'})
+    sys.exit(0)
 
 
 if __name__ == '__main__':
-    # print(models_list())
     main()
