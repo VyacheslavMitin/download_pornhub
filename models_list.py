@@ -5,6 +5,8 @@ def read_files(filename) -> list:
 
     try:
         with open(filename, 'r') as models_file:
+            # for element in models_file:
+            #     list_.append(element.rsplit('\n'))
             for item in models_file:
                 if '\n' in item:  # проверка на перенос строк
                     item = item[:-1]  # удаление переноса строк

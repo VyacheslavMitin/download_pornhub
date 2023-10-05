@@ -48,7 +48,7 @@ def return_models() -> list:
     return names
 
 
-RETURN_MODELS = return_models()
+RETURN_MODELS = return_models()  # повторяемый лист обработки в main.py
 
 
 if __name__ == '__main__':

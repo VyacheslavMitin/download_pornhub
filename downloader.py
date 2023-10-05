@@ -17,8 +17,6 @@ COMMAND_OPTIONS = (
 )
 SEPARATOR = '~' * 8
 
-# TODO считать разницу времени для учитывания количества времени на загрузку
-
 
 def starting_download() -> None:
     """Функция загрузки контента"""
@@ -44,7 +42,7 @@ def starting_download() -> None:
 
         now_time = time.strftime("%d.%m.%Yг., %H:%M:%S")
         message_start_model_download_print = f"{SEPARATOR} Загрузка {progress}, модель {model.upper()} {SEPARATOR}\n"
-        message_start_model_download_send = f"Началась загрузка {progress}, модель {model.upper()}\n{now_time}"
+        message_start_model_download_send = f"🟢Началась загрузка {progress}\n{now_time}\nМодель {model.upper()}"
         print(message_start_model_download_print)
         telegram_send.send(messages=[message_start_model_download_send])
 
@@ -72,9 +70,5 @@ def starting_download() -> None:
                    now_time=now_time
                    )
         # Сообщение об окончании загрузки
-        time.sleep(3)
-        now_time_finish = time.strftime("%d.%m.%Yг., %H:%M:%S")
-        message_finish_model_download_print = f"\n{SEPARATOR} Окончание загрузки модели {model.upper()} {SEPARATOR}" + '\n'*10
-        message_finish_model_download_send = f"Окончание загрузки модели {model.upper()}\n{now_time_finish}"
-        print(message_finish_model_download_print)
-        telegram_send.send(messages=[message_finish_model_download_send])
+        message_finish_model_download = f"\n{SEPARATOR} Окончание загрузки модели {model.upper()} {SEPARATOR}" + '\n'*10
+        print(message_finish_model_download)
