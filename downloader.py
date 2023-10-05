@@ -26,6 +26,20 @@ def starting_download() -> None:
         path = os.path.join(RETURN_DICT_DOWNLOADS.get(model)[0])
         link = RETURN_DICT_DOWNLOADS.get(model)[1]
 
+        # Путь к файлу с аватаром модели
+        path_ = f'/Users/sonic/PycharmProjects/download_pornhub/images/{model}.jpg'
+        if os.path.isfile(path_):
+            image = path_
+        else:
+            image = os.path.join('/Users/sonic/PycharmProjects/download_pornhub/images/dummy.jpg')
+        # try:
+        #     path_ = f'/Users/sonic/PycharmProjects/download_pornhub/images/{model}.jpg'
+        #     os.path.join(path_)
+        #     image = os.path.join(path_)
+        # except FileNotFoundError:
+        #     image = os.path.join('/Users/sonic/PycharmProjects/download_pornhub/images/dummy.jpg')
+        # print(image)
+
         if not os.path.isdir(path):
             try:
                 os.mkdir(path)
@@ -42,27 +56,38 @@ def starting_download() -> None:
 
         now_time = time.strftime("%d.%m.%Yг., %H:%M:%S")
         message_start_model_download_print = f"{SEPARATOR} Загрузка {progress}, модель {model.upper()} {SEPARATOR}\n"
-        message_start_model_download_send = f"🟢Началась загрузка {progress}\n{now_time}\nМодель {model.upper()}"
+        message_start_model_download_send = f"*🟢Началась загрузка {progress}*\n{now_time}\nМодель {model.upper()}"
         print(message_start_model_download_print)
-        telegram_send.send(messages=[message_start_model_download_send])
+        avatar = open(image, 'rb')
+        telegram_send.send(
+                           # messages=[message_start_model_download_send],
+                           parse_mode='markdown',
+                           images=[avatar],
+                           captions=[f"*🟢Началась загрузка {progress}*\n{now_time}\nМодель {model.upper()}"],
+                           )
+        avatar.close()
 
-        subprocess.call([
-            COMMAND,  # распаковка списка с командой youtube-dl
-            *COMMAND_OPTIONS,  # параметры youtube-dl, распаковка
-            link,  # передаваемая ссылка
-        ])
+        try:
+            subprocess.call([
+                COMMAND,  # распаковка списка с командой youtube-dl
+                *COMMAND_OPTIONS,  # параметры youtube-dl, распаковка
+                link,  # передаваемая ссылка
+            ])
 
-        time.sleep(1)
+            time.sleep(1)
 
-        while True:  # Поиск не докаченных файлов
-            if searching_parts():
-                subprocess.call([
-                    COMMAND,  # распаковка списка с командой youtube-dl
-                    *COMMAND_OPTIONS,  # параметры youtube-dl, распаковка
-                    link,  # передаваемая ссылка
-                ])
-            else:
-                break
+            while True:  # Поиск не докаченных файлов
+                if searching_parts():
+                    subprocess.call([
+                        COMMAND,  # распаковка списка с командой youtube-dl
+                        *COMMAND_OPTIONS,  # параметры youtube-dl, распаковка
+                        link,  # передаваемая ссылка
+                    ])
+                else:
+                    break
+        except KeyboardInterrupt:
+            print('Прерывание с клавиатуры')
+            sys.exit()
         # Запись HTML файла с описанием
         write_html(path=path,
                    name=model,

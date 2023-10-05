@@ -1,5 +1,5 @@
-# Модуль для скачки с pornhub, в зависимостях ytp-dl как отдельная программа в PATH
-# Минимальная версия Python - 3.10
+# Модуль для загрузки роликов с pornhub, в зависимостях ytp-dl как отдельная программа в PATH
+# Минимальная версия Python - 3.10 (из-за match-case)
 # Зависимости
 # pip3 install telegram-send ; pip3 install --force-reinstall -v "python-telegram-bot==13.5" ; telegram-send --configure
 # Необходимо иметь python-telegram-bot==13.5", на более высоких не работает модуль telegram-send
@@ -13,7 +13,28 @@ from links import RETURN_MODELS
 from downloader import starting_download
 import telegram_send
 
-__version__ = '3.3.5'
+__version__ = '3.4.4'
+
+
+# Путь к файлу с логотипом сайта
+def logo_image():
+    """Функция передачи пути к логотипу"""
+    logo = '/Users/sonic/PycharmProjects/download_pornhub/images/logo.jpg'
+    if os.path.isfile(logo):
+        image_logo = logo
+    else:
+        image_logo = '/Users/sonic/PycharmProjects/download_pornhub/images/dummy.jpg'
+    return image_logo
+
+
+def done_image():
+    """Функция передачи пути к логотипу"""
+    done = '/Users/sonic/PycharmProjects/download_pornhub/images/done.jpg'
+    if os.path.isfile(done):
+        image_done = done
+    else:
+        image_done = '/Users/sonic/PycharmProjects/download_pornhub/images/dummy.jpg'
+    return image_done
 
 
 def models_list() -> str:
@@ -33,17 +54,18 @@ def main():
     """Основная функция"""
     try:  # проверка параметров запуска
         if sys.argv[1] == '--edit-models':
-            # print(sys.argv[1])
+            print('Модуль загрузки видео с PornHub, правка списков моделей')
             changes = input('Необходимы правки списков моделей? Y/Д или N/Н: ')
             match changes:
                 case 'y' | 'Y' | 'Д' | 'д' | 'l' | 'L':
-                    for item in ['!priority', '!models.txt', '!pornstars.txt']:
+                    for item in ['!priority',
+                                 '!models.txt',
+                                 '!pornstars.txt']:
                         subprocess.Popen(['nano', item]).wait()
                     time.sleep(1)
                     print('Правки выполнены\n\n')
                     os.system('clear')
                 case '' | None | 'N' | 'n' | 'н' | 'Н':
-                    # time.sleep(1)
                     print('Без правок\n\n')
                     os.system('clear')
 
@@ -53,19 +75,43 @@ def main():
     except IndexError:  # обработка отсутствия передаваемого параметра
         pass
 
-    message_start = ("💦Загрузка роликов с PornHub".upper() + '\n' +
-                     f'{time.strftime("%d.%m.%Yг., %H:%M:%S")}\n' +  # текущее время
-                     f'Версия Python: {sys.version[:-35]}\n' +
-                     f'Версия программы {__version__}\n' +
-                     f"Количество моделей для загрузки: {len(RETURN_MODELS):}\n\n" +
-                     "Список моделей для скачки:".upper() +
-                     f'\n{models_list()}')
+    message_start_print = ("Загрузка роликов с PornHub".upper() + '\n' +
+                           f'{time.strftime("%d.%m.%Yг., %H:%M:%S")}\n' +  # текущее время
+                           f'Версия Python: {sys.version[:-35]}\n' +  # [:-35]
+                           f'Версия программы {__version__}\n' +
+                           f"Количество моделей для загрузки: {len(RETURN_MODELS):}\n\n" +
+                           "Список моделей для загрузки:".upper() +
+                           f'\n{models_list()}'
+                           )
+
+    message_start_send = (f'💦Загрузка роликов с PH\n'
+                          f'{time.strftime("%d.%m.%Yг., %H:%M:%S")}\n'  # текущее время
+                          f'Версия Python: {sys.version[:-79]}\n' +  # [:-35]
+                          f'Версия программы {__version__}\n'
+                          f'Количество моделей для загрузки: {len(RETURN_MODELS):}\n\n'
+                          f'Список моделей для загрузки:\n'
+                          f'{models_list()}'
+                          )
 
     time.sleep(1)
-    print(message_start)
-    telegram_send.send(messages=[message_start])
+    print(message_start_print)
+    logo = open(logo_image(), 'rb')
+    telegram_send.send(
+        # messages=[message_start_send],
+        captions=[message_start_send],
+        images=[logo]
+    )
+    logo.close()
     starting_download()
-    telegram_send.send(messages={f'☑️Все успешно загружено\n{time.strftime("%d.%m.%Yг., %H:%M:%S")}'})
+
+    print('Все успешно загружено', '\n'*5)
+    done = open(done_image(), 'rb')
+    telegram_send.send(
+        # messages=[f'☑️Все успешно загружено\n{time.strftime("%d.%m.%Yг., %H:%M:%S")}'],
+        captions=[f'☑️Все успешно загружено\n{time.strftime("%d.%m.%Yг., %H:%M:%S")}'],
+        images=[done]
+    )
+    done.close()
     sys.exit(0)
 
 
