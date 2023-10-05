@@ -17,6 +17,8 @@ COMMAND_OPTIONS = (
 )
 SEPARATOR = '~' * 8
 
+# TODO считать разницу времени для учитывания количества времени на загрузку
+
 
 def starting_download() -> None:
     """Функция загрузки контента"""
@@ -70,6 +72,7 @@ def starting_download() -> None:
                    now_time=now_time
                    )
         # Сообщение об окончании загрузки
+        time.sleep(3)
         now_time_finish = time.strftime("%d.%m.%Yг., %H:%M:%S")
         message_finish_model_download_print = f"\n{SEPARATOR} Окончание загрузки модели {model.upper()} {SEPARATOR}" + '\n'*10
         message_finish_model_download_send = f"Окончание загрузки модели {model.upper()}\n{now_time_finish}"

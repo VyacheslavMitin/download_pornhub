@@ -26,9 +26,9 @@ def read_files(filename) -> list:
 
 
 # Чтение файлов в списки ля последующей обработки
-PORNSTARS = read_files('+pornstars.txt')
-MODELS = read_files('+models.txt')
-PRIORITY = read_files('+priority.txt')
+PORNSTARS = read_files('!pornstars.txt')
+MODELS = read_files('!models.txt')
+PRIORITY = read_files('!priority.txt')
 
 
 def union_models(mode='mixed') -> list:
@@ -59,6 +59,6 @@ def union_models(mode='mixed') -> list:
 
 
 if __name__ == '__main__':
-    # print(read_files('+models.txt'))
+    # print(read_files('!models.txt'))
     print('СОРТИРОВАНО ->', union_models(mode='sorted'))
     print('ПЕРЕМЕШАНО ->', union_models(mode='mixed'))

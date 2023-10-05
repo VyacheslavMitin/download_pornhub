@@ -1,10 +1,5 @@
 # Функция проверки недокачанных файлов
-
 import glob
-# import os
-
-# os.chdir(os.path.join("/Volumes/WD_4TB/Гнуха/PornHub/wetslavs"))
-# print("Текущая директория ", os.path.abspath(os.path.curdir))
 
 
 def searching_parts():
