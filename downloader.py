@@ -21,7 +21,7 @@ SEPARATOR = '~' * 8
 
 def starting_download() -> None:
     """Функция загрузки контента"""
-    print("\n\n\nНачало загрузки роликов\n\n\n".upper())
+    print("\n\nНачало загрузки роликов\n\n".upper())
     count = 0
     for model in RETURN_DICT_DOWNLOADS.keys():
         path = os.path.join(RETURN_DICT_DOWNLOADS.get(model)[0])
@@ -47,7 +47,9 @@ def starting_download() -> None:
 
         now_time = time.strftime("%d.%m.%Yг., %H:%M:%S")
         message_start_model_download_print = f"{SEPARATOR} Загрузка {progress}, модель {model.upper()} {SEPARATOR}\n"
-        message_start_model_download_send = f"🟢Началась загрузка {progress}\n{now_time}\nМодель {model.upper()}"
+        message_start_model_download_send = (f"🟢Началась загрузка {progress}\n"
+                                             f"{now_time}\n"
+                                             f"Модель {model.upper()}")
         print(message_start_model_download_print)
         with open(avatar, 'rb') as avatar:
             telegram_send.send(

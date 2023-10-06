@@ -16,7 +16,7 @@ from downloader import starting_download
 from image_path import return_image_path
 
 
-__version__ = '3.5.1'
+__version__ = '3.5.2'
 
 
 def models_list() -> str:
@@ -40,7 +40,7 @@ def main():
             changes = input('Необходимы правки списков моделей? Y/Д или N/Н: ')
             match changes:
                 case 'y' | 'Y' | 'Д' | 'д' | 'l' | 'L':
-                    for item in ['!priority',
+                    for item in ['!priority.txt',
                                  '!models.txt',
                                  '!pornstars.txt']:
                         subprocess.Popen(['nano', item]).wait()
@@ -57,13 +57,13 @@ def main():
     except IndexError:  # обработка отсутствия передаваемого параметра
         pass
 
-    message_start_print = ("Загрузка роликов с PornHub".upper() + '\n' +
+    message_start_print = ('Загрузка роликов с PornHub'.upper() + '\n' +
                            f'{time.strftime("%d.%m.%Yг., %H:%M:%S")}\n' +  # текущее время
                            f'Версия Python: {sys.version[:-35]}\n' +  # [:-35]
                            f'Версия программы {__version__}\n' +
-                           f"Количество моделей для загрузки: {len(RETURN_MODELS):}\n\n" +
-                           "Список моделей для загрузки:".upper() +
-                           f'\n{models_list()}'
+                           f'Количество моделей для загрузки: {len(RETURN_MODELS):}\n\n' +
+                           'Список моделей для загрузки:'.upper() + '\n' +
+                           f'{models_list()}'
                            )
 
     message_start_send = (f'💦Загрузка роликов с PH\n'
@@ -91,7 +91,8 @@ def main():
     with open(return_image_path('done'), 'rb') as done:
         telegram_send.send(
             # messages=[f'☑️Все успешно загружено\n{time.strftime("%d.%m.%Yг., %H:%M:%S")}'],
-            captions=[f'☑️Все успешно загружено\n{time.strftime("%d.%m.%Yг., %H:%M:%S")}'],
+            captions=[f'☑️Все успешно загружено\n'
+                      f'{time.strftime("%d.%m.%Yг., %H:%M:%S")}'],
             images=[done]
         )
 
