@@ -5,6 +5,7 @@ import time
 import sys
 import telegram_send
 
+from image_path import return_image_path
 from write_html import write_html
 from check_fragments import searching_parts
 from links import RETURN_DICT_DOWNLOADS
@@ -27,18 +28,8 @@ def starting_download() -> None:
         link = RETURN_DICT_DOWNLOADS.get(model)[1]
 
         # Путь к файлу с аватаром модели
-        path_ = f'/Users/sonic/PycharmProjects/download_pornhub/images/{model}.jpg'
-        if os.path.isfile(path_):
-            image = path_
-        else:
-            image = os.path.join('/Users/sonic/PycharmProjects/download_pornhub/images/dummy.jpg')
-        # try:
-        #     path_ = f'/Users/sonic/PycharmProjects/download_pornhub/images/{model}.jpg'
-        #     os.path.join(path_)
-        #     image = os.path.join(path_)
-        # except FileNotFoundError:
-        #     image = os.path.join('/Users/sonic/PycharmProjects/download_pornhub/images/dummy.jpg')
-        # print(image)
+        avatar = return_image_path(image=model,
+                                   avatar=True)
 
         if not os.path.isdir(path):
             try:
@@ -56,16 +47,15 @@ def starting_download() -> None:
 
         now_time = time.strftime("%d.%m.%Yг., %H:%M:%S")
         message_start_model_download_print = f"{SEPARATOR} Загрузка {progress}, модель {model.upper()} {SEPARATOR}\n"
-        message_start_model_download_send = f"*🟢Началась загрузка {progress}*\n{now_time}\nМодель {model.upper()}"
+        message_start_model_download_send = f"🟢Началась загрузка {progress}\n{now_time}\nМодель {model.upper()}"
         print(message_start_model_download_print)
-        avatar = open(image, 'rb')
-        telegram_send.send(
-                           # messages=[message_start_model_download_send],
-                           parse_mode='markdown',
-                           images=[avatar],
-                           captions=[f"*🟢Началась загрузка {progress}*\n{now_time}\nМодель {model.upper()}"],
-                           )
-        avatar.close()
+        with open(avatar, 'rb') as avatar:
+            telegram_send.send(
+                               # messages=[message_start_model_download_send],
+                               # parse_mode='markdown',
+                               images=[avatar],
+                               captions=[message_start_model_download_send],
+                               )
 
         try:
             subprocess.call([

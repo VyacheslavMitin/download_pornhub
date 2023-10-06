@@ -9,32 +9,14 @@ import os
 import subprocess
 import sys
 import time
-from links import RETURN_MODELS
-from downloader import starting_download
 import telegram_send
 
-__version__ = '3.4.4'
+from links import RETURN_MODELS
+from downloader import starting_download
+from image_path import return_image_path
 
 
-# Путь к файлу с логотипом сайта
-def logo_image():
-    """Функция передачи пути к логотипу"""
-    logo = '/Users/sonic/PycharmProjects/download_pornhub/images/logo.jpg'
-    if os.path.isfile(logo):
-        image_logo = logo
-    else:
-        image_logo = '/Users/sonic/PycharmProjects/download_pornhub/images/dummy.jpg'
-    return image_logo
-
-
-def done_image():
-    """Функция передачи пути к логотипу"""
-    done = '/Users/sonic/PycharmProjects/download_pornhub/images/done.jpg'
-    if os.path.isfile(done):
-        image_done = done
-    else:
-        image_done = '/Users/sonic/PycharmProjects/download_pornhub/images/dummy.jpg'
-    return image_done
+__version__ = '3.5.1'
 
 
 def models_list() -> str:
@@ -94,25 +76,26 @@ def main():
                           )
 
     time.sleep(1)
+
     print(message_start_print)
-    logo = open(logo_image(), 'rb')
-    telegram_send.send(
-        # messages=[message_start_send],
-        captions=[message_start_send],
-        images=[logo]
-    )
-    logo.close()
+    with open(return_image_path('logo'), 'rb') as logo:
+        telegram_send.send(
+            # messages=[message_start_send],
+            captions=[message_start_send],
+            images=[logo]
+        )
+
     starting_download()
 
-    print('Все успешно загружено', '\n'*5)
-    done = open(done_image(), 'rb')
-    telegram_send.send(
-        # messages=[f'☑️Все успешно загружено\n{time.strftime("%d.%m.%Yг., %H:%M:%S")}'],
-        captions=[f'☑️Все успешно загружено\n{time.strftime("%d.%m.%Yг., %H:%M:%S")}'],
-        images=[done]
-    )
-    done.close()
-    sys.exit(0)
+    print('Все успешно загружено', '\n' * 5)
+    with open(return_image_path('done'), 'rb') as done:
+        telegram_send.send(
+            # messages=[f'☑️Все успешно загружено\n{time.strftime("%d.%m.%Yг., %H:%M:%S")}'],
+            captions=[f'☑️Все успешно загружено\n{time.strftime("%d.%m.%Yг., %H:%M:%S")}'],
+            images=[done]
+        )
+
+    sys.exit(0)  # выход
 
 
 if __name__ == '__main__':
