@@ -1,0 +1,52 @@
+# Модуль скачивания аватаров
+import os.path
+import requests
+from bs4 import BeautifulSoup
+
+from links import RETURN_DICT_DOWNLOADS
+
+avatars_dir = os.path.join('/Users/sonic/PycharmProjects/download_pornhub/images/avatars/')
+
+
+def download_avatars(verbose: bool = True) -> None:
+    """Функция загрузки аватаров всех моделей"""
+
+    os.makedirs(os.path.normpath(avatars_dir), exist_ok=True)  # создание каталога с аватарами если не существует
+
+    if verbose:
+        print('Модуль загрузки аватаров моделей с PornHub\n\n'.upper())
+
+    for model, links in RETURN_DICT_DOWNLOADS.items():
+        if verbose:
+            print(f'Загружаем файл аватара модели {model.upper()}, по ссылке: {links[1]}')
+        response = requests.get(links[1])
+        soup = BeautifulSoup(response.content, "html.parser")
+        avatar_get = soup.find('img',
+                               {'id': 'getAvatar'})
+        # if verbose:
+        #     print(avatar_get)
+        try:
+            src = avatar_get.get('src')
+            if verbose:
+                print(f'Ссылка на аватар на PornHub: {src}')
+            url_avatar = requests.get(src).content
+
+            with open(f'{avatars_dir}{model}.jpg', 'wb') as file_avatar:
+                file_avatar.write(url_avatar)
+
+        except AttributeError:  # проверка на ошибку отсутствия доступа к аватару (мертвая ссылка и тд)
+            if verbose:
+                print(f'Аватар модели {model.upper()} не доступен!\n')
+
+        finally:
+            if verbose:
+                if os.path.isfile(f'{avatars_dir}{model}.jpg'):
+                    print(f"Аватар модели {model.upper()} сохранен в файл '{model}.jpg'\n")
+                else:
+                    print(f'Аватар модели {model.upper()} по не известной причине не сохранен!\n')
+
+    print('Все аватары моделей загружены')
+
+
+if __name__ == '__main__':
+    download_avatars()
