@@ -16,7 +16,7 @@ from downloader import starting_download
 from image_path import return_image_path
 
 
-__version__ = '3.9.0'
+__version__ = '4.0.0'
 
 
 def models_list() -> str:

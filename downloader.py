@@ -27,8 +27,8 @@ def starting_download() -> None:
         path = os.path.join(RETURN_DICT_DOWNLOADS.get(model)[0])
         link = RETURN_DICT_DOWNLOADS.get(model)[1]
 
-        # Путь к файлу с аватаром модели
-        avatar = return_image_path(image=model,
+        # Путь к файлу с аватаркой модели
+        avatar = return_image_path(model=model,
                                    avatar=True)
 
         if not os.path.isdir(path):
