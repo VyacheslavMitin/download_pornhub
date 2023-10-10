@@ -5,9 +5,9 @@ from bs4 import BeautifulSoup
 
 from links import RETURN_DICT_DOWNLOADS
 DICT_MODELS_LINKS = {}
-for model_, list_, in RETURN_DICT_DOWNLOADS.items():
-    DICT_MODELS_LINKS.update({model_: list_[1]})
-# print(DICT_MODELS_LINKS)
+for model_, list_, in RETURN_DICT_DOWNLOADS.items():  # Создание нового словаря без значения с путем, для упрощения
+    DICT_MODELS_LINKS.update({model_:
+                             list_[1]})  # втором элемент значения - ссылка на страницу
 
 avatars_dir = os.path.join('/Users/sonic/PycharmProjects/download_pornhub/images/avatars/')
 
@@ -29,7 +29,7 @@ def download_avatars(verbose: bool = True,
         soup = BeautifulSoup(response.content, "html.parser")
         avatar_get = soup.find('img',
                                {'id': 'getAvatar'})
-        # if verbose:
+        # if verbose:  # печать тега с ссылкой в коде страницы
         #     print(avatar_get)
         try:
             src = avatar_get.get('src')
@@ -55,8 +55,9 @@ def download_avatars(verbose: bool = True,
 
 
 if __name__ == '__main__':
-    download_avatars(verbose=True,
-                     dictionary={'MISSLEXA': 'https://www.pornhub.com/model/misslexa/'}
+    # print(DICT_MODELS_LINKS)
+    download_avatars(verbose=True,  # пример использования
+                     dictionary={'misslexa': 'https://www.pornhub.com/model/misslexa/'}
                      )
     # download_avatars(verbose=True,
     #                  dictionary=DICT_MODELS_LINKS)

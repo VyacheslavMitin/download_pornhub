@@ -22,18 +22,24 @@ def return_dict_downloads(sorting='mix') -> dict:
     Здесь создаются ссылки для передачи в программу для скачивания видео"""
     dict_links = {}
     from models_list import union_models, PORNSTARS
-    list_ = []
+    models = []
     match sorting:
         case 'sort':
-            list_ = union_models('sorted')
+            models = union_models('sorted')
         case 'mix':
-            list_ = union_models('mixed')
+            models = union_models('mixed')
 
-    for item in list_:
-        if item not in PORNSTARS:
-            dict_links.update({item: (return_path(item), f"https://www.pornhub.com/model/{item}/")})
+    for model in models:
+        if model not in PORNSTARS:
+            # Формирование словаря с именем модели, путями, и ссылкой на страничку модели
+            # Словарь вида {МОДЕЛЬ: [ПУТЬ К КАТАЛОГУ, ССЫЛКА НА ПОРНХАБ]}, то есть значение это список
+            dict_links.update({model:
+                              (return_path(model),
+                               f"https://www.pornhub.com/model/{model}/")})
         else:
-            dict_links.update({item: (return_path(item), f"https://www.pornhub.com/pornstar/{item}/")})
+            dict_links.update({model:
+                              (return_path(model),
+                               f"https://www.pornhub.com/pornstar/{model}/")})
     return dict_links
 
 
@@ -49,7 +55,6 @@ def return_models() -> list:
 
 
 RETURN_MODELS = return_models()  # повторяемый лист обработки в main.py
-
 
 if __name__ == '__main__':
     from pprint import pprint

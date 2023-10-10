@@ -1,8 +1,8 @@
-# Модуль для загрузки роликов с pornhub, в зависимостях ytp-dl как отдельная программа в PATH
+# Модуль для загрузки роликов с pornhub, в зависимостях yt-dlp как отдельная программа в PATH, youtube-dl устарел
 # Минимальная версия Python - 3.10 (из-за match-case)
 # Зависимости
 # pip3 install telegram-send ; pip3 install --force-reinstall -v "python-telegram-bot==13.5" ; telegram-send --configure
-# Необходимо иметь python-telegram-bot==13.5", на более высоких не работает модуль telegram-send
+# Необходимо иметь python-telegram-bot==13.5", на свежих не работает модуль telegram-send и python выше 3.11 тоже
 # https://pythonhosted.org/telegram-send/
 # https://pythonhosted.org/telegram-send/api/
 import os
@@ -16,7 +16,7 @@ from downloader import starting_download
 from image_path import return_image_path
 
 
-__version__ = '4.0.0'
+__version__ = '3.9.0'
 
 
 def models_list() -> str:
