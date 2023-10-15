@@ -4,7 +4,8 @@ import os.path
 img_dir = os.path.join('/Users/sonic/PycharmProjects/download_pornhub/images/')
 
 
-def return_image_path(model: str = 'dummy', avatar: bool = False) -> str:
+def return_image_path(model: str = 'dummy',
+                      avatar: bool = False) -> str:
     """Функция передачи пути к изображению"""
     img = ''
 
@@ -17,15 +18,16 @@ def return_image_path(model: str = 'dummy', avatar: bool = False) -> str:
     if os.path.isfile(img):
         image_path = img
     else:
-        from download_avatars import download_avatars, DICT_MODELS_LINKS
-        link = DICT_MODELS_LINKS.get(model)
+        from download_avatars import download_avatars
+        from dictionary_processing import dict_link
+        link = dict_link.get(model)
         download_avatars(verbose=False,
                          dictionary={model: link}
                          )
         if os.path.isfile(img):
             image_path = img
         else:
-            print(f'Аватара модели {model.upper()} не существует6 устанавливаю заглушку')
+            print(f'Аватара модели {model.upper()} не существует, устанавливаю заглушку')
             image_path = f'{img_dir}dummy.jpg'
 
     return image_path

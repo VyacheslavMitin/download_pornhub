@@ -8,7 +8,8 @@ import telegram_send
 from image_path import return_image_path
 from write_html import write_html
 from check_fragments import searching_parts
-from links import RETURN_DICT_DOWNLOADS
+from dictionary_processing import dict_link, dict_path, prioritized_model_shuffle
+
 
 COMMAND = "yt-dlp"  # команда для вызова youtube-dl или аналогов
 COMMAND_OPTIONS = (
@@ -20,12 +21,13 @@ SEPARATOR = '~' * 8
 
 
 def starting_download() -> None:
-    """Функция загрузки контента"""
+    """Функция загрузки видео контента с PH"""
     print("\n\nНачало загрузки роликов\n\n".upper())
     count = 0
-    for model in RETURN_DICT_DOWNLOADS.keys():
-        path = os.path.join(RETURN_DICT_DOWNLOADS.get(model)[0])
-        link = RETURN_DICT_DOWNLOADS.get(model)[1]
+
+    for model in prioritized_model_shuffle:
+        path = dict_path.get(model)
+        link = dict_link.get(model)
 
         # Путь к файлу с аватаркой модели
         avatar = return_image_path(model=model,
@@ -40,7 +42,7 @@ def starting_download() -> None:
         os.chdir(path)
 
         count += 1  # счетчик скачиваемой модели
-        progress = f'{count}/{len(RETURN_DICT_DOWNLOADS.keys())}'
+        progress = f'{count}/{len(prioritized_model_shuffle)}'
         for i in range(5):
             # подстановка заголовка в терминал
             sys.stdout.write(f"\x1b]2;Загрузка {progress}, модель {model.upper()}\x07")
@@ -62,7 +64,7 @@ def starting_download() -> None:
         try:
             subprocess.call([
                 COMMAND,  # распаковка списка с командой youtube-dl
-                *COMMAND_OPTIONS,  # параметры youtube-dl, распаковка
+                *COMMAND_OPTIONS,  # параметры youtube-dl, распаковка кортежа с параметрами
                 link,  # передаваемая ссылка
             ])
 
@@ -72,7 +74,7 @@ def starting_download() -> None:
                 if searching_parts():
                     subprocess.call([
                         COMMAND,  # распаковка списка с командой youtube-dl
-                        *COMMAND_OPTIONS,  # параметры youtube-dl, распаковка
+                        *COMMAND_OPTIONS,  # параметры youtube-dl, распаковка кортежа с параметрами
                         link,  # передаваемая ссылка
                     ])
                 else:
@@ -89,3 +91,9 @@ def starting_download() -> None:
         # Сообщение об окончании загрузки
         message_finish_model_download = f"\n{SEPARATOR} Окончание загрузки модели {model.upper()} {SEPARATOR}" + '\n'*10
         print(message_finish_model_download)
+
+
+if __name__ == '__main__':
+    print(prioritized_model_shuffle)
+    print(dict_link)
+    print(dict_path)

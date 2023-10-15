@@ -6,30 +6,17 @@
 # https://pythonhosted.org/telegram-send/
 # https://pythonhosted.org/telegram-send/api/
 import os
-import subprocess
 import sys
 import time
 import telegram_send
+# import subprocess
 
-from links import RETURN_MODELS
 from downloader import starting_download
 from image_path import return_image_path
+from dictionary_processing import prioritized_model_shuffle
 
 
-__version__ = '3.9.0'
-
-
-def models_list() -> str:
-    """Функция подготовки текстового массива с моделями"""
-    count = 0  # вывод списка моделей построчно с указанием номера в списке очередности
-    models_strings = ''
-
-    for item in RETURN_MODELS:
-        count += 1
-        model_string = f'{count:2} ~ {item}'
-        models_strings += model_string + '\n'
-
-    return models_strings
+__version__ = '4.0'
 
 
 def main():
@@ -40,10 +27,7 @@ def main():
             changes = input('Необходимы правки списков моделей? Y/Д или N/Н: ')
             match changes:
                 case 'y' | 'Y' | 'Д' | 'д' | 'l' | 'L':
-                    for item in ['!priority.txt',
-                                 '!models.txt',
-                                 '!pornstars.txt']:
-                        subprocess.Popen(['nano', item]).wait()
+                    # TODO сделать инструкции по работе с базой sqlite
                     time.sleep(1)
                     print('Правки выполнены\n\n')
                     os.system('clear')
@@ -57,11 +41,23 @@ def main():
     except IndexError:  # обработка отсутствия передаваемого параметра
         pass
 
+    def models_list() -> str:
+        """Функция подготовки текстового массива с моделями и нумерацией"""
+        count = 0  # вывод списка моделей построчно с указанием номера в списке очередности
+        models_strings = ''
+
+        for item in prioritized_model_shuffle:
+            count += 1
+            model_string = f'{count:2} ~ {item}'
+            models_strings += model_string + '\n'
+
+        return models_strings
+
     message_start_print = ('Загрузка роликов с PornHub'.upper() + '\n' +
                            f'{time.strftime("%d.%m.%Yг., %H:%M:%S")}\n' +  # текущее время
                            f'Версия Python: {sys.version[:-35]}\n' +  # [:-35]
                            f'Версия программы {__version__}\n' +
-                           f'Количество моделей для загрузки: {len(RETURN_MODELS):}\n\n' +
+                           f'Количество моделей для загрузки: {len(prioritized_model_shuffle):}\n\n' +
                            'Список моделей для загрузки:'.upper() + '\n' +
                            f'{models_list()}'
                            )
@@ -70,7 +66,7 @@ def main():
                           f'{time.strftime("%d.%m.%Yг., %H:%M:%S")}\n'  # текущее время
                           f'Версия Python: {sys.version[:-79]}\n' +  # [:-35]
                           f'Версия программы {__version__}\n'
-                          f'Количество моделей для загрузки: {len(RETURN_MODELS):}\n\n'
+                          f'Количество моделей для загрузки: {len(prioritized_model_shuffle):}\n\n'
                           f'Список моделей для загрузки:\n'
                           f'{models_list()}'
                           )
@@ -90,7 +86,6 @@ def main():
     print('Все успешно загружено', '\n' * 5)
     with open(return_image_path('done'), 'rb') as done:
         telegram_send.send(
-            # messages=[f'☑️Все успешно загружено\n{time.strftime("%d.%m.%Yг., %H:%M:%S")}'],
             captions=[f'☑️Все успешно загружено\n'
                       f'{time.strftime("%d.%m.%Yг., %H:%M:%S")}'],
             images=[done]

@@ -3,17 +3,13 @@ import os.path
 import requests
 from bs4 import BeautifulSoup
 
-from links import RETURN_DICT_DOWNLOADS
-DICT_MODELS_LINKS = {}
-for model_, list_, in RETURN_DICT_DOWNLOADS.items():  # Создание нового словаря без значения с путем, для упрощения
-    DICT_MODELS_LINKS.update({model_:
-                             list_[1]})  # втором элемент значения - ссылка на страницу
+from dictionary_processing import dict_link
 
 avatars_dir = os.path.join('/Users/sonic/PycharmProjects/download_pornhub/images/avatars/')
 
 
 def download_avatars(verbose: bool = True,
-                     dictionary: dict = DICT_MODELS_LINKS) -> None:
+                     dictionary: dict = dict_link) -> None:
     """Функция загрузки аватарок всех моделей"""
     if verbose:
         print('Модуль загрузки аватарок моделей с PornHub\n\n'.upper())
@@ -55,10 +51,7 @@ def download_avatars(verbose: bool = True,
 
 
 if __name__ == '__main__':
-    # print(DICT_MODELS_LINKS)
     download_avatars(verbose=True,  # пример использования
-                     dictionary={'misslexa': 'https://www.pornhub.com/model/misslexa/'}
-                     )
-    # download_avatars(verbose=True,
-    #                  dictionary=DICT_MODELS_LINKS)
+                     dictionary={'booty_ass':
+                                 'https://www.pornhub.com/model/booty_ass/'})
     download_avatars()  # все модели
