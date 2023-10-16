@@ -25,6 +25,15 @@ def starting_download() -> None:
     print("\n\nНачало загрузки роликов\n\n".upper())
     count = 0
 
+    def subprocess_download(link_):
+        """Функция вызова subprocess с программой-загрузчиком"""
+        subprocess.call([
+            COMMAND,  # распаковка списка с командой youtube-dl
+            *COMMAND_OPTIONS,  # параметры youtube-dl, распаковка кортежа с параметрами
+            link_,  # передаваемая ссылка на плейлист с каналом модели
+        ])
+        time.sleep(1)
+
     for model in prioritized_model_shuffle:
         path = dict_path.get(model)
         link = dict_link.get(model)
@@ -55,32 +64,19 @@ def starting_download() -> None:
         print(message_start_model_download_print)
         with open(avatar, 'rb') as avatar:
             telegram_send.send(
-                               # messages=[message_start_model_download_send],
-                               # parse_mode='markdown',
                                images=[avatar],
                                captions=[message_start_model_download_send],
                                )
 
         try:
-            subprocess.call([
-                COMMAND,  # распаковка списка с командой youtube-dl
-                *COMMAND_OPTIONS,  # параметры youtube-dl, распаковка кортежа с параметрами
-                link,  # передаваемая ссылка
-            ])
-
-            time.sleep(1)
-
+            subprocess_download(link)
             while True:  # Поиск не докаченных файлов
-                if searching_parts():
-                    subprocess.call([
-                        COMMAND,  # распаковка списка с командой youtube-dl
-                        *COMMAND_OPTIONS,  # параметры youtube-dl, распаковка кортежа с параметрами
-                        link,  # передаваемая ссылка
-                    ])
+                if searching_parts():  # проверка на фрагменты видео, если есть стереть и перекачать заново
+                    subprocess_download(link)
                 else:
                     break
         except KeyboardInterrupt:
-            print('Прерывание с клавиатуры')
+            print('Прерывание загрузки с клавиатуры')
             sys.exit()
         # Запись HTML файла с описанием
         write_html(path=path,
