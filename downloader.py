@@ -3,15 +3,16 @@ import os
 import subprocess
 import time
 import sys
+
 import telegram_send
 
-from image_path import return_image_path
 from write_html import write_html
 from check_fragments import searching_parts
 from dictionary_processing import dict_link, dict_path, prioritized_model_shuffle
+from datebase_module import avatar_read_from_bd, image_read_from_db
 
 
-COMMAND = "yt-dlp"  # команда для вызова youtube-dl или аналогов
+COMMAND = "yt-dlp"  # команда для вызова youtube-dl или аналогов, должна находится в PATH
 COMMAND_OPTIONS = (
     '--abort-on-unavailable-fragment',
     # '--quiet',
@@ -20,28 +21,28 @@ COMMAND_OPTIONS = (
 SEPARATOR = '~' * 8
 
 
+def subprocess_download(link_):
+    """Функция вызова subprocess с программой-загрузчиком и параметрами"""
+    subprocess.call([
+        COMMAND,  # распаковка списка с командой youtube-dl
+        *COMMAND_OPTIONS,  # параметры youtube-dl, распаковка кортежа с параметрами
+        link_,  # передаваемая ссылка на плейлист с каналом модели
+    ])
+    time.sleep(1)
+
+
 def starting_download() -> None:
     """Функция загрузки видео контента с PH"""
     print("\n\nНачало загрузки роликов\n\n".upper())
     count = 0
-
-    def subprocess_download(link_):
-        """Функция вызова subprocess с программой-загрузчиком"""
-        subprocess.call([
-            COMMAND,  # распаковка списка с командой youtube-dl
-            *COMMAND_OPTIONS,  # параметры youtube-dl, распаковка кортежа с параметрами
-            link_,  # передаваемая ссылка на плейлист с каналом модели
-        ])
-        time.sleep(1)
 
     for model in prioritized_model_shuffle:
         path = dict_path.get(model)
         link = dict_link.get(model)
 
         # Путь к файлу с аватаркой модели
-        avatar = return_image_path(model=model,
-                                   avatar=True)
-
+        avatar = avatar_read_from_bd(model)
+        # Проверка существования и создания каталога для сохранения загружаемых файлов
         if not os.path.isdir(path):
             try:
                 os.mkdir(path)
@@ -62,22 +63,23 @@ def starting_download() -> None:
                                              f"{now_time}\n"
                                              f"Модель {model.upper()}")
         print(message_start_model_download_print)
-        with open(avatar, 'rb') as avatar:
-            telegram_send.send(
-                               images=[avatar],
-                               captions=[message_start_model_download_send],
-                               )
-
+        telegram_send.send(
+                           images=[avatar],
+                           captions=[message_start_model_download_send],
+                           )
         try:
-            subprocess_download(link)
-            while True:  # Поиск не докаченных файлов
+            while True:
+                subprocess_download(link)
                 if searching_parts():  # проверка на фрагменты видео, если есть стереть и перекачать заново
-                    subprocess_download(link)
+                    continue
                 else:
                     break
         except KeyboardInterrupt:
-            print('Прерывание загрузки с клавиатуры')
-            sys.exit()
+            telegram_send.send(
+                images=[image_read_from_db('interrupt')],
+                captions=[f'🔴Прерывание работы программы пользователем\n{time.strftime("%d.%m.%Yг., %H:%M:%S")}']
+            )
+            sys.exit('🔴Прерывание работы программы пользователем')
         # Запись HTML файла с описанием
         write_html(path=path,
                    name=model,

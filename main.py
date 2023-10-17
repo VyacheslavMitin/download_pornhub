@@ -9,14 +9,13 @@ import os
 import sys
 import time
 import telegram_send
-# import subprocess
 
 from downloader import starting_download
-from image_path import return_image_path
 from dictionary_processing import prioritized_model_shuffle
+from datebase_module import image_read_from_db
 
 
-__version__ = '4.0'
+__version__ = '4.2'
 
 
 def main():
@@ -24,14 +23,14 @@ def main():
     try:  # проверка параметров запуска
         if sys.argv[1] == '--edit-models':
             print('Модуль загрузки видео с PornHub, правка списков моделей')
-            changes = input('Необходимы правки списков моделей? Y/Д или N/Н: ')
+            changes = input('Необходимы правки списков моделей? Y/Д или N/Н: ').lower()
             match changes:
-                case 'y' | 'Y' | 'Д' | 'д' | 'l' | 'L':
+                case 'y' | 'д' | 'l':
                     # TODO сделать инструкции по работе с базой sqlite
                     time.sleep(1)
                     print('Правки выполнены\n\n')
                     os.system('clear')
-                case '' | None | 'N' | 'n' | 'н' | 'Н':
+                case '' | None | 'n' | 'н':
                     print('Без правок\n\n')
                     os.system('clear')
 
@@ -41,8 +40,10 @@ def main():
     except IndexError:  # обработка отсутствия передаваемого параметра
         pass
 
+    # time.sleep(1)
+
     def models_list() -> str:
-        """Функция подготовки текстового массива с моделями и нумерацией"""
+        """Функция подготовки текстового массива с моделями и их нумерацией"""
         count = 0  # вывод списка моделей построчно с указанием номера в списке очередности
         models_strings = ''
 
@@ -71,25 +72,20 @@ def main():
                           f'{models_list()}'
                           )
 
-    time.sleep(1)
-
     print(message_start_print)
-    with open(return_image_path('logo'), 'rb') as logo:
-        telegram_send.send(
-            # messages=[message_start_send],
-            captions=[message_start_send],
-            images=[logo]
-        )
+    telegram_send.send(
+        captions=[message_start_send],
+        images=[image_read_from_db('logo')]
+    )
 
     starting_download()
 
     print('Все успешно загружено', '\n' * 5)
-    with open(return_image_path('done'), 'rb') as done:
-        telegram_send.send(
-            captions=[f'☑️Все успешно загружено\n'
-                      f'{time.strftime("%d.%m.%Yг., %H:%M:%S")}'],
-            images=[done]
-        )
+    telegram_send.send(
+        captions=[f'☑️Все успешно загружено\n'
+                  f'{time.strftime("%d.%m.%Yг., %H:%M:%S")}'],
+        images=[image_read_from_db('done')]
+    )
 
     sys.exit(0)  # выход
 

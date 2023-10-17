@@ -1,5 +1,4 @@
 # Модуль генерации данных для передачи в YOUTUBE-DL или аналоги
-# import random
 import os
 import configparser
 from datebase_module import DATABASE_CONTENT

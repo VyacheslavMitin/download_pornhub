@@ -3,12 +3,14 @@
 # brew install --cask db-browser-for-sqlite
 import sqlite3
 import os
+import sys
 
-DATABASE_MODELS = 'models.sq3'
+abs_path = os.path.abspath(os.curdir)
+DATABASE_MODELS = os.path.join(abs_path, 'models.sq3')
 
 
 def split_models_output():
-    """Функция для нарезания файла с моделями в массив данных"""
+    """Функция для нарезания файла с моделями в список"""
     list_ = []
     file = 'models_output.txt'
     with open(file, 'r') as file:
@@ -25,7 +27,7 @@ MODELS_DATA = split_models_output()
 
 def create_db():
     """Функция создания базы данных с моделями"""
-    os.remove(DATABASE_MODELS)
+    # os.remove(DATABASE_MODELS)
 
     # Подключаемся к базе и создаем поля
     connection = sqlite3.connect(DATABASE_MODELS)
@@ -71,13 +73,13 @@ def insert_data_in_table():
 
 def read_db(priority='all',
             mixed=True):
-    """Функция чтения из базы данных"""
+    """Функция чтения данных из базы данных"""
     connection = sqlite3.connect(DATABASE_MODELS)
     cursor = connection.cursor()
 
     # Получение моделей с приоритетами 1 и 2
     cursor.execute("""SELECT name, role, activity, priority FROM models 
-    WHERE activity == 'active' AND priority == 2 OR priority == 1
+    WHERE activity == 'active' AND (priority == 2 OR priority == 1)
     ORDER BY priority
     """)  # получение данных из таблицы если модель активна
     rows_1_2 = cursor.fetchall()
@@ -108,16 +110,17 @@ DATABASE_CONTENT = read_db(priority='all',  # получение столбцо�
 
 
 def avatar_write_to_db():
-    """Функция работы с базой данных"""
+    """Функция записи аватарок в базу данных"""
     connection = sqlite3.connect(DATABASE_MODELS)
     cursor = connection.cursor()
 
     cursor.execute("""SELECT name, avatar FROM models
     WHERE activity == 'active'
-    ORDER BY name""")
+    ORDER BY name
+    """)  # получение строк в БД для проверки существования аватарок
     rows = cursor.fetchall()
     for item in rows:
-        if item[1] is None:
+        if item[1] is None:  # если нет аватара попробовать его загрузить и записать в БД
             print(f'У модели "{item[0]}" нет аватара!')
             from dictionary_processing import dict_link
             from download_avatars import download_avatars
@@ -130,7 +133,7 @@ def avatar_write_to_db():
                                            SET avatar = ?
                                            WHERE name == ?      
                                            """
-                cursor.execute(sqlite_insert_blob_query,
+                cursor.execute(sqlite_insert_blob_query,  # обновление БД с записью в нее загруженных аватарок
                                [blob_data, item[0]])
     # Сохраняем изменения и закрываем соединение
     connection.commit()
@@ -138,15 +141,88 @@ def avatar_write_to_db():
     return rows
 
 
+def avatar_read_from_bd(model):
+    """Функция чтения аватарок или их замены из базы данных"""
+    connection = sqlite3.connect(DATABASE_MODELS)
+    cursor = connection.cursor()
+
+    cursor.execute("""SELECT name, avatar FROM models
+    WHERE name == ?
+    """, [model])
+
+    row = cursor.fetchone()
+
+    # Закрываем соединение
+    cursor.close()
+
+    if row[1]:  # если есть аватар в кортеже
+        avatar = row[1]
+    else:
+        avatar = image_read_from_db('dummy')  # передача пустышки
+
+    return avatar
+
+
+def image_read_from_db(file_name):
+    """Функция чтения картинок (не аватарок) из базы данных"""
+    conn = sqlite3.connect(DATABASE_MODELS)
+    cursor = conn.cursor()
+
+    cursor.execute("""SELECT image FROM images
+    WHERE file_name == ?""",
+                   [file_name])
+
+    image = cursor.fetchone()[0]
+
+    # Закрываем соединение
+    conn.close()
+
+    return image
+
+
+def insert_blob_in_db(table, blob, key):
+    """Функция записи файлов в базу данных"""
+    conn = sqlite3.connect(DATABASE_MODELS)
+    cursor = conn.cursor()
+
+    if os.path.isfile(blob):
+        blob_data = open(blob, 'rb')
+        blob_data_read = blob_data.read()
+
+        cursor.execute(f"""UPDATE {table}
+        SET image = ?
+        WHERE file_name == ?""",
+                       [blob_data_read, key])
+        # Закрываем файл
+        blob_data.close()
+    else:
+        sys.exit('Нет файла для записи в базу данных')
+    # Закрываем соединение с БД с сохранением данных
+    conn.commit()
+    conn.close()
+
+
 if __name__ == '__main__':
-    import pprint
+    # import pprint
     # create_db()
     # insert_data_in_table()
     # print(read_db(mixed=True, priority='not all'))
-    # print(DATABASE_CONTENT)
-    for element in avatar_write_to_db():
-        if element[1]:
-            print(f"У модели '{element[0]}' есть аватарка в базе данных")
-        else:
-            print(f"У модели '{element[0]}' нет аватарки в базе данных!")
+    print(DATABASE_CONTENT)
+    # for element in avatar_write_to_db():
+    #     if element[1]:
+    #         print(f"У модели '{element[0]}' есть аватарка в базе данных")
+    #     else:
+    #         print(f"У модели '{element[0]}' нет аватарки в базе данных!")
     # pprint.pprint(avatar_working())
+    # avatar_read_from_bd(model='booty_ass')
+    # create_table_images()
+    insert_blob_in_db(table='images', blob='interrupt.jpg', key='interrupt')
+    print(image_read_from_db('interrupt'))
+    # import telegram_send
+    # telegram_send.send(images=[avatar_read_from_bd(model='booty_ass')],
+    #                    captions=['test3'])
+    # tuple_ = ('dummy', 'done', 'logo')
+    # for item in tuple_:
+    #     image_write_to_db(image_=item)
+    #     insert_images(file_names=item)
+    pass
