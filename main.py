@@ -15,7 +15,7 @@ from dictionary_processing import prioritized_model_shuffle
 from datebase_module import image_read_from_db
 
 
-__version__ = '4.2'
+__version__ = '4.3'
 
 
 def main():

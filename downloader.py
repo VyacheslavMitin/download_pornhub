@@ -67,6 +67,7 @@ def starting_download() -> None:
                            images=[avatar],
                            captions=[message_start_model_download_send],
                            )
+        searching_parts()  # проверка на фрагменты перед загрузкой
         try:
             while True:
                 subprocess_download(link)
@@ -79,7 +80,7 @@ def starting_download() -> None:
                 images=[image_read_from_db('interrupt')],
                 captions=[f'🔴Прерывание работы программы пользователем\n{time.strftime("%d.%m.%Yг., %H:%M:%S")}']
             )
-            sys.exit('🔴Прерывание работы программы пользователем')
+            sys.exit('🔴 Прерывание работы программы пользователем')
         # Запись HTML файла с описанием
         write_html(path=path,
                    name=model,

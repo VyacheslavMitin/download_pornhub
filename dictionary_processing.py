@@ -1,12 +1,8 @@
 # Модуль генерации данных для передачи в YOUTUBE-DL или аналоги
 import os
-import configparser
-from datebase_module import DATABASE_CONTENT
 
-config = configparser.ConfigParser()
-config.read('config.ini')
-PATH = config.get('SETTINGS',  # получение из конфига пути к каталогу для записи файлов
-                  'path')
+from configs import PATH
+from datebase_module import DATABASE_CONTENT
 
 
 def return_data():

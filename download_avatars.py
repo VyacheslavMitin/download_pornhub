@@ -4,8 +4,7 @@ import requests
 from bs4 import BeautifulSoup
 
 from dictionary_processing import dict_link
-
-avatars_dir = os.path.join('/Users/sonic/PycharmProjects/download_pornhub/images/avatars/')
+from configs import temp_dir
 
 
 def download_avatars(verbose: bool = True,
@@ -16,7 +15,7 @@ def download_avatars(verbose: bool = True,
 
     if verbose:
         print('Создаем каталог для хранения аватарок\n')
-    os.makedirs(os.path.normpath(avatars_dir), exist_ok=True)  # создание каталога с аватарками если не существует
+    os.makedirs(os.path.normpath(temp_dir), exist_ok=True)  # создание каталога с аватарками если не существует
 
     for model, link in dictionary.items():
         if verbose:
@@ -33,7 +32,7 @@ def download_avatars(verbose: bool = True,
                 print(f'Ссылка на аватар на PornHub: {src}')
             url_avatar = requests.get(src).content
 
-            with open(f'{avatars_dir}{model}.jpg', 'wb') as file_avatar:
+            with open(f'{temp_dir}{model}.jpg', 'wb') as file_avatar:
                 file_avatar.write(url_avatar)
 
         except AttributeError:  # проверка на ошибку отсутствия доступа к аватарке (мертвая ссылка и тд)
@@ -42,7 +41,7 @@ def download_avatars(verbose: bool = True,
 
         finally:
             if verbose:
-                if os.path.isfile(f'{avatars_dir}{model}.jpg'):
+                if os.path.isfile(f'{temp_dir}{model}.jpg'):
                     print(f"Аватар модели {model.upper()} сохранен в файл '{model}.jpg'\n")
                 else:
                     print(f'Аватар модели {model.upper()} по не известной причине не сохранен!\n')
