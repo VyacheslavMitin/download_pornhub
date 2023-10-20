@@ -5,15 +5,14 @@ import sqlite3
 import os
 import sys
 
-abs_path = os.path.abspath(os.curdir)
-DATABASE_MODELS = os.path.join(abs_path, 'models.sq3')
+from configs import DATABASE_MODELS
 
 
 def make_db():
     """Создание таблицы из файла с полями и всем прочим"""
     # Подключаемся к базе и создаем поля
-    connection = sqlite3.connect(DATABASE_MODELS)
-    cursor = connection.cursor()
+    connect = sqlite3.connect(DATABASE_MODELS)
+    cursor = connect.cursor()
 
     def split_models_output():
         """Функция для нарезания файла с моделями в список"""
@@ -38,7 +37,7 @@ def make_db():
         role TEXT DEFAULT model NOT NULL,
         activity TEXT DEFAULT active NOT NULL,
         priority INT DEFAULT 3 NOT NULL,
-        try INTEGER DEFAULT 1,
+        attempts INTEGER DEFAULT 1,
         avatar BLOB
         );'''
 
@@ -61,16 +60,15 @@ def make_db():
     create_db()
     insert_data_in_table()
     # Сохраняем изменения и закрываем соединение
-    connection.commit()
+    connect.commit()
     cursor.close()
 
 
 def read_db(priority='all',
             mixed=True):
     """Функция чтения данных из базы данных"""
-    connection = sqlite3.connect(DATABASE_MODELS)
-    cursor = connection.cursor()
-
+    connect = sqlite3.connect(DATABASE_MODELS)
+    cursor = connect.cursor()
     # Получение моделей с приоритетами 1 и 2
     cursor.execute("""SELECT name, role, activity, priority FROM models 
     WHERE activity == 'active' AND (priority == 2 OR priority == 1)
@@ -93,7 +91,7 @@ def read_db(priority='all',
             rows = rows_1_2 + rows_3
 
     # Сохраняем изменения и закрываем соединение
-    connection.commit()
+    connect.commit()
     cursor.close()
 
     return rows
@@ -103,10 +101,36 @@ DATABASE_CONTENT = read_db(priority='all',  # получение столбцо�
                            mixed=True)
 
 
+def insert_new_model_in_db(name=None, role=None, priority=None):
+    """Функция вставки новой модели в базу данных перед загрузкой"""
+    connect = sqlite3.connect(DATABASE_MODELS)
+    cursor = connect.cursor()
+
+    if name is None:
+        print("Необходимо ввести данные по новой модели\n")
+        name = input("Имя модели:  ")
+        role = input("Это model или pornstar:  ")
+        priority = int(input("Приоритет 1, 2 или 3:  "))
+
+    try:
+        cursor.execute("""INSERT INTO models (name, role, priority)
+        VALUES (?, ?, ?)""",
+                       [name, role, priority])
+    except sqlite3.IntegrityError:
+        print("Модель уже есть в базе данных")
+    finally:
+        connect.commit()
+        cursor.close()
+
+    global DATABASE_CONTENT
+    DATABASE_CONTENT = read_db(priority='all',  # получение столбцов из БД
+                               mixed=True)
+
+
 def avatar_read_from_bd(model):
     """Функция чтения аватарок или их замены из базы данных"""
-    connection = sqlite3.connect(DATABASE_MODELS)
-    cursor = connection.cursor()
+    connect = sqlite3.connect(DATABASE_MODELS)
+    cursor = connect.cursor()
 
     cursor.execute("""SELECT name, avatar FROM models
     WHERE name == ?
@@ -141,19 +165,19 @@ def avatar_update(model):
     path_file = f'{temp_dir}{model}.jpg'
     if os.path.isfile(path_file):  # если аватарка загрузилась - записать ее в БД
         connect = sqlite3.connect(DATABASE_MODELS)
-        cur = connect.cursor()
+        cursor = connect.cursor()
         with open(path_file, 'rb') as avatar:
             blob = avatar.read()
-            cur.execute("""UPDATE models
+            cursor.execute("""UPDATE models
             SET avatar = ?
             WHERE name == ?""", [blob, model])
         connect.commit()
         # прочитать аватарку из БД и передать ее из функции дальше
-        cur.execute("""SELECT avatar FROM models
+        cursor.execute("""SELECT avatar FROM models
         WHERE name == ?""",
-                    [model])
-        avatar = cur.fetchone()[0]
-        cur.close()
+                       [model])
+        avatar = cursor.fetchone()[0]
+        cursor.close()
         shutil.rmtree(temp_dir)  # удаление временного каталога для аватарки
         return avatar
     else:
@@ -163,8 +187,8 @@ def avatar_update(model):
 
 def image_read_from_db(file_name):
     """Функция чтения картинок (не аватарок) из базы данных"""
-    conn = sqlite3.connect(DATABASE_MODELS)
-    cursor = conn.cursor()
+    connect = sqlite3.connect(DATABASE_MODELS)
+    cursor = connect.cursor()
 
     cursor.execute("""SELECT image FROM images
     WHERE file_name == ?""",
@@ -173,17 +197,17 @@ def image_read_from_db(file_name):
     image = cursor.fetchone()[0]
 
     # Закрываем соединение
-    conn.close()
+    connect.close()
 
     return image
 
 
 def insert_blob_in_db(table, blob, key):
     """Функция записи файлов в базу данных"""
-    conn = sqlite3.connect(DATABASE_MODELS)
-    cursor = conn.cursor()
-
     if os.path.isfile(blob):
+        connect = sqlite3.connect(DATABASE_MODELS)
+        cursor = connect.cursor()
+
         blob_data = open(blob, 'rb')
         blob_data_read = blob_data.read()
 
@@ -196,11 +220,34 @@ def insert_blob_in_db(table, blob, key):
     else:
         sys.exit('Нет файла для записи в базу данных')
     # Закрываем соединение с БД с сохранением данных
-    conn.commit()
-    conn.close()
+    connect.commit()
+    connect.close()
+
+
+def update_attempts(model):
+    """Функция для обновления количества попыток загрузки"""
+    connect = sqlite3.connect(DATABASE_MODELS)
+    cursor = connect.cursor()
+
+    sql_query_select_attempts = """SELECT attempts FROM models WHERE name = ?"""
+    cursor.execute(sql_query_select_attempts, [model])
+    attempt = cursor.fetchone()[0]
+    attempt = attempt + 1
+    sql_query_update_attempts = """UPDATE models
+    SET attempts = ?
+    where name == ?"""
+
+    cursor.execute(sql_query_update_attempts, [attempt, model])
+
+    connect.commit()
+    cursor.close()
+
+    return attempt
 
 
 if __name__ == '__main__':
+    update_attempts('ava-nicks')
+    # connect, cursor = connect_and_cursor_db()
     # import pprint
     # create_db()
     # insert_data_in_table()
@@ -212,7 +259,10 @@ if __name__ == '__main__':
     #     else:
     #         print(f"У модели '{element[0]}' нет аватарки в базе данных!")
     # pprint.pprint(avatar_working())
-    avatar_read_from_bd(model='bubble-lover')
+    # avatar_read_from_bd(model='bubble-lover')
+    # insert_new_model_in_db(name='ava-nicks',
+    #                        role='model',
+    #                        priority=1)
     # avatar_update(model='booty_ass')
     # create_table_images()
     # insert_blob_in_db(table='images', blob='interrupt.jpg', key='interrupt')

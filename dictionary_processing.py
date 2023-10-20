@@ -2,7 +2,7 @@
 import os
 
 from configs import PATH
-from datebase_module import DATABASE_CONTENT
+from database_module import DATABASE_CONTENT
 
 
 def return_data():
@@ -29,7 +29,8 @@ dict_link, dict_path, dict_priority, prioritized_model_shuffle = return_data()
 
 
 if __name__ == '__main__':
+    import pprint
     print(prioritized_model_shuffle)
-    print(dict_link)
-    print(dict_path)
-    print(dict_priority)
+    pprint.pprint(dict_link)
+    # print(dict_path)
+    pprint.pprint(dict_priority)

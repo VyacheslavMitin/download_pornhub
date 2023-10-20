@@ -9,8 +9,7 @@ import telegram_send
 from write_html import write_html
 from check_fragments import searching_parts
 from dictionary_processing import dict_link, dict_path, prioritized_model_shuffle
-from datebase_module import avatar_read_from_bd, image_read_from_db
-
+from database_module import avatar_read_from_bd, image_read_from_db, update_attempts
 
 COMMAND = "yt-dlp"  # команда для вызова youtube-dl или аналогов, должна находится в PATH
 COMMAND_OPTIONS = (
@@ -57,16 +56,25 @@ def starting_download() -> None:
             # подстановка заголовка в терминал
             sys.stdout.write(f"\x1b]2;Загрузка {progress}, модель {model.upper()}\x07")
 
+        attempt = update_attempts(model)
         now_time = time.strftime("%d.%m.%Yг., %H:%M:%S")
-        message_start_model_download_print = f"{SEPARATOR} Загрузка {progress}, модель {model.upper()} {SEPARATOR}\n"
+
+        message_start_model_download_print = (f"{SEPARATOR} Загрузка {progress},"
+                                              f" модель {model.upper()},"
+                                              f" попытка {attempt} {SEPARATOR}\n")
+
         message_start_model_download_send = (f"🟢Началась загрузка {progress}\n"
                                              f"{now_time}\n"
-                                             f"Модель {model.upper()}")
+                                             f"Модель {model.upper()}\n"
+                                             f"Попытка {attempt}")
         print(message_start_model_download_print)
-        telegram_send.send(
-                           images=[avatar],
-                           captions=[message_start_model_download_send],
-                           )
+        try:
+            telegram_send.send(
+                images=[avatar],
+                captions=[message_start_model_download_send],
+            )
+        except:
+            print('Не удалось отправить уведомление в Telegram')
         searching_parts()  # проверка на фрагменты перед загрузкой
         try:
             while True:
@@ -76,19 +84,23 @@ def starting_download() -> None:
                 else:
                     break
         except KeyboardInterrupt:
-            telegram_send.send(
-                images=[image_read_from_db('interrupt')],
-                captions=[f'🔴Прерывание работы программы пользователем\n{time.strftime("%d.%m.%Yг., %H:%M:%S")}']
-            )
+            try:
+                telegram_send.send(
+                    images=[image_read_from_db('interrupt')],
+                    captions=[f'🔴Прерывание работы программы пользователем\n{time.strftime("%d.%m.%Yг., %H:%M:%S")}']
+                )
+            except:
+                print('Не удалось отправить уведомление в Telegram')
             sys.exit('🔴 Прерывание работы программы пользователем')
         # Запись HTML файла с описанием
         write_html(path=path,
                    name=model,
                    link=link,
-                   now_time=now_time
+                   now_time=now_time,
+                   attempt=attempt,
                    )
         # Сообщение об окончании загрузки
-        message_finish_model_download = f"\n{SEPARATOR} Окончание загрузки модели {model.upper()} {SEPARATOR}" + '\n'*10
+        message_finish_model_download = f"\n{SEPARATOR} Окончание загрузки модели {model.upper()} {SEPARATOR}" + '\n' * 10
         print(message_finish_model_download)
 
 

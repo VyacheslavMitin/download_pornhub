@@ -11,9 +11,8 @@ import time
 import telegram_send
 
 from downloader import starting_download
+from database_module import image_read_from_db
 from dictionary_processing import prioritized_model_shuffle
-from datebase_module import image_read_from_db
-
 
 __version__ = '4.3'
 
@@ -23,10 +22,13 @@ def main():
     try:  # проверка параметров запуска
         if sys.argv[1] == '--edit-models':
             print('Модуль загрузки видео с PornHub, правка списков моделей')
-            changes = input('Необходимы правки списков моделей? Y/Д или N/Н: ').lower()
+            changes = input('Необходимы правки списков моделей? y/N: ').lower()
+            # TODO сделать инструкции по работе с базой sqlite
             match changes:
                 case 'y' | 'д' | 'l':
-                    # TODO сделать инструкции по работе с базой sqlite
+                    # from dictionary_processing import prioritized_model_shuffle
+                    # from database_module import insert_new_model_in_db
+                    # insert_new_model_in_db()
                     time.sleep(1)
                     print('Правки выполнены\n\n')
                     os.system('clear')
@@ -39,8 +41,6 @@ def main():
 
     except IndexError:  # обработка отсутствия передаваемого параметра
         pass
-
-    # time.sleep(1)
 
     def models_list() -> str:
         """Функция подготовки текстового массива с моделями и их нумерацией"""
@@ -73,19 +73,24 @@ def main():
                           )
 
     print(message_start_print)
-    telegram_send.send(
-        captions=[message_start_send],
-        images=[image_read_from_db('logo')]
-    )
-
+    try:
+        telegram_send.send(
+            captions=[message_start_send],
+            images=[image_read_from_db('logo')]
+        )
+    except:
+        print('Не удалось отправить уведомление в Telegram')
     starting_download()
 
     print('Все успешно загружено', '\n' * 5)
-    telegram_send.send(
-        captions=[f'☑️Все успешно загружено\n'
-                  f'{time.strftime("%d.%m.%Yг., %H:%M:%S")}'],
-        images=[image_read_from_db('done')]
-    )
+    try:
+        telegram_send.send(
+            captions=[f'☑️Все успешно загружено\n'
+                      f'{time.strftime("%d.%m.%Yг., %H:%M:%S")}'],
+            images=[image_read_from_db('done')]
+        )
+    except:
+        print('Не удалось отправить уведомление в Telegram')
 
     sys.exit(0)  # выход
 

@@ -5,7 +5,7 @@ import time
 NAME_HTML = '+info.html'
 
 
-def write_html(path, name, link, now_time):
+def write_html(path, name, link, now_time, attempt):
     """Функция записи HTML файла с информацией о файлах и загрузках"""
 
     file = open(f'{path}{os.sep}{NAME_HTML}', 'w')
@@ -51,7 +51,8 @@ def write_html(path, name, link, now_time):
                 if f != NAME_HTML:  # проверка на html файл и удаление его из списка
                     file_date = datetime.fromtimestamp(getctime(f)).strftime("%d.%m.%Y, %H:%M")
                     file_size = human_read_format(os.path.getsize(f))
-                    a += f'{count}. {f} - {file_size} - {file_date}#####'  # Решетки ##### для будущей замены в HTML на br
+                    a += (f'{count}. {f} - {file_size} - '
+                          f'{file_date}#####')  # Решетки ##### для будущей замены в HTML на br
                     count += 1
         return a
 
@@ -61,9 +62,10 @@ def write_html(path, name, link, now_time):
     <head><h1>{name.upper()}</h1></head>
     <body>
     <p><a href={link}>{link}</a></p>
+    <p>Количество попыток загрузки - {attempt}</p>
     <p>Время начала загрузки: {now_time}<br>
     Время окончания загрузки: {time.strftime("%d.%m.%Yг., %H:%M:%S")}</p>
-    <p>Количество файлов {amount_files_in_directory()}<br>
+    <p>Количество файлов - {amount_files_in_directory()} шт.<br>
     Общий размер файлов - {get_size_file_in_directory()}</p>
     <p>Список файлов: <br>
     {get_files_sizes_dates().replace('#####', '<br>')}</p>
