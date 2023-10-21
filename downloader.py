@@ -4,16 +4,15 @@ import subprocess
 import time
 import sys
 
-import telegram_send
-
 from write_html import write_html
 from check_fragments import searching_parts
 from dictionary_processing import dict_link, dict_path, prioritized_model_shuffle
 from database_module import avatar_read_from_bd, image_read_from_db, update_attempts
+from telegram_notifications import tg_send_notifications
 
 COMMAND = "yt-dlp"  # команда для вызова youtube-dl или аналогов, должна находится в PATH
 COMMAND_OPTIONS = (
-    '--abort-on-unavailable-fragment',
+    '--abort-on-unavailable-fragment',  # отмена загрузки если фрагмент не доступен
     # '--quiet',
     # '--progress'
 )
@@ -63,19 +62,14 @@ def starting_download() -> None:
                                               f" модель {model.upper()},"
                                               f" попытка {attempt} {SEPARATOR}\n")
 
-        message_start_model_download_send = (f"🟢Началась загрузка {progress}\n"
+        message_start_model_download_send = (f"🟢 Началась загрузка {progress}\n"
                                              f"{now_time}\n"
                                              f"Модель {model.upper()}\n"
                                              f"Попытка {attempt}")
         print(message_start_model_download_print)
 
-        try:
-            telegram_send.send(
-                images=[avatar],
-                captions=[message_start_model_download_send],
-            )
-        except:
-            print('Не удалось отправить уведомление в Telegram')
+        tg_send_notifications(captions=message_start_model_download_send, images=avatar)
+
         searching_parts()  # проверка на фрагменты перед загрузкой
 
         try:
@@ -85,14 +79,11 @@ def starting_download() -> None:
                     continue
                 else:
                     break
-        except KeyboardInterrupt:
-            try:
-                telegram_send.send(
-                    images=[image_read_from_db('interrupt')],
-                    captions=[f'🔴Прерывание работы программы пользователем\n{time.strftime("%d.%m.%Yг., %H:%M:%S")}']
-                )
-            except:
-                print('Не удалось отправить уведомление в Telegram')
+        except KeyboardInterrupt:  # обработка закрытия программы во время загрузки
+            tg_send_notifications(captions=f'🔴 Прерывание работы программы пользователем\n'
+                                           f'{time.strftime("%d.%m.%Yг., %H:%M:%S")}',
+                                  images=image_read_from_db('interrupt'))
+
             sys.exit('🔴 Прерывание работы программы пользователем')
         # Запись HTML файла с описанием
         write_html(path=path,
@@ -102,7 +93,8 @@ def starting_download() -> None:
                    attempt=attempt,
                    )
         # Сообщение об окончании загрузки
-        message_finish_model_download = f"\n{SEPARATOR} Окончание загрузки модели {model.upper()} {SEPARATOR}" + '\n' * 10
+        message_finish_model_download = (f"\n{SEPARATOR} Окончание загрузки модели {model.upper()} {SEPARATOR}"
+                                         + '\n' * 10)
         print(message_finish_model_download)
 
 

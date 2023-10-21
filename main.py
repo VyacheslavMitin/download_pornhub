@@ -1,18 +1,18 @@
-# Модуль для загрузки роликов с pornhub, в зависимостях yt-dlp как отдельная программа в PATH, youtube-dl устарел
+# Программа для пакетной загрузки роликов с pornhub, в зависимостях yt-dlp как отдельная программа в PATH
+# Используется база данных для хранения настроек, аватарок, приоритетов и прочего, а так же файл ini для хранения путей
+# Включен модуль рассылки уведомлений через telegram (telegram _send)
 # Минимальная версия Python - 3.10 (из-за match-case)
 # Зависимости
 # pip3 install telegram-send ; pip3 install --force-reinstall -v "python-telegram-bot==13.5" ; telegram-send --configure
-# Необходимо иметь python-telegram-bot==13.5", на свежих не работает модуль telegram-send и python выше 3.11 тоже
-# https://pythonhosted.org/telegram-send/
-# https://pythonhosted.org/telegram-send/api/
+# Подробнее о рассылке в соответствующем модуле
+# Для моделей где требуется "дружба" необходимо подложить куки через команду 'yt-dlp --cookies cookies.txt'
+# Подробное о аутентификации и авторизации в соответствующем модуле
+
 import os
 import sys
 import time
-import telegram_send
 
-# from downloader import starting_download
-from database_module import image_read_from_db
-# from dictionary_processing import prioritized_model_shuffle
+from telegram_notifications import tg_send_notifications
 
 __version__ = '4.4'
 
@@ -25,11 +25,9 @@ def main():
             changes = input('Необходимы правки списков моделей? y/N: ').lower()
             match changes:
                 case 'y' | 'д' | 'l':
-                    # from dictionary_processing import prioritized_model_shuffle
                     from database_module import insert_new_model_in_db
                     insert_new_model_in_db()
                     time.sleep(1)
-                    # del prioritized_model_shuffle
                     print('Правки выполнены\n\n')
                     os.system('clear')
                 case '' | None | 'n' | 'н':
@@ -59,6 +57,7 @@ def main():
 
         return models_strings
 
+    from database_module import image_read_from_db
     message_start_print = ('Загрузка роликов с PornHub'.upper() + '\n' +
                            f'{time.strftime("%d.%m.%Yг., %H:%M:%S")}\n' +  # текущее время
                            f'Версия Python: {sys.version[:-35]}\n' +  # [:-35]
@@ -78,26 +77,14 @@ def main():
                           )
 
     print(message_start_print)
-    try:
-        telegram_send.send(
-            captions=[message_start_send],
-            images=[image_read_from_db('logo')]
-        )
-    except:
-        print('Не удалось отправить уведомление в Telegram')
+    tg_send_notifications(captions=message_start_send, images=image_read_from_db('logo'))
 
     from downloader import starting_download
     starting_download()
 
     print('Все успешно загружено', '\n' * 5)
-    try:
-        telegram_send.send(
-            captions=[f'☑️Все успешно загружено\n'
-                      f'{time.strftime("%d.%m.%Yг., %H:%M:%S")}'],
-            images=[image_read_from_db('done')]
-        )
-    except:
-        print('Не удалось отправить уведомление в Telegram')
+    tg_send_notifications(captions=f'☑️Все успешно загружено\n{time.strftime("%d.%m.%Yг., %H:%M:%S")}',
+                          images=image_read_from_db('done'))
 
     sys.exit(0)  # выход
 
