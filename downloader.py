@@ -9,13 +9,18 @@ from check_fragments import searching_unfinished_downloads
 from dictionary_processing import dict_link, dict_path, prioritized_model_shuffle
 from database_module import avatar_read_from_bd, image_read_from_db, update_attempts
 from telegram_notifications import tg_send_notifications
+from cookies import COMMAND_OPTIONS_ADD
 
 COMMAND = "yt-dlp"  # команда для вызова youtube-dl или аналогов, должна находится в PATH
-COMMAND_OPTIONS = (
+COMMAND_OPTIONS = [  # параметры для yt-dlp
     '--abort-on-unavailable-fragment',  # отмена загрузки если фрагмент не доступен
     # '--quiet',
     # '--progress'
-)
+]
+
+if COMMAND_OPTIONS_ADD:
+    COMMAND_OPTIONS = COMMAND_OPTIONS + COMMAND_OPTIONS_ADD
+
 SEPARATOR = '~' * 8
 
 
@@ -75,7 +80,8 @@ def starting_download() -> None:
         try:
             while True:
                 subprocess_download(link)
-                if searching_unfinished_downloads():  # проверка на фрагменты видео, если есть стереть и перекачать заново
+                if searching_unfinished_downloads():  # проверка на фрагменты видео,
+                    # если есть стереть и перекачать заново
                     continue
                 else:
                     break

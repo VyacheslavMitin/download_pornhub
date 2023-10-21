@@ -14,7 +14,7 @@ import time
 
 from telegram_notifications import tg_send_notifications
 
-__version__ = '4.5'
+__version__ = '5.0'
 
 
 def main():

@@ -26,8 +26,12 @@ def searching_unfinished_downloads() -> list:
         for item_temp in search_temp:
             split1, split2 = item_temp.split(mask)
             item = f'{split1}.{split2}'
-            os.remove(item)
-            os.remove(item_temp)
+            files_tuple = (item, item_temp)
+            try:
+                for element in files_tuple:
+                    os.remove(element)
+            except FileNotFoundError:  # перехват исключения если файл не обнаружен
+                pass
 
     return search_part
 
