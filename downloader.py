@@ -68,6 +68,7 @@ def starting_download() -> None:
                                              f"Модель {model.upper()}\n"
                                              f"Попытка {attempt}")
         print(message_start_model_download_print)
+
         try:
             telegram_send.send(
                 images=[avatar],
@@ -76,6 +77,7 @@ def starting_download() -> None:
         except:
             print('Не удалось отправить уведомление в Telegram')
         searching_parts()  # проверка на фрагменты перед загрузкой
+
         try:
             while True:
                 subprocess_download(link)

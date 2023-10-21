@@ -6,6 +6,7 @@ import os
 import sys
 
 from configs import DATABASE_MODELS
+# TODO сделать общую точка входа в базу данных
 
 
 def make_db():
@@ -37,7 +38,7 @@ def make_db():
         role TEXT DEFAULT model NOT NULL,
         activity TEXT DEFAULT active NOT NULL,
         priority INT DEFAULT 3 NOT NULL,
-        attempts INTEGER DEFAULT 1,
+        attempts INTEGER DEFAULT 0,
         avatar BLOB
         );'''
 
@@ -106,11 +107,28 @@ def insert_new_model_in_db(name=None, role=None, priority=None):
     connect = sqlite3.connect(DATABASE_MODELS)
     cursor = connect.cursor()
 
-    if name is None:
+    if name is None:  # запрос на ввод данных если они не передаются в параметрах функции
         print("Необходимо ввести данные по новой модели\n")
         name = input("Имя модели:  ")
-        role = input("Это model или pornstar:  ")
-        priority = int(input("Приоритет 1, 2 или 3:  "))
+
+        while True:  # получение от пользователя строки с типом модели
+            role_tuple = ('model', 'pornstar',)
+            role = input("Это model или pornstar (по умолчанию model):  ").lower()
+            if role not in role_tuple and role != '':
+                print(f'Необходимо ввести правильную роль из {role_tuple}!')
+            elif role == '':
+                role = 'model'
+                break
+            else:
+                break
+
+        while True:  # получение от пользователя числа с приоритетом для порядка
+            priority_tuple = (1, 2, 3,)
+            priority = int(input("Приоритет 1, 2 или 3:  "))
+            if priority not in priority_tuple:
+                print(f'Необходимо указать корректный порядок - из {priority_tuple}')
+            else:
+                break
 
     try:
         cursor.execute("""INSERT INTO models (name, role, priority)
@@ -246,13 +264,14 @@ def update_attempts(model):
 
 
 if __name__ == '__main__':
-    update_attempts('ava-nicks')
+    # insert_new_model_in_db()
+    # update_attempts('ava-nicks')
     # connect, cursor = connect_and_cursor_db()
     # import pprint
     # create_db()
     # insert_data_in_table()
     # print(read_db(mixed=True, priority='not all'))
-    # print(DATABASE_CONTENT)
+    print(DATABASE_CONTENT)
     # for element in avatar_write_to_db():
     #     if element[1]:
     #         print(f"У модели '{element[0]}' есть аватарка в базе данных")

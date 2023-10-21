@@ -10,11 +10,11 @@ import sys
 import time
 import telegram_send
 
-from downloader import starting_download
+# from downloader import starting_download
 from database_module import image_read_from_db
-from dictionary_processing import prioritized_model_shuffle
+# from dictionary_processing import prioritized_model_shuffle
 
-__version__ = '4.3'
+__version__ = '4.4'
 
 
 def main():
@@ -23,24 +23,29 @@ def main():
         if sys.argv[1] == '--edit-models':
             print('Модуль загрузки видео с PornHub, правка списков моделей')
             changes = input('Необходимы правки списков моделей? y/N: ').lower()
-            # TODO сделать инструкции по работе с базой sqlite
             match changes:
                 case 'y' | 'д' | 'l':
                     # from dictionary_processing import prioritized_model_shuffle
-                    # from database_module import insert_new_model_in_db
-                    # insert_new_model_in_db()
+                    from database_module import insert_new_model_in_db
+                    insert_new_model_in_db()
                     time.sleep(1)
+                    # del prioritized_model_shuffle
                     print('Правки выполнены\n\n')
                     os.system('clear')
                 case '' | None | 'n' | 'н':
                     print('Без правок\n\n')
                     os.system('clear')
 
-        if sys.argv[1] == '--no-questions':
+        elif sys.argv[1] == '--no-questions':
             print('Без параметров запуска\n\n')
+
+        elif sys.argv[1] is None:
+            pass
 
     except IndexError:  # обработка отсутствия передаваемого параметра
         pass
+
+    from dictionary_processing import prioritized_model_shuffle
 
     def models_list() -> str:
         """Функция подготовки текстового массива с моделями и их нумерацией"""
@@ -80,6 +85,8 @@ def main():
         )
     except:
         print('Не удалось отправить уведомление в Telegram')
+
+    from downloader import starting_download
     starting_download()
 
     print('Все успешно загружено', '\n' * 5)
