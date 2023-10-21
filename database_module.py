@@ -102,7 +102,7 @@ DATABASE_CONTENT = read_db(priority='all',  # получение столбцо�
                            mixed=True)
 
 
-def insert_new_model_in_db(name=None, role=None, priority=None):
+def insert_new_model_in_db(name=None, role='model', priority=1):
     """Функция вставки новой модели в базу данных перед загрузкой"""
     connect = sqlite3.connect(DATABASE_MODELS)
     cursor = connect.cursor()
@@ -124,9 +124,12 @@ def insert_new_model_in_db(name=None, role=None, priority=None):
 
         while True:  # получение от пользователя числа с приоритетом для порядка
             priority_tuple = (1, 2, 3,)
-            priority = int(input("Приоритет 1, 2 или 3:  "))
-            if priority not in priority_tuple:
+            priority = int(input("Приоритет 1, 2 или 3 (по умолчанию 1):  "))
+            if priority not in priority_tuple and priority != '':
                 print(f'Необходимо указать корректный порядок - из {priority_tuple}')
+            elif priority == '':
+                priority = 1
+                break
             else:
                 break
 
