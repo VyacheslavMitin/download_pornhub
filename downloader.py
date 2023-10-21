@@ -5,7 +5,7 @@ import time
 import sys
 
 from write_html import write_html
-from check_fragments import searching_parts
+from check_fragments import searching_unfinished_downloads
 from dictionary_processing import dict_link, dict_path, prioritized_model_shuffle
 from database_module import avatar_read_from_bd, image_read_from_db, update_attempts
 from telegram_notifications import tg_send_notifications
@@ -70,12 +70,12 @@ def starting_download() -> None:
 
         tg_send_notifications(captions=message_start_model_download_send, images=avatar)
 
-        searching_parts()  # проверка на фрагменты перед загрузкой
+        searching_unfinished_downloads()  # проверка на фрагменты перед загрузкой
 
         try:
             while True:
                 subprocess_download(link)
-                if searching_parts():  # проверка на фрагменты видео, если есть стереть и перекачать заново
+                if searching_unfinished_downloads():  # проверка на фрагменты видео, если есть стереть и перекачать заново
                     continue
                 else:
                     break
