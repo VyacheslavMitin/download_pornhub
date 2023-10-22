@@ -11,8 +11,9 @@ import sys
 import time
 
 from telegram_notifications import tg_send_notifications
+from disk_usage import disk_usage_all_info
 
-__version__ = '6.3'
+__version__ = '6.4'
 
 
 def main():
@@ -58,9 +59,10 @@ def main():
     from database_module import image_read_from_db
     message_start_print = ('Загрузка роликов с PornHub'.upper() + '\n' +
                            f'{time.strftime("%d.%m.%Yг., %H:%M:%S")}\n' +  # текущее время
-                           f'Платформа {sys.platform}\n'
+                           f'{disk_usage_all_info()}\n'  # определение свободного места
+                           f'Платформа: {sys.platform}\n'
                            f'Версия Python: {sys.version[:7]}\n' +  # [:-35]
-                           f'Версия программы {__version__}\n' +
+                           f'Версия программы: {__version__}\n' +
                            f'Количество моделей для загрузки: {len(prioritized_model_shuffle):}\n\n' +
                            'Список моделей для загрузки:'.upper() + '\n' +
                            f'{models_list()}'
@@ -68,9 +70,10 @@ def main():
 
     message_start_send = (f'💦Загрузка роликов с PH\n'
                           f'{time.strftime("%d.%m.%Yг., %H:%M:%S")}\n'  # текущее время
-                          f'Платформа {sys.platform}\n'
+                          f'{disk_usage_all_info()}\n'  # определение свободного места
+                          f'Платформа: {sys.platform}\n'
                           f'Версия Python: {sys.version[:7]}\n' +  # [:-35]
-                          f'Версия программы {__version__}\n'
+                          f'Версия программы: {__version__}\n'
                           f'Количество моделей для загрузки: {len(prioritized_model_shuffle):}\n\n'
                           f'Список моделей для загрузки:\n'
                           f'{models_list()}'

@@ -5,20 +5,21 @@ import time
 NAME_HTML = '+info.html'
 
 
+def human_read_format(size):
+    """Функция человеко-читаемого размера файлов"""
+    sizes = [' Б', ' КБ', ' МБ', ' ГБ']
+    index = 0
+    for i in range(len(sizes)):
+        if size / (1024 ** i) < 1:
+            break
+        index = i
+    return f'{round(size / (1024 ** index))}{sizes[index]}'
+
+
 def write_html(path, name, link, now_time, attempt):
     """Функция записи HTML файла с информацией о файлах и загрузках"""
 
     file = open(f'{path}{os.sep}{NAME_HTML}', 'w')
-
-    def human_read_format(size):
-        """Функция человеко-читаемого размера файлов"""
-        sizes = [' Б', ' КБ', ' МБ', ' ГБ']
-        index = 0
-        for i in range(len(sizes)):
-            if size / (1024 ** i) < 1:
-                break
-            index = i
-        return f'{round(size / (1024 ** index))}{sizes[index]}'
 
     def get_size_file_in_directory():
         """Функция получения размера файлов в каталоге"""

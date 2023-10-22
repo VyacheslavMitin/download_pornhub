@@ -10,6 +10,7 @@ from dictionary_processing import dict_link, dict_path, prioritized_model_shuffl
 from database_module import avatar_read_from_bd, image_read_from_db, update_attempts
 from telegram_notifications import tg_send_notifications
 from cookies import COMMAND_OPTIONS_ADD
+from disk_usage import disk_free_space
 
 COMMAND = "yt-dlp"  # команда для вызова youtube-dl или аналогов, должна находится в PATH
 COMMAND_OPTIONS = [  # параметры для yt-dlp
@@ -66,12 +67,14 @@ def starting_download() -> None:
 
         message_start_model_download_print = (f"{SEPARATOR_START} Загрузка {progress},"
                                               f" модель {model.upper()},"
-                                              f" попытка {attempt} {SEPARATOR_START}\n")
+                                              f" попытка {attempt} {SEPARATOR_START}\n"
+                                              f"Свободное место - {disk_free_space()}\n")
 
         message_start_model_download_send = (f"🟢 Началась загрузка {progress}\n"
                                              f"{now_time}\n"
                                              f"Модель {model.upper()}\n"
-                                             f"Попытка {attempt}")
+                                             f"Попытка {attempt}\n"
+                                             f"Свободное место - {disk_free_space()}")
         print(message_start_model_download_print)
 
         tg_send_notifications(captions=message_start_model_download_send, images=avatar)
