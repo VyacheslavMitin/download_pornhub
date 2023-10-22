@@ -12,7 +12,7 @@ import time
 
 from telegram_notifications import tg_send_notifications
 
-__version__ = '6.0'
+__version__ = '6.1'
 
 
 def main():
@@ -58,6 +58,7 @@ def main():
     from database_module import image_read_from_db
     message_start_print = ('Загрузка роликов с PornHub'.upper() + '\n' +
                            f'{time.strftime("%d.%m.%Yг., %H:%M:%S")}\n' +  # текущее время
+                           f'Платформа {sys.platform}'
                            f'Версия Python: {sys.version[:7]}\n' +  # [:-35]
                            f'Версия программы {__version__}\n' +
                            f'Количество моделей для загрузки: {len(prioritized_model_shuffle):}\n\n' +
@@ -67,6 +68,7 @@ def main():
 
     message_start_send = (f'💦Загрузка роликов с PH\n'
                           f'{time.strftime("%d.%m.%Yг., %H:%M:%S")}\n'  # текущее время
+                          f'Платформа {sys.platform}'
                           f'Версия Python: {sys.version[:7]}\n' +  # [:-35]
                           f'Версия программы {__version__}\n'
                           f'Количество моделей для загрузки: {len(prioritized_model_shuffle):}\n\n'

@@ -21,8 +21,8 @@ COMMAND_OPTIONS = [  # параметры для yt-dlp
 if COMMAND_OPTIONS_ADD:
     COMMAND_OPTIONS = COMMAND_OPTIONS + COMMAND_OPTIONS_ADD
 
-SEPARATOR_START = '🟡' * 5
-SEPARATOR_END = '🟢' * 5
+SEPARATOR_START = '🔶' * 5
+SEPARATOR_END = '🔷' * 5
 
 
 def subprocess_download(link_):
@@ -44,7 +44,7 @@ def starting_download() -> None:
         path = dict_path.get(model)
         link = dict_link.get(model)
 
-        # Путь к файлу с аватаркой модели
+        # Чтение аватарки из БД
         avatar = avatar_read_from_bd(model)
         # Проверка существования и создания каталога для сохранения загружаемых файлов
         if not os.path.isdir(path):
