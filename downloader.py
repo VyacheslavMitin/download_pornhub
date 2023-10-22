@@ -21,7 +21,8 @@ COMMAND_OPTIONS = [  # параметры для yt-dlp
 if COMMAND_OPTIONS_ADD:
     COMMAND_OPTIONS = COMMAND_OPTIONS + COMMAND_OPTIONS_ADD
 
-SEPARATOR = '~' * 8
+SEPARATOR_START = '🟡' * 5
+SEPARATOR_END = '🟢' * 5
 
 
 def subprocess_download(link_):
@@ -63,9 +64,9 @@ def starting_download() -> None:
         attempt = update_attempts(model)
         now_time = time.strftime("%d.%m.%Yг., %H:%M:%S")
 
-        message_start_model_download_print = (f"{SEPARATOR} Загрузка {progress},"
+        message_start_model_download_print = (f"{SEPARATOR_START} Загрузка {progress},"
                                               f" модель {model.upper()},"
-                                              f" попытка {attempt} {SEPARATOR}\n")
+                                              f" попытка {attempt} {SEPARATOR_START}\n")
 
         message_start_model_download_send = (f"🟢 Началась загрузка {progress}\n"
                                              f"{now_time}\n"
@@ -99,12 +100,17 @@ def starting_download() -> None:
                    attempt=attempt,
                    )
         # Сообщение об окончании загрузки
-        message_finish_model_download = (f"\n{SEPARATOR} Окончание загрузки модели {model.upper()} {SEPARATOR}"
+        message_finish_model_download = (f"\n{SEPARATOR_END} Окончание загрузки модели {model.upper()} {SEPARATOR_END}"
                                          + '\n' * 10)
         print(message_finish_model_download)
 
 
 if __name__ == '__main__':
+    from pprint import pprint
+    print(f"Опции для загрузчика {COMMAND_OPTIONS}")
+    print()
     print(prioritized_model_shuffle)
-    print(dict_link)
-    print(dict_path)
+    print()
+    pprint(dict_link)
+    print()
+    pprint(dict_path)
