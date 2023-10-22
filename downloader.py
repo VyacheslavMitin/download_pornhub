@@ -97,9 +97,9 @@ def starting_download() -> None:
             os.remove('cookies.txt')
 
         # Удаление старого HTML файла
-        from write_html import NAME_HTML
-        if os.path.isfile(NAME_HTML):
-            os.remove(NAME_HTML)
+        # from write_html import NAME_HTML
+        # if os.path.isfile(NAME_HTML):
+        #     os.remove(NAME_HTML)
         # Запись HTML файла с описанием
         write_html(path=path,
                    name=model,

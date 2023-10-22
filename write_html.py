@@ -48,7 +48,7 @@ def write_html(path, name, link, now_time, attempt):
         count = 1  # начинаем счетчик с 1
         for f in os.listdir():
             if os.path.isfile(f):
-                if f != NAME_HTML:  # проверка на html файл и удаление его из списка
+                if f != NAME_HTML:  # проверка на существование html файл и удаление его из списка
                     file_date = datetime.fromtimestamp(getctime(f)).strftime("%d.%m.%Y, %H:%M")
                     file_size = human_read_format(os.path.getsize(f))
                     a += (f'{count}. {f} - {file_size} - '
