@@ -59,7 +59,7 @@ def starting_download() -> None:
         progress = f'{count}/{len(prioritized_model_shuffle)}'
         for i in range(5):
             # подстановка заголовка в терминал
-            sys.stdout.write(f"\x1b]2;Загрузка {progress}, модель {model.upper()}\x07")
+            sys.stdout.write(f"\x1b]2;{progress}, модель {model.upper()}\x07")
 
         attempt = update_attempts(model)
         now_time = time.strftime("%d.%m.%Yг., %H:%M:%S")
@@ -92,6 +92,14 @@ def starting_download() -> None:
                                   images=image_read_from_db('interrupt'))
 
             sys.exit('🔴 Прерывание работы программы пользователем')
+
+        if os.path.isfile('cookies.txt'):  # удаление создаваемых в каталогах моделей куки файлов
+            os.remove('cookies.txt')
+
+        # Удаление старого HTML файла
+        from write_html import NAME_HTML
+        if os.path.isfile(NAME_HTML):
+            os.remove(NAME_HTML)
         # Запись HTML файла с описанием
         write_html(path=path,
                    name=model,
@@ -101,7 +109,7 @@ def starting_download() -> None:
                    )
         # Сообщение об окончании загрузки
         message_finish_model_download = (f"\n{SEPARATOR_END} Окончание загрузки модели {model.upper()} {SEPARATOR_END}"
-                                         + '\n' * 10)
+                                         + '\n' * 3)
         print(message_finish_model_download)
 
 
