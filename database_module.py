@@ -268,14 +268,14 @@ def update_attempts(model):
 
 if __name__ == '__main__':
     import pprint
-    # insert_new_model_in_db()
+    insert_new_model_in_db()
     # update_attempts('ava-nicks')
     # connect, cursor = connect_and_cursor_db()
     # import pprint
     # create_db()
     # insert_data_in_table()
     # print(read_db(mixed=True, priority='not all'))
-    pprint.pprint(DATABASE_CONTENT)
+    # pprint.pprint(DATABASE_CONTENT)
     # for element in avatar_write_to_db():
     #     if element[1]:
     #         print(f"У модели '{element[0]}' есть аватарка в базе данных")

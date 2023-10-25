@@ -1,9 +1,9 @@
 # Модуль для отправки в Гит (GitHub) базы данных, которая лежит не в проекте
-import os
+# import os
 import shutil
 
 from configs import PLATFORM, DATABASE_MODELS, abs_path
-from telegram_notifications import tg_send_notifications
+# from telegram_notifications import tg_send_notifications
 
 
 def git_push_db():
@@ -15,9 +15,9 @@ def git_push_db():
         case 'macbook':
             print("Копирование базы в каталог программы на Macbook")
             shutil.copy(DATABASE_MODELS, abs_path)
-            os.system(f"git add {db}")
-            os.system("git commit -m 'обновление БД в Git'")
-            os.system("git push")
+            # os.system(f"git add -u {db}")
+            # os.system("git commit -m 'обновление БД в Git'")
+            # os.system("git push")
 
         case 'wifi_router':
             import sys

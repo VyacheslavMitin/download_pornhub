@@ -3,18 +3,22 @@ import os
 import subprocess
 import time
 import sys
+import shutil
 
-from write_html import write_html
+from write_html import write_html_model
 from check_fragments import searching_unfinished_downloads
 from dictionary_processing import dict_link, dict_path, prioritized_model_shuffle
 from database_module import avatar_read_from_bd, image_read_from_db, update_attempts
 from telegram_notifications import tg_send_notifications
 from cookies import COMMAND_OPTIONS_ADD
-from disk_usage import disk_free_space
+from disk_usage import disk_free_space, difference_used_sizes
+from configs import PATH
 
 COMMAND = "yt-dlp"  # команда для вызова youtube-dl или аналогов, должна находится в PATH
 COMMAND_OPTIONS = [  # параметры для yt-dlp
     '--abort-on-unavailable-fragment',  # отмена загрузки если фрагмент не доступен
+    # yt-dlp --proxy socks5://proxy.example.com:1080
+    # '--proxy', 'socks4://213.74.223.77:4153',
     # '--quiet',
     # '--progress'
 ]
@@ -81,6 +85,7 @@ def starting_download() -> None:
 
         searching_unfinished_downloads()  # проверка на фрагменты перед загрузкой
 
+        before_size = shutil.disk_usage(PATH)[2]
         try:
             while True:
                 subprocess_download(link)
@@ -96,23 +101,26 @@ def starting_download() -> None:
 
             sys.exit('🔴 Прерывание работы программы пользователем')
 
+        after_size = shutil.disk_usage(PATH)[2]
+        difference_size = difference_used_sizes(before_size, after_size)
+
         if os.path.isfile('cookies.txt'):  # удаление создаваемых в каталогах моделей куки файлов
             os.remove('cookies.txt')
 
         # Удаление старого HTML файла
-        # from write_html import NAME_HTML
-        # if os.path.isfile(NAME_HTML):
-        #     os.remove(NAME_HTML)
+        # from write_html import NAME_HTML_MODEL
+        # if os.path.isfile(NAME_HTML_MODEL):
+        #     os.remove(NAME_HTML_MODEL)
         # Запись HTML файла с описанием
-        write_html(path=path,
-                   name=model,
-                   link=link,
-                   now_time=now_time,
-                   attempt=attempt,
-                   )
+        write_html_model(path=path,
+                         name=model,
+                         link=link,
+                         now_time=now_time,
+                         attempt=attempt,
+                         )
         # Сообщение об окончании загрузки
         message_finish_model_download = (f"\n{SEPARATOR_END} Окончание загрузки модели {model.upper()} {SEPARATOR_END}"
-                                         + '\n' * 3)
+                                         + f"\nЗагружено {difference_size}" + '\n' * 3)
         print(message_finish_model_download)
 
 

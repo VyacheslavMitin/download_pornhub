@@ -2,24 +2,44 @@
 import os
 import time
 
-NAME_HTML = '+info.html'
+from configs import PATH
+
+NAME_HTML_MODEL = '+info.html'
 
 
-def human_read_format(size):
-    """Функция человеко-читаемого размера файлов"""
-    sizes = [' Б', ' КБ', ' МБ', ' ГБ']
-    index = 0
-    for i in range(len(sizes)):
-        if size / (1024 ** i) < 1:
-            break
-        index = i
-    return f'{round(size / (1024 ** index))}{sizes[index]}'
+def write_html_index(path=PATH):
+    """Функция создания HTML index.html"""
+    file = open(f"{path}{os.sep}index.html", 'w')
+
+    html = f"""<html>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>Программа загрузки с PornHub</title>
+    <head><h1>Программа загрузки с PornHub</h1></head>
+    <body>
+    <p>Время начала загрузки: {time.strftime("%d.%m.%Yг., %H:%M:%S")}</p>
+    <p><a href=behindthemaskk{os.sep}{NAME_HTML_MODEL}>behindthemaskk</a></p>
+    </body>
+    </html>"""
+
+    file.write(html)
+    file.close()
 
 
-def write_html(path, name, link, now_time, attempt):
+def write_html_model(path, name, link, now_time, attempt):
     """Функция записи HTML файла с информацией о файлах и загрузках"""
 
-    file = open(f'{path}{os.sep}{NAME_HTML}', 'w')
+    file = open(f'{path}{os.sep}{NAME_HTML_MODEL}', 'w')
+
+    def human_read_format(size):
+        """Функция человеко-читаемого размера файлов"""
+        sizes = [' Б', ' КБ', ' МБ', ' ГБ']
+        index = 0
+        for i in range(len(sizes)):
+            if size / (1024 ** i) < 1:
+                break
+            index = i
+        return f'{round(size / (1024 ** index))}{sizes[index]}'
+        # return f'{(size / (1024 ** index)):.2f}{sizes[index]}'
 
     def get_size_file_in_directory():
         """Функция получения размера файлов в каталоге"""
@@ -35,7 +55,7 @@ def write_html(path, name, link, now_time, attempt):
         amount_files = 0
         for dirpath, dirnames, filenames in os.walk(path):
             for f in filenames:
-                if f != NAME_HTML:  # проверка на html файл и вычитание его из счетчика
+                if f != NAME_HTML_MODEL:  # проверка на html файл и вычитание его из счетчика
                     amount_files += 1
         return amount_files
 
@@ -49,7 +69,7 @@ def write_html(path, name, link, now_time, attempt):
         count = 1  # начинаем счетчик с 1
         for f in os.listdir():
             if os.path.isfile(f):
-                if f != NAME_HTML:  # проверка на существование html файл и удаление его из списка
+                if f != NAME_HTML_MODEL:  # проверка на существование html файл и удаление его из списка
                     file_date = datetime.fromtimestamp(getctime(f)).strftime("%d.%m.%Y, %H:%M")
                     file_size = human_read_format(os.path.getsize(f))
                     a += (f'{count}. {f} - {file_size} - '
@@ -62,6 +82,7 @@ def write_html(path, name, link, now_time, attempt):
     <title>Модель {name.upper()}</title>
     <head><h1>{name.upper()}</h1></head>
     <body>
+    <p><a href="..{os.sep}index.html">Возврат в Index.html</a></p>
     <p><a href={link}>{link}</a></p>
     <p>Количество попыток загрузки - {attempt}</p>
     <p>Время начала загрузки: {now_time}<br>
@@ -75,3 +96,7 @@ def write_html(path, name, link, now_time, attempt):
 
     file.write(message)
     file.close()
+
+
+if __name__ == '__main__':
+    write_html_index()

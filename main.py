@@ -9,11 +9,15 @@
 import os
 import sys
 import time
+import shutil
 
+from downloader import starting_download
 from telegram_notifications import tg_send_notifications
-from disk_usage import disk_usage_all_info
+from write_html import write_html_index
+from disk_usage import disk_usage_all_info, difference_used_sizes
+from configs import PATH
 
-__version__ = '6.4'
+__version__ = '6.5'
 
 
 def main():
@@ -82,11 +86,19 @@ def main():
     print(message_start_print)
     tg_send_notifications(captions=message_start_send, images=image_read_from_db('logo'))
 
-    from downloader import starting_download
+    # Записать Index.html
+    write_html_index()
+
+    # Начало загрузки
+    before_size = shutil.disk_usage(PATH)[2]
     starting_download()
+    after_size = shutil.disk_usage(PATH)[2]
+    difference_size = difference_used_sizes(before_size, after_size)
 
     print('Все успешно загружено', '\n' * 5)
-    tg_send_notifications(captions=f'☑️Все успешно загружено\n{time.strftime("%d.%m.%Yг., %H:%M:%S")}',
+    tg_send_notifications(captions=f'☑️Все успешно загружено\n{time.strftime("%d.%m.%Yг., %H:%M:%S")}\n'
+                                   f'Осталось места {disk_usage_all_info()}\n'
+                                   f'Было загружено {difference_size}',
                           images=image_read_from_db('done'))
 
     sys.exit(0)  # выход
