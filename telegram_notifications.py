@@ -16,24 +16,41 @@ import telegram_send
 import telegram  # для обработки исключений
 
 
-def tg_send_notifications(
+def tg_send_notifications_images(
         # message=None, # сообщение от дельно от картинки, не используется в данной программе
-        captions=None,  # подпись к картинкам, используется
+        captions: str = None,  # подпись к картинкам, используется
         images=None):
     """Функция для рассылки уведомлений в Telegram с картинкой и подписью к ней"""
     if captions and images:
         try:
             telegram_send.send(
-                # messages=[message],
                 captions=[captions],
                 images=[images],
             )
+        except telegram.error.BadRequest:
+            print("Не удалось отправить уведомление в Telegram - слишком длинное сообщение")
         except telegram.error.NetworkError:  # Перехват исключения если API не доступно по сети
-            print('Не удалось отправить уведомление в Telegram')
+            print('Не удалось отправить уведомление в Telegram - проблемы с сетью')
     else:
         print("Не хватает параметров для отправки уведомления в Telegram!")
 
 
+def tg_send_notifications_message(message: str = None):
+    """Функция для рассылки сообщений в Telegram"""
+    if message:
+        try:
+            telegram_send.send(
+                messages=[message]
+            )
+        except telegram.error.BadRequest:
+            print("Не удалось отправить уведомление в Telegram - слишком длинное сообщение")
+        except telegram.error.NetworkError:  # Перехват исключения если API не доступно по сети
+            print('Не удалось отправить уведомление в Telegram - проблемы с сетью')
+    else:
+        print("Не хватает параметров для отправки сообщения в Telegram!")
+
+
 if __name__ == '__main__':
     from database_module import image_read_from_db
-    tg_send_notifications(captions='test', images=image_read_from_db('logo'))
+    tg_send_notifications_images(captions='test', images=image_read_from_db('logo'))
+    tg_send_notifications_message(message='test')

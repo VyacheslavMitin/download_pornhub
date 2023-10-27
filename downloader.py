@@ -7,11 +7,11 @@ import shutil
 
 from write_html import write_html_model
 from check_fragments import searching_unfinished_downloads
-from dictionary_processing import dict_link, dict_path, prioritized_model_shuffle
+from dictionary_processing import dict_link, dict_path
 from database_module import avatar_read_from_bd, image_read_from_db, update_attempts
-from telegram_notifications import tg_send_notifications
+from telegram_notifications import tg_send_notifications_images, tg_send_notifications_message
 from cookies import COMMAND_OPTIONS_ADD
-from disk_usage import disk_free_space, difference_used_sizes
+from disk_usage import difference_used_sizes
 from configs import PATH
 
 COMMAND = "yt-dlp"  # команда для вызова youtube-dl или аналогов, должна находится в PATH
@@ -45,6 +45,7 @@ def starting_download() -> None:
     print("\n\nНачало загрузки роликов\n\n".upper())
     count = 0
 
+    from dictionary_processing import prioritized_model_shuffle
     for model in prioritized_model_shuffle:
         path = dict_path.get(model)
         link = dict_link.get(model)
@@ -72,16 +73,16 @@ def starting_download() -> None:
         message_start_model_download_print = (f"{SEPARATOR_START} Загрузка {progress},"
                                               f" модель {model.upper()},"
                                               f" попытка {attempt} {SEPARATOR_START}\n"
-                                              f"Свободное место - {disk_free_space()}\n")
+                                              )
 
         message_start_model_download_send = (f"🟢 Началась загрузка {progress}\n"
                                              f"{now_time}\n"
                                              f"Модель {model.upper()}\n"
                                              f"Попытка {attempt}\n"
-                                             f"Свободное место - {disk_free_space()}")
+                                             )
         print(message_start_model_download_print)
 
-        tg_send_notifications(captions=message_start_model_download_send, images=avatar)
+        tg_send_notifications_images(captions=message_start_model_download_send, images=avatar)
 
         searching_unfinished_downloads()  # проверка на фрагменты перед загрузкой
 
@@ -95,17 +96,17 @@ def starting_download() -> None:
                 else:
                     break
         except KeyboardInterrupt:  # обработка закрытия программы во время загрузки
-            tg_send_notifications(captions=f'🔴 Прерывание работы программы пользователем\n'
-                                           f'{time.strftime("%d.%m.%Yг., %H:%M:%S")}',
-                                  images=image_read_from_db('interrupt'))
+            tg_send_notifications_images(captions=f'🔴 Прерывание работы программы пользователем\n'
+                                                  f'{time.strftime("%d.%m.%Yг., %H:%M:%S")}',
+                                         images=image_read_from_db('interrupt'))
 
             sys.exit('🔴 Прерывание работы программы пользователем')
 
-        after_size = shutil.disk_usage(PATH)[2]
-        difference_size = difference_used_sizes(before_size, after_size)
-
         if os.path.isfile('cookies.txt'):  # удаление создаваемых в каталогах моделей куки файлов
             os.remove('cookies.txt')
+
+        after_size = shutil.disk_usage(PATH)[2]
+        difference_size = difference_used_sizes(before_size, after_size)
 
         # Удаление старого HTML файла
         # from write_html import NAME_HTML_MODEL
@@ -118,17 +119,22 @@ def starting_download() -> None:
                          now_time=now_time,
                          attempt=attempt,
                          )
+
         # Сообщение об окончании загрузки
         message_finish_model_download = (f"\n{SEPARATOR_END} Окончание загрузки модели {model.upper()} {SEPARATOR_END}"
                                          + f"\nЗагружено {difference_size}" + '\n' * 3)
         print(message_finish_model_download)
 
+        if difference_size != '0.00 Б':
+            tg_send_notifications_message(f"Загружено: {difference_size}")
+
 
 if __name__ == '__main__':
     from pprint import pprint
+
     print(f"Опции для загрузчика {COMMAND_OPTIONS}")
     print()
-    print(prioritized_model_shuffle)
+    # print(prioritized_model_shuffle)
     print()
     pprint(dict_link)
     print()

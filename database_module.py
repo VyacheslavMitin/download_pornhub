@@ -65,7 +65,7 @@ def make_db():
     cursor.close()
 
 
-def read_db(priority='all',
+def read_db(priority='all',  # not_all
             mixed=True):
     """Функция чтения данных из базы данных"""
     connect = sqlite3.connect(DATABASE_MODELS)
@@ -92,7 +92,7 @@ def read_db(priority='all',
             rows = rows_1_2 + rows_3
 
     # Сохраняем изменения и закрываем соединение
-    connect.commit()
+    # connect.commit()
     cursor.close()
 
     return rows
@@ -123,14 +123,15 @@ def insert_new_model_in_db(name=None, role='model', priority=1):
                 break
 
         while True:  # получение от пользователя числа с приоритетом для порядка
-            priority_tuple = (1, 2, 3,)
-            priority = int(input("Приоритет 1, 2 или 3 (по умолчанию 1):  "))
+            priority_tuple = ('1', '2', '3',)
+            priority = input("Приоритет 1, 2 или 3 (по умолчанию 1):  ")
             if priority not in priority_tuple and priority != '':
                 print(f'Необходимо указать корректный порядок - из {priority_tuple}')
             elif priority == '':
                 priority = 1
                 break
             else:
+                priority = int(priority)
                 break
 
     try:
@@ -268,7 +269,7 @@ def update_attempts(model):
 
 if __name__ == '__main__':
     import pprint
-    insert_new_model_in_db()
+    # insert_new_model_in_db()
     # update_attempts('ava-nicks')
     # connect, cursor = connect_and_cursor_db()
     # import pprint
@@ -297,4 +298,5 @@ if __name__ == '__main__':
     # for item in tuple_:
     #     image_write_to_db(image_=item)
     #     insert_images(file_names=item)
+    pprint.pprint(DATABASE_CONTENT)
     pass

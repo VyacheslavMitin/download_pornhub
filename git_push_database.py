@@ -1,9 +1,10 @@
 # Модуль для отправки в Гит (GitHub) базы данных, которая лежит не в проекте
-# import os
+# TODO победить работу с GitHub по новым стандартам аутентификации
+import os
 import shutil
 
 from configs import PLATFORM, DATABASE_MODELS, abs_path
-# from telegram_notifications import tg_send_notifications
+from telegram_notifications import tg_send_notifications_images
 
 
 def git_push_db():
