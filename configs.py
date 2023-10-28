@@ -1,7 +1,6 @@
 # Модуль с конфигурациями
 import configparser
 import os
-import sys
 import socket
 
 # Получение абсолютного пути к модулю
@@ -9,6 +8,8 @@ abs_path = os.path.abspath(os.curdir)
 # Чтение конфигурации из файла ini
 config = configparser.ConfigParser()
 config.read('config.ini')
+
+WEB_SERVER = config.get('SETTINGS', 'web_server')
 
 
 def return_platform() -> str:
@@ -55,6 +56,8 @@ temp_dir = os.path.join(abs_path, 'tmp/')
 
 
 if __name__ == '__main__':
+    print(WEB_SERVER)
+    print(type(WEB_SERVER))
     print(f"Путь к каталогу для сохранения данных '{PATH}'")
     print(f"Путь к базе данных '{DATABASE_MODELS}'")
     print(f"Путь к каталогу с временными файлами {temp_dir}")

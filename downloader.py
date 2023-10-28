@@ -5,14 +5,14 @@ import time
 import sys
 import shutil
 
-from write_html import write_html_model
+from write_html import write_html_model, NAME_HTML_MODEL
 from check_fragments import searching_unfinished_downloads
 from dictionary_processing import dict_link, dict_path
 from database_module import avatar_read_from_bd, image_read_from_db, update_attempts
 from telegram_notifications import tg_send_notifications_images, tg_send_notifications_message
 from cookies import COMMAND_OPTIONS_ADD
 from disk_usage import difference_used_sizes
-from configs import PATH
+from configs import PATH, WEB_SERVER
 
 COMMAND = "yt-dlp"  # команда для вызова youtube-dl или аналогов, должна находится в PATH
 COMMAND_OPTIONS = [  # параметры для yt-dlp
@@ -77,7 +77,8 @@ def starting_download() -> None:
 
         message_start_model_download_send = (f"🟢 Началась загрузка {progress}\n"
                                              f"{now_time}\n"
-                                             f"Модель {model.upper()}\n"
+                                             f"Модель <a href='{WEB_SERVER}/{model}/{NAME_HTML_MODEL}'>{model.upper()}</a>\n"
+                                             # f"Модель {model.upper()}\n"
                                              f"Попытка {attempt}\n"
                                              )
         print(message_start_model_download_print)

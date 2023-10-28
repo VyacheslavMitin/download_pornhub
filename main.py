@@ -13,11 +13,11 @@ import shutil
 
 from downloader import starting_download
 from telegram_notifications import tg_send_notifications_images, tg_send_notifications_message
-from write_html import write_html_index
+from write_html import write_html_index, models_list_html
 from disk_usage import disk_usage_all_info, difference_used_sizes
-from configs import PATH
+from configs import PATH, WEB_SERVER
 
-__version__ = '6.6'
+__version__ = '6.7'
 
 
 def main():
@@ -52,12 +52,10 @@ def main():
         """Функция подготовки текстового массива с моделями и их нумерацией"""
         count = 0  # вывод списка моделей построчно с указанием номера в списке очередности
         models_strings = ''
-
         for item in prioritized_model_shuffle:
             count += 1
             model_string = f'{count:2} ~ {item}'
             models_strings += model_string + '\n'
-
         return models_strings
 
     from database_module import image_read_from_db
@@ -82,8 +80,8 @@ def main():
                           )
 
     message_models_send = (
-        f'Список моделей для загрузки:\n'
-        f'{models_list()}'
+        f'<a href="{WEB_SERVER}">Список моделей для загрузки:</a>\n\n'
+        f'{models_list_html()}'
     )
 
     print(message_start_print)

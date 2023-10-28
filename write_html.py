@@ -2,14 +2,27 @@
 import os
 import time
 
-from configs import PATH
+from configs import PATH, WEB_SERVER
+from dictionary_processing import prioritized_model_shuffle
 
 NAME_HTML_MODEL = '+info.html'
+end_line = '\n'
 
 
-def write_html_index(path=PATH):
+def models_list_html() -> str:
+    """Функция подготовки текстового массива с моделями и их нумерацией"""
+    count = 0  # вывод списка моделей построчно с указанием номера в списке очередности
+    models_strings = ''
+    for item in prioritized_model_shuffle:
+        count += 1
+        model_string = f'{count:2} ~ <a href="{WEB_SERVER}/{item}/{NAME_HTML_MODEL}">{item}</a>'
+        models_strings += model_string + '\n'
+    return models_strings
+
+
+def write_html_index(root=PATH):
     """Функция создания HTML index.html"""
-    file = open(f"{path}{os.sep}index.html", 'w')
+    file = open(f"{root}{os.sep}index.html", 'w')
 
     html = f"""<html>
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
@@ -17,10 +30,11 @@ def write_html_index(path=PATH):
     <head><h1>Программа загрузки с PornHub</h1></head>
     <body>
     <p>Время начала загрузки: {time.strftime("%d.%m.%Yг., %H:%M:%S")}</p>
-    <p><a href=behindthemaskk{os.sep}{NAME_HTML_MODEL}>behindthemaskk</a></p>
+    <p>Список моделей: <br>
+    {models_list_html().replace(end_line, '<br>')}</p>
     </body>
     </html>"""
-
+    #     {get_files_sizes_dates().replace('#####', '<br>')}</p>
     file.write(html)
     file.close()
 
@@ -73,16 +87,16 @@ def write_html_model(path, name, link, now_time, attempt):
                     file_date = datetime.fromtimestamp(getctime(f)).strftime("%d.%m.%Y, %H:%M")
                     file_size = human_read_format(os.path.getsize(f))
                     a += (f'{count}. {f} - {file_size} - '
-                          f'{file_date}#####')  # Решетки ##### для будущей замены в HTML на br
+                          f'{file_date}\n')  # Решетки ##### для будущей замены в HTML на br
                     count += 1
         return a
 
     message = f"""<html>
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <title>Модель {name.upper()}</title>
-    <head><h1>{name.upper()}</h1></head>
+    <head><h1>Модель {name.upper()}</h1></head>
     <body>
-    <p><a href="..{os.sep}index.html">Возврат в Index.html</a></p>
+    <p><a href="..{os.sep}index.html">Возврат в index.html</a></p>
     <p><a href={link}>{link}</a></p>
     <p>Количество попыток загрузки - {attempt}</p>
     <p>Время начала загрузки: {now_time}<br>
@@ -90,7 +104,7 @@ def write_html_model(path, name, link, now_time, attempt):
     <p>Количество файлов - {amount_files_in_directory()} шт.<br>
     Общий размер файлов - {get_size_file_in_directory()}</p>
     <p>Список файлов: <br>
-    {get_files_sizes_dates().replace('#####', '<br>')}</p>
+    {get_files_sizes_dates().replace(end_line, '<br>')}</p>
     </body>
     </html>"""
 
