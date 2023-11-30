@@ -2,6 +2,7 @@
 # Используется база данных для хранения настроек, аватарок, приоритетов и прочего, а так же файл ini для хранения путей
 # Включен модуль рассылки уведомлений через telegram (telegram _send)
 # Минимальная версия Python - 3.10 (из-за match-case)
+# Максимальная версия Python - 3.11 (из-за telegram-send)
 # Включена рассылка через Telegram, подробнее о рассылке в соответствующем модуле
 # Для моделей где требуется "дружба" необходимо подложить куки через команду 'yt-dlp --cookies cookies.txt'
 # Подробное об аутентификации и авторизации в соответствующем модуле
@@ -17,7 +18,7 @@ from write_html import write_html_index, models_list_html
 from disk_usage import disk_usage_all_info, difference_used_sizes
 from configs import PATH, WEB_SERVER
 
-__version__ = '6.7'
+__version__ = '6.8'
 
 
 def main():

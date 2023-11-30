@@ -16,8 +16,6 @@
 import telegram_send
 import telegram  # для обработки исключений
 
-from configs import WEB_SERVER
-
 
 def tg_send_notifications_images(
         # message=None, # сообщение от дельно от картинки, не используется в данной программе
@@ -58,14 +56,14 @@ def tg_send_notifications_message(message: str = None, parse_mode: str = 'html')
 
 
 if __name__ == '__main__':
+    # Тест отправки уведомлений
     from database_module import image_read_from_db
 
     model = 'test'
-    models = "<a href='ya.ru'>test<a/>"
-
+    print("Тест отправки уведомлений в Телеграмм")
     tg_send_notifications_images(captions=f"test\n<a href='http://ya.ru'>{model}</a>",
                                  images=image_read_from_db('logo'))
 
-    tg_send_notifications_message(message=
-                                  f"<a href='http://{WEB_SERVER}/juicy-xenia/+info.html'>JUICY-XENIA</a>\n"
+    from configs import WEB_SERVER
+    tg_send_notifications_message(message=f"<a href='http://{WEB_SERVER}/juicy-xenia/+info.html'>JUICY-XENIA</a>\n"
                                   )

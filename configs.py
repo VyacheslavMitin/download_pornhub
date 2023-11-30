@@ -17,7 +17,7 @@ def return_platform() -> str:
     platform = ''
     hostname = socket.gethostname()  # определение через имя хоста
     match hostname:
-        case 'MacBook-Pro-Vaceslav.local':
+        case 'MacBook-Pro.local':
             platform = 'macbook'
         case 'Keenetic_Viva':
             platform = 'wifi_router'
