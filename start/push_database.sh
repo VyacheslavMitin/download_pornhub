@@ -1,7 +1,11 @@
-#!/bin/sh
+#!/usr/local/bin/fish
 
-cd '/Users/sonic/PycharmProjects/download_pornhub/'
+set PATH_SCRIPT_DIR '/Users/sonic/PycharmProjects/download_pornhub/'
+set PYTHON_BIN_VER python3.11
+
+cd $PATH_SCRIPT_DIR
+. venv/bin/activate.fish
 
 clear
 
-python3 git_push_database.py
+$PYTHON_BIN_VER git_push_database.py

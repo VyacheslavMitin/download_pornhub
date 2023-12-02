@@ -1,8 +1,12 @@
-#!/bin/sh
+#!/usr/local/bin/fish
 
-cd '/Users/sonic/PycharmProjects/download_pornhub/'
+set PATH_SCRIPT_DIR '/Users/sonic/PycharmProjects/download_pornhub/'
+set PYTHON_BIN_VER python3.11
+
+cd $PATH_SCRIPT_DIR
+. venv/bin/activate.fish
 
 clear
 
-python3 main.py --edit-models
-# python3 main.py --no-questions
+$PYTHON_BIN_VER main.py --edit-models
+# $PYTHON_BIN_VER main.py --no-questions
