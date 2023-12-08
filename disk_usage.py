@@ -3,16 +3,6 @@ import shutil
 
 from configs import PATH
 
-# result = shutil.disk_usage(PATH)
-
-# print(result)
-# print(f"Общая память {result[0]}")
-# print(f"Общая память {human_read_format(result[0])}")
-# print(f"Использованная память {result[1]}")
-# print(f"Использованная память {human_read_format(result[1])}")
-# print(f"Свободная память {result[2]}")
-# print(f"Свободная память {human_read_format(result[2])}")
-
 
 def human_read_format(size):
     """Функция человеко-читаемого размера файлов"""
@@ -50,6 +40,8 @@ def difference_used_sizes(before: int = 0, after: int = 0) -> str:
 
 
 if __name__ == '__main__':
-    print(difference_used_sizes(before=shutil.disk_usage(PATH)[2], after=(shutil.disk_usage(PATH)[2] - 5000000000)))
+    # print(difference_used_sizes(before=shutil.disk_usage(PATH)[2], after=(shutil.disk_usage(PATH)[2] - 5000000000)))
+    print("Свободное место:")
     print(disk_free_space())
+    print("Использование диска")
     print(disk_usage_all_info())

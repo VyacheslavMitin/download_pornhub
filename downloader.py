@@ -12,7 +12,8 @@ from database_module import avatar_read_from_bd, image_read_from_db, update_atte
 from telegram_notifications import tg_send_notifications_images, tg_send_notifications_message
 from cookies import COMMAND_OPTIONS_ADD
 from disk_usage import difference_used_sizes
-from configs import PATH, WEB_SERVER
+from configs import WEB_SERVER
+from system import update_system_title
 
 COMMAND = "yt-dlp"  # команда для вызова youtube-dl или аналогов, должна находится в PATH
 COMMAND_OPTIONS = [  # параметры для yt-dlp
@@ -63,9 +64,10 @@ def starting_download() -> None:
 
         count += 1  # счетчик скачиваемой модели
         progress = f'{count}/{len(prioritized_model_shuffle)}'
-        for i in range(5):
-            # подстановка заголовка в терминал
-            sys.stdout.write(f"\x1b]2;{progress}, модель {model.upper()}\x07")
+        update_system_title(f"\x1b]2;{progress}, модель {model.upper()}\x07")
+        # for i in range(5):
+        #     # подстановка заголовка в терминал
+        #     sys.stdout.write(f"\x1b]2;{progress}, модель {model.upper()}\x07")
 
         attempt = update_attempts(model)
         now_time = time.strftime("%d.%m.%Yг., %H:%M:%S")
@@ -77,17 +79,19 @@ def starting_download() -> None:
 
         message_start_model_download_send = (f"🟢 Началась загрузка {progress}\n"
                                              f"{now_time}\n"
-                                             f"Модель <a href='{WEB_SERVER}/{model}/{NAME_HTML_MODEL}'>{model.upper()}</a>\n"
+                                             f"Модель <a href='{WEB_SERVER}/{model}/{NAME_HTML_MODEL}'>{model.upper()}"
+                                             f"</a>\n"
                                              # f"Модель {model.upper()}\n"
                                              f"Попытка {attempt}\n"
                                              )
         print(message_start_model_download_print)
 
-        tg_send_notifications_images(captions=message_start_model_download_send, images=avatar)
+        tg_send_notifications_images(captions=message_start_model_download_send,
+                                     images=avatar)
 
         searching_unfinished_downloads()  # проверка на фрагменты перед загрузкой
 
-        before_size = shutil.disk_usage(PATH)[2]
+        before_size = shutil.disk_usage(path)[2]  # (PATH)[2]
         try:
             while True:
                 subprocess_download(link)
@@ -106,7 +110,7 @@ def starting_download() -> None:
         if os.path.isfile('cookies.txt'):  # удаление создаваемых в каталогах моделей куки файлов
             os.remove('cookies.txt')
 
-        after_size = shutil.disk_usage(PATH)[2]
+        after_size = shutil.disk_usage(path)[2]  # (PATH)[2]
         difference_size = difference_used_sizes(before_size, after_size)
 
         # Удаление старого HTML файла

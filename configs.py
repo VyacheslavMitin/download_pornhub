@@ -9,7 +9,8 @@ abs_path = os.path.abspath(os.curdir)
 config = configparser.ConfigParser()
 config.read('config.ini')
 
-WEB_SERVER = config.get('SETTINGS', 'web_server')
+WEB_SERVER = config.get('SETTINGS',
+                        'web_server')
 
 
 def return_platform() -> str:

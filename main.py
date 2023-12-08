@@ -1,5 +1,5 @@
 # Программа для пакетной загрузки роликов с pornhub, в зависимостях yt-dlp как отдельная программа в PATH.
-# pip install -r requirements.txt
+# Установка зависимостей pip install -r requirements.txt
 # Используется база данных для хранения настроек, аватарок, приоритетов и прочего, а так же файл ini для хранения путей
 # Включен модуль рассылки уведомлений через telegram (telegram _send)
 # Минимальная версия Python - 3.10 (из-за match-case)
@@ -18,8 +18,9 @@ from telegram_notifications import tg_send_notifications_images, tg_send_notific
 from write_html import write_html_index, models_list_html
 from disk_usage import disk_usage_all_info, difference_used_sizes
 from configs import PATH, WEB_SERVER
+from system import update_system_title
 
-__version__ = '6.9'
+__version__ = '6.10'
 
 
 def main():
@@ -104,6 +105,7 @@ def main():
                 f'Было загружено: {difference_size}'
                 )
     print(all_done)
+    update_system_title('☑️Все успешно загружено')
     tg_send_notifications_images(captions=all_done,
                                  images=image_read_from_db('done'))
 
