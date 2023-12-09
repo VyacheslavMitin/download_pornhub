@@ -20,7 +20,7 @@ from disk_usage import disk_usage_all_info, difference_used_sizes
 from configs import PATH, WEB_SERVER
 from system import update_system_title
 
-__version__ = '6.10'
+__version__ = '6.11'
 
 
 def main():
@@ -87,8 +87,10 @@ def main():
         f'{models_list_html()}'
     )
 
+    # Вывод в консоль и рассылка уведомлений в Телеграм о старте загрузки роликов
     print(message_start_print)
-    tg_send_notifications_images(captions=message_start_send, images=image_read_from_db('logo'))
+    tg_send_notifications_images(captions=message_start_send,
+                                 images=image_read_from_db('logo'))
     tg_send_notifications_message(message=message_models_send)
 
     # Записать Index.html
@@ -105,7 +107,7 @@ def main():
                 f'Было загружено: {difference_size}'
                 )
     print(all_done)
-    update_system_title('☑️Все успешно загружено')
+    update_system_title('Все успешно загружено')
     tg_send_notifications_images(captions=all_done,
                                  images=image_read_from_db('done'))
 
