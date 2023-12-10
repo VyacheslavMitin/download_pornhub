@@ -43,5 +43,5 @@ if __name__ == '__main__':
     # print(difference_used_sizes(before=shutil.disk_usage(PATH)[2], after=(shutil.disk_usage(PATH)[2] - 5000000000)))
     print("Свободное место:")
     print(disk_free_space())
-    print("Использование диска")
+    print("Использование диска:")
     print(disk_usage_all_info())

@@ -64,7 +64,7 @@ def starting_download() -> None:
 
         count += 1  # счетчик скачиваемой модели
         progress = f'{count}/{len(prioritized_model_shuffle)}'
-        update_system_title(f"\x1b]2;{progress}, модель {model.upper()}\x07")
+        update_system_title(f"{progress}, модель {model.upper()}")
         # for i in range(5):
         #     # подстановка заголовка в терминал
         #     sys.stdout.write(f"\x1b]2;{progress}, модель {model.upper()}\x07")
