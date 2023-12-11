@@ -20,7 +20,7 @@ from disk_usage import disk_usage_all_info, difference_used_sizes
 from configs import PATH, WEB_SERVER
 from system import update_system_title, check_all
 
-__version__ = '6.12'
+__version__ = '6.13'
 
 
 def main():
@@ -37,16 +37,17 @@ def main():
                     insert_new_model_in_db()
                     time.sleep(1)
                     print('Правки выполнены\n\n')
-                    os.system('clear')
                 case '' | None | 'n' | 'н':
                     print('Без правок\n\n')
-                    os.system('clear')
 
         elif sys.argv[1] == '--no-questions':
             print('Без параметров запуска\n\n')
 
         elif sys.argv[1] is None:
             pass
+
+        for i in range(2):
+            os.system('clear')
 
     except IndexError:  # обработка отсутствия передаваемого параметра
         pass
@@ -64,7 +65,7 @@ def main():
         return models_strings
 
     from database_module import image_read_from_db
-    message_start_print = ('Загрузка роликов с PornHub'.upper() + '\n' +
+    message_start_print = ('💦 Загрузка роликов с PornHub'.upper() + '\n' +
                            f'{time.strftime("%d.%m.%Yг., %H:%M:%S")}\n' +  # текущее время
                            f'{disk_usage_all_info()}\n'  # определение свободного места
                            f'Платформа: {sys.platform}\n'
@@ -75,7 +76,7 @@ def main():
                            f'{models_list()}'
                            )
 
-    message_start_send = (f'💦Загрузка роликов с PH\n'
+    message_start_send = (f'💦 Загрузка роликов с PH\n'
                           f'{time.strftime("%d.%m.%Yг., %H:%M:%S")}\n'  # текущее время
                           f'{disk_usage_all_info()}\n'  # определение свободного места
                           f'Платформа: {sys.platform}\n'
@@ -104,12 +105,12 @@ def main():
     after_size = shutil.disk_usage(PATH)[2]
     difference_size = difference_used_sizes(before_size, after_size)
 
-    all_done = (f'☑️Все успешно загружено\n{time.strftime("%d.%m.%Yг., %H:%M:%S")}\n'
+    all_done = (f'☑️ Все успешно загружено\n{time.strftime("%d.%m.%Yг., %H:%M:%S")}\n'
                 f'{disk_usage_all_info()}\n'
                 f'Было загружено: {difference_size}'
                 )
     print(all_done)
-    update_system_title(f'☑️Все успешно загружено')
+    update_system_title(f'☑️ Все успешно загружено')
     tg_send_notifications_images(captions=all_done,
                                  images=image_read_from_db('done'))
 
