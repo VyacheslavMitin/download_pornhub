@@ -20,7 +20,7 @@ from disk_usage import disk_usage_all_info, difference_used_sizes
 from configs import PATH, WEB_SERVER
 from system import update_system_title, check_all
 
-__version__ = '6.13'
+__version__ = '6.14'
 
 
 def main():

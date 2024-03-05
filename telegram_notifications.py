@@ -18,7 +18,7 @@ import telegram  # для обработки исключений
 
 
 def tg_send_notifications_images(
-        # message=None, # сообщение от дельно от картинки, не используется в данной программе
+        # message=None, # сообщение отдельно от картинки, не используется в данной программе
         captions: str = None,  # подпись к картинкам, используется
         images=None,
         parse_mode: str = 'html',
@@ -39,7 +39,8 @@ def tg_send_notifications_images(
         print("Не хватает параметров для отправки уведомления в Telegram!")
 
 
-def tg_send_notifications_message(message: str = None, parse_mode: str = 'html'):
+def tg_send_notifications_message(message: str = None,
+                                  parse_mode: str = 'html'):
     """Функция для рассылки сообщений в Telegram"""
     if message:
         try:

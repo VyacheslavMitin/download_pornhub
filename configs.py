@@ -18,8 +18,10 @@ def return_platform() -> str:
     platform = ''
     hostname = socket.gethostname()  # определение через имя хоста
     match hostname:
+        case 'Mac-Pro-Vaceslav.local':
+            platform = 'mac'
         case 'MacBook-Pro.local':
-            platform = 'macbook'
+            platform = 'mac'
         case 'Keenetic_Viva':
             platform = 'wifi_router'
     return platform
@@ -34,13 +36,13 @@ def return_paths() -> tuple:
     path, database_models = '', ''
 
     match PLATFORM:
-        case 'macbook':
+        case 'mac':
             # Путь к каталогу для хранения видео
             path = config.get('SETTINGS',  # получение из конфига пути к каталогу для записи файлов
-                              'path_macbook')
+                              'path_mac')
             # Путь к базе данных
             database_models = config.get('SETTINGS',  # получение из конфига пути к каталогу для записи файлов
-                                         'path_database_for_macbook')
+                                         'path_database_for_mac')
         case 'wifi_router':
             # Путь к каталогу для хранения видео
             path = config.get('SETTINGS',  # получение из конфига пути к каталогу для записи файлов
