@@ -24,6 +24,8 @@ def return_platform() -> str:
             platform = 'mac'
         case 'Keenetic_Viva':
             platform = 'wifi_router'
+        case 'VYACHESLAV-PC':
+            platform = 'win-pc'
     return platform
 
 
@@ -49,6 +51,13 @@ def return_paths() -> tuple:
                               'path_keenetic_viva')
             # Путь к базе данных
             database_models = os.path.join(abs_path, 'models.db')
+        case 'win-pc':
+            # Путь к каталогу для хранения видео
+            path = config.get('SETTINGS',  # получение из конфига пути к каталогу для записи файлов
+                              'path_win')
+            # Путь к базе данных
+            database_models = config.get('SETTINGS',  # получение из конфига пути к каталогу для записи файлов
+                                         'path_database_for_win')
 
     return path, database_models
 
@@ -60,7 +69,7 @@ temp_dir = os.path.join(abs_path, 'tmp/')
 
 if __name__ == '__main__':
     print(WEB_SERVER)
-    print(type(WEB_SERVER))
+    # print(type(WEB_SERVER))
     print(f"Путь к каталогу для сохранения данных '{PATH}'")
     print(f"Путь к базе данных '{DATABASE_MODELS}'")
     print(f"Путь к каталогу с временными файлами {temp_dir}")

@@ -35,6 +35,9 @@ def tg_send_notifications_images(
             print("Не удалось отправить уведомление в Telegram - слишком длинное сообщение")
         except telegram.error.NetworkError:  # Перехват исключения если API не доступно по сети
             print('Не удалось отправить уведомление в Telegram - проблемы с сетью')
+        except telegram_send.telegram_send.ConfigError:
+            print('Не удалось отправить уведомление в Telegram - проблемы с настройками модуля')
+
     else:
         print("Не хватает параметров для отправки уведомления в Telegram!")
 
@@ -52,6 +55,8 @@ def tg_send_notifications_message(message: str = None,
             print("Не удалось отправить сообщение в Telegram - слишком длинное сообщение")
         except telegram.error.NetworkError:  # Перехват исключения если API не доступно по сети
             print('Не удалось отправить сообщение в Telegram - проблемы с сетью')
+        except telegram_send.telegram_send.ConfigError:
+            print('Не удалось отправить уведомление в Telegram - проблемы с настройками модуля')
     else:
         print("Не хватает параметров для отправки сообщения в Telegram!")
 

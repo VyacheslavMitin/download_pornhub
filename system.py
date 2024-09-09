@@ -2,7 +2,7 @@
 import sys
 import os
 
-from configs import PATH, DATABASE_MODELS
+from configs import PATH, DATABASE_MODELS, PLATFORM
 
 REQUIRED_APPS = ('yt-dlp', 'ffmpeg', 'python3.11')
 REQUIRED_MODULES = ('telegram-send', 'python-telegram-bot', 'beautifulsoup4', 'requests')
@@ -12,12 +12,25 @@ def check_apps():
     """Функция проверки доступности рекомендуемых приложений"""
     print("Проверка на доступ к требуемым программам\n".upper())
 
+    # for app in REQUIRED_APPS:
+    #     if os.system(f"which '{app}'") is True:
+    #         print(f"Приложение '{app}' не установлено!")
+    #         sys.exit(1)
+    #     else:
+    #         print(f"Приложение '{app}' установлено")
     for app in REQUIRED_APPS:
-        if os.system(f"which '{app}'") is True:
-            print(f"Приложение '{app}' не установлено!")
-            sys.exit(1)
+        if PLATFORM == 'win-pc':
+            if os.system(f'where {app}') is True:
+                print(f"Приложение '{app}' не установлено!")
+                sys.exit(1)
+            else:
+                print(f"Приложение '{app}' установлено")
         else:
-            print(f"Приложение '{app}' установлено")
+            if os.system(f'which {app}') is True:
+                print(f"Приложение '{app}' не установлено!")
+                sys.exit(1)
+            else:
+                print(f"Приложение '{app}' установлено")
 
     print("Проверка на доступ к требуемым программам пройдена\n".upper())
 
@@ -27,7 +40,7 @@ def check_paths():
     print("Проверка на доступ к требуемым путям\n".upper())
 
     if os.path.isfile(DATABASE_MODELS) is not True:
-        print(f"Путь к '{DATABASE_MODELS}', выход с ошибкой!")
+        print(f"Путь к '{DATABASE_MODELS}' не доступен, выход с ошибкой!")
         sys.exit(1)
     else:
         print(f"Путь к '{DATABASE_MODELS}' доступен")
@@ -71,7 +84,11 @@ def check_all():
 
     print("Проверки выполнения зависимостей и доступности для запуска программы выполнены успешно\n".upper())
 
-    os.system('clear')  # очистка консоли
+    for i in range(2):  # очистка терминала
+        if PLATFORM == 'win-pc':
+            os.system('cls')
+        else:
+            os.system('clear')
 
 
 if __name__ == '__main__':

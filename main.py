@@ -17,10 +17,10 @@ from downloader import starting_download
 from telegram_notifications import tg_send_notifications_images, tg_send_notifications_message
 from write_html import write_html_index, models_list_html
 from disk_usage import disk_usage_all_info, difference_used_sizes
-from configs import PATH, WEB_SERVER
+from configs import PATH, WEB_SERVER, PLATFORM
 from system import update_system_title, check_all
 
-__version__ = '6.14'
+__version__ = '6.20'
 
 
 def main():
@@ -47,7 +47,10 @@ def main():
             pass
 
         for i in range(2):
-            os.system('clear')
+            if PLATFORM == 'win-pc':
+                os.system('cls')
+            else:
+                os.system('clear')
 
     except IndexError:  # обработка отсутствия передаваемого параметра
         pass

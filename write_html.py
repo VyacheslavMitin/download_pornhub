@@ -42,7 +42,7 @@ def write_html_index(root=PATH):
 def write_html_model(path, name, link, now_time, attempt):
     """Функция записи HTML файла с информацией о файлах и загрузках"""
 
-    file = open(f'{path}{os.sep}{NAME_HTML_MODEL}', 'w')
+    file = open(f'{path}{os.sep}{NAME_HTML_MODEL}', 'w', encoding="utf-8")
 
     def human_read_format(size):
         """Функция человеко-читаемого размера файлов"""
@@ -107,7 +107,7 @@ def write_html_model(path, name, link, now_time, attempt):
     {get_files_sizes_dates().replace(end_line, '<br>')}</p>
     </body>
     </html>"""
-
+    # message = "test"
     file.write(message)
     file.close()
 

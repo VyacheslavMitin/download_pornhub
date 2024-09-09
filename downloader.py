@@ -18,8 +18,9 @@ from system import update_system_title
 COMMAND = "yt-dlp"  # команда для вызова youtube-dl или аналогов, должна находится в PATH
 COMMAND_OPTIONS = [  # параметры для yt-dlp
     '--abort-on-unavailable-fragment',  # отмена загрузки если фрагмент не доступен
+    # yt-dlp --proxy "socks5://127.0.0.1:9150/" - через TOR
     # yt-dlp --proxy socks5://proxy.example.com:1080
-    # '--proxy', 'socks4://213.74.223.77:4153',
+    '--proxy', "socks5://127.0.0.1:9150/",
     # '--quiet',
     # '--progress'
 ]
