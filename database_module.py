@@ -268,8 +268,7 @@ def update_attempts(model):
 
 
 if __name__ == '__main__':
-    import pprint
-    # insert_new_model_in_db()
+    insert_new_model_in_db()
     # update_attempts('ava-nicks')
     # connect, cursor = connect_and_cursor_db()
     # import pprint
@@ -298,5 +297,6 @@ if __name__ == '__main__':
     # for item in tuple_:
     #     image_write_to_db(image_=item)
     #     insert_images(file_names=item)
+    import pprint
     pprint.pprint(DATABASE_CONTENT)
     pass

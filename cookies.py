@@ -26,6 +26,9 @@ def cookies_options() -> list:
         case 'wifi_router':  # чтение специально подготовленного файла с куками
             list_.append('--cookies')
             list_.append('cookies.txt')
+        case 'win-pc':  # чтение специально подготовленного файла с куками
+            list_.append('--cookies')
+            list_.append('cookies.txt')
 
     return list_
 
