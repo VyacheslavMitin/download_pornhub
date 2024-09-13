@@ -1,3 +1,6 @@
 cd "C:\Users\sonic\PycharmProjects\download_pornhub\"
-.\venv\Scripts\activate.bat
+./start\activate.ps1
 python3.11 main.py --edit-models
+
+
+REM wt -d "C:\Users\sonic\PycharmProjects\download_pornhub\" "cmd /k venv\Scripts\activate"
