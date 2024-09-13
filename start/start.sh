@@ -1,4 +1,4 @@
-#!/usr/local/bin/fish
+#!/opt/homebrew/bin/fish
 
 set PATH_SCRIPT_DIR '/Users/sonic/PycharmProjects/download_pornhub/'
 set PYTHON_BIN_VER python3.11

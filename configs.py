@@ -22,6 +22,8 @@ def return_platform() -> str:
             platform = 'mac'
         case 'MacBook-Pro.local':
             platform = 'mac'
+        case 'Mac-mini-Vaceslav.local':
+            platform = 'mac'
         case 'Keenetic_Viva':
             platform = 'wifi_router'
         case 'VYACHESLAV-PC':
