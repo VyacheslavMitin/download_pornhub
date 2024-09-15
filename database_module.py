@@ -175,7 +175,7 @@ def avatar_read_from_bd(model):
 
 def avatar_update(model):
     """Функция обновления аватара в таблице в случае его отсутствия"""
-    import shutil
+    # import shutil
     from download_avatars import download_avatars
     from dictionary_processing import dict_link
     from configs import temp_dir
@@ -200,10 +200,10 @@ def avatar_update(model):
                        [model])
         avatar = cursor.fetchone()[0]
         cursor.close()
-        shutil.rmtree(temp_dir)  # удаление временного каталога для аватарки
+        # shutil.rmtree(temp_dir)  # удаление временного каталога для аватарки
         return avatar
     else:
-        shutil.rmtree(temp_dir)  # удаление временного каталога для аватарки
+        # shutil.rmtree(temp_dir)  # удаление временного каталога для аватарки
         return None
 
 

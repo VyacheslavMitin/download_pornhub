@@ -1,4 +1,6 @@
 # Модуль для работы с backend для загрузки
+# Из-за очередной блокировки PH пришлось перейти на TOR в proxy, мост:
+# obfs4 122.199.22.246:5342 B74D6031E64A7EF8E362395A7D85E3E02E8C2EF8 cert=uQLASVwr7ysdti/7oxYIy3ntn3U1Spx4Bk9Jesec7gYrAjmK4oP/GEz2s3zeVvy3NHf5bA iat-mode=0
 import os
 import subprocess
 import time
@@ -12,7 +14,7 @@ from database_module import avatar_read_from_bd, image_read_from_db, update_atte
 from telegram_notifications import tg_send_notifications_images, tg_send_notifications_message
 from cookies import COMMAND_OPTIONS_ADD
 from disk_usage import difference_used_sizes
-from configs import WEB_SERVER
+from configs import WEB_SERVER, temp_dir
 from system import update_system_title
 
 COMMAND = "yt-dlp"  # команда для вызова youtube-dl или аналогов, должна находится в PATH
@@ -20,9 +22,10 @@ COMMAND_OPTIONS = [  # параметры для yt-dlp
     '--abort-on-unavailable-fragment',  # отмена загрузки если фрагмент не доступен
     # yt-dlp --proxy "socks5://127.0.0.1:9150/" - через TOR
     # yt-dlp --proxy socks5://proxy.example.com:1080
-    '--proxy', "socks5://127.0.0.1:9150/",
+    '--proxy', "socks5://127.0.0.1:9150/",  # использование прокси от TOR
+    '-P', f'temp:{temp_dir}',  # использование временной папки
     # '--quiet',
-    # '--progress'
+    # '--progress',
 ]
 
 if COMMAND_OPTIONS_ADD:
@@ -45,6 +48,11 @@ def subprocess_download(link_):
 def starting_download() -> None:
     """Функция загрузки видео контента с PH"""
     print("\n\nНачало загрузки роликов\n\n".upper())
+
+    if not os.path.isdir(os.path.normpath(temp_dir)):
+        # print('Создаем временный каталог для файлов\n')
+        os.makedirs(os.path.normpath(temp_dir), exist_ok=True)  # создание каталога с аватарками если не существует
+
     count = 0
 
     from dictionary_processing import prioritized_model_shuffle
@@ -62,6 +70,10 @@ def starting_download() -> None:
                 print(err)
                 sys.exit('Нет доступа к каталогу! Выход с ошибкой.')
         os.chdir(path)
+
+        # Очистка каталога с временными файлами
+        for tmp_files in os.listdir(os.path.abspath(temp_dir)):
+            os.remove(os.path.abspath(temp_dir) + '/' + tmp_files)
 
         count += 1  # счетчик скачиваемой модели
         progress = f'{count}/{len(prioritized_model_shuffle)}'

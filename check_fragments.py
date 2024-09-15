@@ -1,5 +1,6 @@
 # Функция проверки не полностью скаченных файлов, проверка наличия фрагментов от youtube-dl и их удаление
 import glob
+from configs import temp_dir
 
 
 def searching_unfinished_downloads() -> list:

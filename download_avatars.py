@@ -13,9 +13,9 @@ def download_avatars(verbose: bool = True,
     if verbose:
         print('Модуль загрузки аватарок моделей с PornHub\n\n'.upper())
 
-    if verbose:
-        print('Создаем каталог для хранения аватарок\n')
-    os.makedirs(os.path.normpath(temp_dir), exist_ok=True)  # создание каталога с аватарками если не существует
+    # if verbose:
+    #     print('Создаем каталог для хранения аватарок\n')
+    # os.makedirs(os.path.normpath(temp_dir), exist_ok=True)  # создание каталога с аватарками если не существует
 
     for model, link in dictionary.items():
         if verbose:

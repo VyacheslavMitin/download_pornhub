@@ -7,6 +7,8 @@
 # Включена рассылка через Telegram, подробнее о рассылке в соответствующем модуле
 # Для моделей где требуется "дружба" необходимо подложить куки через команду 'yt-dlp --cookies cookies.txt'
 # Подробное об аутентификации и авторизации в соответствующем модуле
+# Из-за очередной блокировки PH пришлось перейти на TOR в proxy, мост:
+# obfs4 122.199.22.246:5342 B74D6031E64A7EF8E362395A7D85E3E02E8C2EF8 cert=uQLASVwr7ysdti/7oxYIy3ntn3U1Spx4Bk9Jesec7gYrAjmK4oP/GEz2s3zeVvy3NHf5bA iat-mode=0
 
 import os
 import sys
@@ -20,7 +22,7 @@ from disk_usage import disk_usage_all_info, difference_used_sizes
 from configs import PATH, WEB_SERVER, PLATFORM
 from system import update_system_title, check_all
 
-__version__ = '6.23'
+__version__ = '6.25'
 
 
 def main():
