@@ -1,20 +1,19 @@
 # Функция проверки не полностью скаченных файлов, проверка наличия фрагментов от youtube-dl и их удаление
 import glob
-from configs import temp_dir
+import os
 
-
-def searching_unfinished_downloads() -> list:
+def searching_unfinished_downloads(path) -> list:
     """Функция поиска файлов от неудачных загрузок видео модели"""
-    # Поиск фрагментов видео
-    search_part = glob.glob("*.part")
-    search_ytdl = glob.glob("*.ytdl")
+    # Поиск фрагментов видео, удаление кусков видео, как правило, их нельзя загрузить из фрагментов
+    search_part = glob.glob(f"{os.path.join(path)}\*.part")
+    # print(search_part)
+    search_ytdl = glob.glob(f"{os.path.join(path)}\"*.ytdl")
 
     mask = '.temp.'
-    search_temp = glob.glob(f"*{mask}*")
+    search_temp = glob.glob(f"{os.path.join(path)}\"*{mask}*")
 
-    if search_part:  # работа с фрагментами видео
+    if search_part or search_ytdl:  # работа с фрагментами видео
         print("\n💫 Обнаружены незавершенные загрузки! Очистка от фрагментов и повторная загрузка файлов модели\n")
-        import os  # удаление кусков видео, как правило, их нельзя загрузить из фрагментов
         for item in search_part:
             os.remove(item)
         for item in search_ytdl:
@@ -23,7 +22,6 @@ def searching_unfinished_downloads() -> list:
     if search_temp:  # работа с временными файлами
         print("\n💫 Обнаружен временный файл! "
               "Очистка от временного и связанного файлов и повторная загрузка файлов модели\n")
-        import os
         for item_temp in search_temp:
             split1, split2 = item_temp.split(mask)
             item = f'{split1}.{split2}'
@@ -38,4 +36,6 @@ def searching_unfinished_downloads() -> list:
 
 
 if __name__ == '__main__':
-    searching_unfinished_downloads()
+    print('Проверка фрагментов')
+    if not searching_unfinished_downloads('C:\\Users\\sonic\\PycharmProjects\\download_pornhub\\tmp'):
+        print('Фрагментов нет')

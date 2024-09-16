@@ -1,5 +1,5 @@
 # Модуль для работы с backend для загрузки
-# Из-за очередной блокировки PH пришлось перейти на TOR в proxy, мост:
+# Из-за очередной блокировки PH пришлось перейти на TOR в proxy, мост, но лучше использовать VPN:
 # obfs4 122.199.22.246:5342 B74D6031E64A7EF8E362395A7D85E3E02E8C2EF8 cert=uQLASVwr7ysdti/7oxYIy3ntn3U1Spx4Bk9Jesec7gYrAjmK4oP/GEz2s3zeVvy3NHf5bA iat-mode=0
 import os
 import subprocess
@@ -22,7 +22,7 @@ COMMAND_OPTIONS = [  # параметры для yt-dlp
     '--abort-on-unavailable-fragment',  # отмена загрузки если фрагмент не доступен
     # yt-dlp --proxy "socks5://127.0.0.1:9150/" - через TOR
     # yt-dlp --proxy socks5://proxy.example.com:1080
-    '--proxy', "socks5://127.0.0.1:9150/",  # использование прокси от TOR
+    # '--proxy', "socks5://127.0.0.1:9150/",  # использование прокси от TOR
     '-P', f'temp:{temp_dir}',  # использование временной папки
     # '--quiet',
     # '--progress',
@@ -99,7 +99,7 @@ def starting_download() -> None:
         tg_send_notifications_images(captions=message_start_model_download_send,
                                      images=avatar)
 
-        searching_unfinished_downloads()  # проверка на фрагменты перед загрузкой
+        searching_unfinished_downloads(path)  # проверка на фрагменты перед загрузкой
 
         try:
             before_size = shutil.disk_usage(path)[2]  # запомнить размер каталога модели до загрузки
@@ -110,7 +110,7 @@ def starting_download() -> None:
         try:
             while True:
                 subprocess_download(link)
-                if searching_unfinished_downloads():  # проверка на фрагменты видео,
+                if searching_unfinished_downloads(temp_dir):  # проверка на фрагменты видео,
                     # если есть стереть и перекачать заново
                     continue
                 else:

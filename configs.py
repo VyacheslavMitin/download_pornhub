@@ -66,7 +66,7 @@ def return_paths() -> tuple:
 
 PATH, DATABASE_MODELS = return_paths()
 # Путь к каталогу для временных файлов в каталоге программы, пока не используется
-temp_dir = os.path.join(abs_path, 'tmp/')
+temp_dir = os.path.join(abs_path, 'tmp')
 
 
 if __name__ == '__main__':
