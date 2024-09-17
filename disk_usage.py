@@ -31,17 +31,33 @@ def disk_usage_all_info() -> str:
     return string_
 
 
-def difference_used_sizes(before: int = 0, after: int = 0) -> str:
+def difference_used_sizes(before: float = 0, after: float = 0) -> float:
     """Функция определения разницы в занятом месте (объемы загруженного)"""
-    difference = before - after
-    # print(difference)
-    result = human_read_format(difference)
-    return result
+    difference = after - before
+    return difference
+
+
+def get_directory_size(path) -> int:
+    """Функция расчета размера каталога"""
+    import os
+
+    total_size = 0
+    try:
+        for dir_path, dir_names, filenames in os.walk(path):
+            for f in filenames:
+                fp = os.path.join(dir_path, f)
+                size = os.path.getsize(fp)
+                total_size += size
+    except PermissionError as e:
+        print(f"Ошибка доступа к папке: {e}")
+    return total_size
 
 
 if __name__ == '__main__':
     # print(difference_used_sizes(before=shutil.disk_usage(PATH)[2], after=(shutil.disk_usage(PATH)[2] - 5000000000)))
-    print("Свободное место:")
+    print("Размер каталога:")
+    print(get_directory_size('Y:\\backup\\PornHub\\wetslavs'))
+    print(f"Свободное место:")
     print(disk_free_space())
     print("Использование диска:")
     print(disk_usage_all_info())

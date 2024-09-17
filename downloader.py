@@ -5,7 +5,6 @@ import os
 import subprocess
 import time
 import sys
-import shutil
 
 from write_html import write_html_model, NAME_HTML_MODEL
 from check_fragments import searching_unfinished_downloads
@@ -13,7 +12,7 @@ from dictionary_processing import dict_link, dict_path
 from database_module import avatar_read_from_bd, image_read_from_db, update_attempts
 from telegram_notifications import tg_send_notifications_images, tg_send_notifications_message
 from cookies import COMMAND_OPTIONS_ADD
-from disk_usage import difference_used_sizes
+from disk_usage import difference_used_sizes, get_directory_size, human_read_format
 from configs import WEB_SERVER, temp_dir
 from system import update_system_title
 
@@ -102,7 +101,8 @@ def starting_download() -> None:
         searching_unfinished_downloads(path)  # проверка на фрагменты перед загрузкой
 
         try:
-            before_size = shutil.disk_usage(path)[2]  # запомнить размер каталога модели до загрузки
+            # before_size = shutil.disk_usage(path)[2]  # запомнить размер каталога модели до загрузки
+            before_size = get_directory_size(path)
         except FileNotFoundError as err:
             print(err)
             before_size = None
@@ -125,25 +125,14 @@ def starting_download() -> None:
         if os.path.isfile('cookies.txt'):  # удаление создаваемых в каталогах моделей куки файлов
             os.remove('cookies.txt')
 
-        try:
-            after_size = shutil.disk_usage(path)[2]  # запомнить размер каталога модели после загрузки
-        except FileNotFoundError as err:
-            print(err)
-            print(f"Не удалось высчитать размер загруженных файлов по модели {model.upper}")
-            tg_send_notifications_message(f"Не удалось высчитать размер загруженных файлов по модели {model.upper}")
-        else:
-            if before_size is not None:
-                difference_size = difference_used_sizes(before_size, after_size)
-                message_finish_model_download = (
-                            f"\n{SEPARATOR_END} Окончание загрузки модели {model.upper()} {SEPARATOR_END}"
-                            + f"\nЗагружено {difference_size}" + '\n' * 3)
-                print(message_finish_model_download)
-
-                if difference_size != '0.00 Б':
-                    tg_send_notifications_message(f"Загружено: {difference_size}")
-            else:
-                print(f"Не удалось высчитать размер загруженных файлов по модели {model.upper}")
-                tg_send_notifications_message(f"Не удалось высчитать размер загруженных файлов по модели {model.upper}")
+        after_size = get_directory_size(path)
+        difference_size = difference_used_sizes(after=after_size, before=before_size)
+        message_finish_model_download = (
+                    f"\n{SEPARATOR_END} Окончание загрузки модели {model.upper()} {SEPARATOR_END}")
+        print(message_finish_model_download)
+        if not difference_size <= 128:
+            print(f"Загружено {human_read_format(difference_size)}" + '\n' * 3)
+            tg_send_notifications_message(f"🔷 Загружено: {human_read_format(difference_size)}")
 
         # Запись HTML файла с описанием
         write_html_model(path=path,
