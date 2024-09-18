@@ -15,6 +15,7 @@ from cookies import COMMAND_OPTIONS_ADD
 from disk_usage import difference_used_sizes, get_directory_size, human_read_format
 from configs import WEB_SERVER, temp_dir
 from system import update_system_title
+from check_doubles import check_doubles
 
 COMMAND = "yt-dlp"  # команда для вызова youtube-dl или аналогов, должна находится в PATH
 COMMAND_OPTIONS = [  # параметры для yt-dlp
@@ -133,6 +134,9 @@ def starting_download() -> None:
         if not difference_size <= 128:
             print(f"Загружено {human_read_format(difference_size)}" + '\n' * 3)
             tg_send_notifications_message(f"🔷 Загружено: {human_read_format(difference_size)}")
+        # проверка дублей
+        check_doubles(path)
+
 
         # Запись HTML файла с описанием
         write_html_model(path=path,

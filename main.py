@@ -18,11 +18,11 @@ import shutil
 from downloader import starting_download
 from telegram_notifications import tg_send_notifications_images, tg_send_notifications_message
 from write_html import write_html_index, models_list_html
-from disk_usage import disk_usage_all_info, difference_used_sizes
+from disk_usage import difference_used_sizes, get_directory_size, human_read_format, disk_usage_all_info
 from configs import PATH, WEB_SERVER, PLATFORM
 from system import update_system_title, check_all
 
-__version__ = '6.29'
+__version__ = '6.30'
 
 
 def main():
@@ -105,10 +105,10 @@ def main():
     write_html_index()
 
     # Начало загрузки
-    before_size = shutil.disk_usage(PATH)[2]
+    before_size = get_directory_size(PATH)
     starting_download()
-    after_size = shutil.disk_usage(PATH)[2]
-    difference_size = difference_used_sizes(before_size, after_size)
+    after_size = get_directory_size(PATH)
+    difference_size = difference_used_sizes(after=after_size, before=before_size)
 
     all_done = (f'☑️ Все успешно загружено\n{time.strftime("%d.%m.%Yг., %H:%M:%S")}\n'
                 f'{disk_usage_all_info()}\n'
