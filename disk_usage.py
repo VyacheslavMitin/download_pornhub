@@ -61,3 +61,4 @@ if __name__ == '__main__':
     print(disk_free_space())
     print("Использование диска:")
     print(disk_usage_all_info())
+    print(human_read_format(1330175074))

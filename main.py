@@ -22,7 +22,7 @@ from disk_usage import difference_used_sizes, get_directory_size, human_read_for
 from configs import PATH, WEB_SERVER, PLATFORM
 from system import update_system_title, check_all
 
-__version__ = '6.30'
+__version__ = '6.99'
 
 
 def main():
@@ -112,7 +112,7 @@ def main():
 
     all_done = (f'☑️ Все успешно загружено\n{time.strftime("%d.%m.%Yг., %H:%M:%S")}\n'
                 f'{disk_usage_all_info()}\n'
-                f'Было загружено: {difference_size}'
+                f'Было загружено: {human_read_format(difference_size)}'
                 )
     print(all_done)
     update_system_title(f'☑️ Все успешно загружено')
