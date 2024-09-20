@@ -129,7 +129,7 @@ def starting_download() -> None:
         after_size = get_directory_size(path)
         difference_size = difference_used_sizes(after=after_size, before=before_size)
         message_finish_model_download = (
-                    f"\n{SEPARATOR_END} Окончание загрузки модели {model.upper()} {SEPARATOR_END}")
+                    f"\n{SEPARATOR_END} Окончание загрузки модели {model.upper()} {SEPARATOR_END}\n\n")
         print(message_finish_model_download)
         if not difference_size <= 128:
             print(f"Загружено {human_read_format(difference_size)}" + '\n' * 3)

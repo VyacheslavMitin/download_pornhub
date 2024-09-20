@@ -13,7 +13,6 @@
 import os
 import sys
 import time
-import shutil
 
 from downloader import starting_download
 from telegram_notifications import tg_send_notifications_images, tg_send_notifications_message
@@ -22,7 +21,7 @@ from disk_usage import difference_used_sizes, get_directory_size, human_read_for
 from configs import PATH, WEB_SERVER, PLATFORM
 from system import update_system_title, check_all
 
-__version__ = '6.99'
+__version__ = '7.0'
 
 
 def main():
@@ -101,12 +100,11 @@ def main():
                                  images=image_read_from_db('logo'))
     tg_send_notifications_message(message=message_models_send)
 
-    # Записать Index.html
-    write_html_index()
+    write_html_index()  # Записать Index.html
 
     # Начало загрузки
     before_size = get_directory_size(PATH)
-    starting_download()
+    starting_download()  # ЗАГРУЗКА
     after_size = get_directory_size(PATH)
     difference_size = difference_used_sizes(after=after_size, before=before_size)
 
