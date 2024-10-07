@@ -1,4 +1,5 @@
 telegram-send==0.34
-python-telegram-bot==13.5
+python-telegram-bot
 beautifulsoup4
 requests
+timedinput
