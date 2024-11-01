@@ -288,7 +288,7 @@ def view_db(mode='active'):
     rows_ = [('ИМЯ', 'ТИП', 'АКТИВНОСТЬ', 'ПРИОРИТЕТ', 'ПОПЫТКИ')] + cursor.fetchall()
 
     for item in rows_:
-        print("{:<20}{:<10}{:<12}{:<11}{:<10}".format(*item))
+        print("{:<20}{:<10}{:<12}{:<10}{:<10}".format(*item))
 
 
 def delete_model():
@@ -320,7 +320,12 @@ def update_model():
     column = 'foobar'
 
     model = input("\nВведите имя модели для обработки: ")
-    mode = input("Введите режим работы\n1 - Включение\n2 - Выключение\n3 - Новое имя\n4 - Приоритет\nВВОД: ")
+    mode = input("Введите режим работы\n"
+                 "1 - Включение\n"
+                 "2 - Выключение\n"
+                 "3 - Новое имя\n"
+                 "4 - Приоритет\n"
+                 "ВВОД: ")
     if mode == '1':
         print("Включение модели")
         column = 'activity'
@@ -353,12 +358,33 @@ def update_model():
     cursor.close()
 
 
+# def select_model():
+#     dict_ = {}
+#     i = 0
+#     for el in sorted(DATABASE_CONTENT):
+#         # print(el[0])
+#         i = i +1
+#         dict_[el[0]] = i
+#
+#     # print(dict_)
+
+
 def db_menu():
     """Функция режима выбора меню работы с БД"""
     while True:
         menu = input(
-            "Выбрать режим работы с базой данных\n1 - Вывод БД\n2 - Добавить модель в БД\n3 - Обновление модели\n4 - Удалить из БД\n\nВВОД: ")
-        if menu == "1":
+            "Выбрать режим работы с базой данных\n"
+            "0 - Вывод всей БД\n"
+            "1 - Вывод БД\n"
+            "2 - Добавить модель в БД\n"
+            "3 - Обновление модели\n"
+            "4 - Удалить из БД\n\n"
+            "ВВОД: ")
+        if menu == "0":
+            print('Содержимое БД (полное)\n')
+            view_db(mode='all')
+            print('\n')
+        elif menu == "1":
             print('Содержимое БД\n')
             view_db()
             print('\n')
@@ -380,4 +406,5 @@ def db_menu():
 
 
 if __name__ == '__main__':
+    # select_model()
     db_menu()
