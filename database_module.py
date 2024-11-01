@@ -4,7 +4,6 @@
 import sqlite3
 import os
 import sys
-from pprint import pprint
 
 from configs import DATABASE_MODELS
 # TODO сделать общую точка входа в базу данных
@@ -268,38 +267,23 @@ def update_attempts(model):
     return attempt
 
 
+def view_db():
+    """Функция чтения данных из базы данных в человеко читаемом виде"""
+    connect = sqlite3.connect(DATABASE_MODELS)
+    cursor = connect.cursor()
+
+    cursor.execute("""SELECT name, role, activity, priority, attempts FROM models 
+    WHERE activity == 'active'
+    ORDER BY name
+    """)  # получение данных из таблицы если модель активна
+    rows_ = [('ИМЯ', 'ТИП', 'АКТИВНОСТЬ', 'ПРИОРИТЕТ', 'ПОПЫТКИ')] + cursor.fetchall()
+
+    for item in rows_:
+        print("{:<20}{:<10}{:<12}{:<10}{:<10}".format(*item))
+
+
 if __name__ == '__main__':
-    print('Содержимое БД')
-    pprint(sorted(DATABASE_CONTENT))  # вывод содержимого БД
+    print('Содержимое БД\n')
+    view_db()
     print('\n')
     insert_new_model_in_db()
-    # update_attempts('ava-nicks')
-    # connect, cursor = connect_and_cursor_db()
-    # import pprint
-    # create_db()
-    # insert_data_in_table()
-    # print(read_db(mixed=True, priority='not all'))
-    # pprint.pprint(DATABASE_CONTENT)
-    # for element in avatar_write_to_db():
-    #     if element[1]:
-    #         print(f"У модели '{element[0]}' есть аватарка в базе данных")
-    #     else:
-    #         print(f"У модели '{element[0]}' нет аватарки в базе данных!")
-    # pprint.pprint(avatar_working())
-    # avatar_read_from_bd(model='bubble-lover')
-    # insert_new_model_in_db(name='ava-nicks',
-    #                        role='model',
-    #                        priority=1)
-    # avatar_update(model='booty_ass')
-    # create_table_images()
-    # insert_blob_in_db(table='images', blob='interrupt.jpg', key='interrupt')
-    # print(image_read_from_db('interrupt'))
-    # import telegram_send
-    # telegram_send.send(images=[avatar_read_from_bd(model='booty_ass')],
-    #                    captions=['test3'])
-    # tuple_ = ('dummy', 'done', 'logo')
-    # for item in tuple_:
-    #     image_write_to_db(image_=item)
-    #     insert_images(file_names=item)
-    # import pprint
-    # pprint.pprint(DATABASE_CONTENT)

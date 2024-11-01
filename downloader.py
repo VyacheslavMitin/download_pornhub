@@ -24,7 +24,7 @@ COMMAND_OPTIONS = [  # параметры для yt-dlp
     '--abort-on-unavailable-fragment',  # отмена загрузки если фрагмент не доступен
     # yt-dlp --proxy "socks5://127.0.0.1:9150/" - через TOR
     # yt-dlp --proxy socks5://proxy.example.com:1080
-    # '--proxy', "socks5://127.0.0.1:9150/",  # использование прокси от TOR
+    '--proxy', "socks5://127.0.0.1:9150/",  # использование прокси от TOR
     '-P', f'temp:{temp_dir}',  # использование временной папки
     # '--quiet',
     # '--progress',
