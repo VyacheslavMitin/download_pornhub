@@ -4,6 +4,7 @@
 import sqlite3
 import os
 import sys
+from pprint import pprint
 
 from configs import DATABASE_MODELS
 # TODO сделать общую точка входа в базу данных
@@ -113,7 +114,7 @@ def insert_new_model_in_db(name=None, role='model', priority=1):
 
         while True:  # получение от пользователя строки с типом модели
             role_tuple = ('model', 'pornstar',)
-            role = input("Это model или pornstar (по умолчанию model):  ").lower()
+            role = input("Это 'model' или 'pornstar' (по умолчанию model):  ").lower()
             if role not in role_tuple and role != '':
                 print(f'Необходимо ввести правильную роль из {role_tuple}!')
             elif role == '':
@@ -268,6 +269,9 @@ def update_attempts(model):
 
 
 if __name__ == '__main__':
+    print('Содержимое БД')
+    pprint(sorted(DATABASE_CONTENT))  # вывод содержимого БД
+    print('\n')
     insert_new_model_in_db()
     # update_attempts('ava-nicks')
     # connect, cursor = connect_and_cursor_db()
@@ -297,6 +301,5 @@ if __name__ == '__main__':
     # for item in tuple_:
     #     image_write_to_db(image_=item)
     #     insert_images(file_names=item)
-    import pprint
-    pprint.pprint(DATABASE_CONTENT)
-    pass
+    # import pprint
+    # pprint.pprint(DATABASE_CONTENT)

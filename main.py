@@ -14,7 +14,7 @@ import os
 import sys
 import time
 
-from timedinput import timedinput
+from timedinput import timedinput  # сторонний модуль для ввода с таймаутом
 
 from downloader import starting_download
 from telegram_notifications import tg_send_notifications_images, tg_send_notifications_message
@@ -23,7 +23,7 @@ from disk_usage import difference_used_sizes, get_directory_size, human_read_for
 from configs import PATH, WEB_SERVER, PLATFORM
 from system import update_system_title, check_all
 
-__version__ = '7.2'
+__version__ = '7.3'
 
 
 def main():
