@@ -267,15 +267,21 @@ def update_attempts(model):
     return attempt
 
 
-def view_db():
+def view_db(mode='active'):
     """Функция чтения данных из базы данных в человеко читаемом виде"""
     connect = sqlite3.connect(DATABASE_MODELS)
     cursor = connect.cursor()
-
-    cursor.execute("""SELECT name, role, activity, priority, attempts FROM models 
+    sql_query = """SELECT name, role, activity, priority, attempts FROM models 
     WHERE activity == 'active'
     ORDER BY name
-    """)  # получение данных из таблицы если модель активна
+    """
+    if mode == 'active':
+        pass
+    elif mode == 'all':
+        sql_query =  """SELECT name, role, activity, priority, attempts FROM models 
+    ORDER BY name
+    """
+    cursor.execute(sql_query)  # получение данных из таблицы если модель активна
     rows_ = [('ИМЯ', 'ТИП', 'АКТИВНОСТЬ', 'ПРИОРИТЕТ', 'ПОПЫТКИ')] + cursor.fetchall()
 
     for item in rows_:
@@ -295,30 +301,36 @@ def delete_model():
     except sqlite3.Error:
         print("Не правильное имя модели")
     else:
-        print(f"Модель {model} из БД удалена")
+        print(f"Модель '{model.upper()}' из БД удалена")
 
     connect.commit()
     cursor.close()
 
 
-def disable_model():
-    """Функция отключения модели в БД"""
+def enable_disable_model():
+    """Функция включения и отключения моделей в БД"""
     connect = sqlite3.connect(DATABASE_MODELS)
     cursor = connect.cursor()
 
-    view_db()
-    model = input("\nВведите имя модели для отключения: ")
+    view_db(mode='all')
+    model = input("\nВведите имя модели для обработки: ")
+    mode = input("Введите режим работы\n1 - Включение\n2 - Выключение\nВВОД: ")
+    activity = 'active'
+    if mode == '1':
+        activity = 'active'
+    elif mode == '2':
+        activity = 'not_active'
 
     try:
         sql_query_update_activity = """UPDATE models
         SET activity = ?
         where name == ?"""
 
-        cursor.execute(sql_query_update_activity, ['not_active', model])
+        cursor.execute(sql_query_update_activity, [activity, model])
     except sqlite3.Error:
         print("Не правильное имя модели")
     else:
-        print(f"Модель {model} в БД отключена")
+        print(f"Модель '{model.upper()}' в БД обработана - '{activity}'")
 
     connect.commit()
     cursor.close()
@@ -328,7 +340,7 @@ def db_menu():
     """Функция режима выбора меню работы с БД"""
     while True:
         menu = input(
-            "Выбрать режим работы с базой данных\n1 - Вывод БД\n2 - Добавить запись в БД\n3 - Отключение модели\n4 - Удалить из БД\n\nВВОД: ")
+            "Выбрать режим работы с базой данных\n1 - Вывод БД\n2 - Добавить запись в БД\n3 - Обновление модели\n4 - Удалить из БД\n\nВВОД: ")
         if menu == "1":
             print('Содержимое БД\n')
             view_db()
@@ -338,8 +350,8 @@ def db_menu():
             insert_new_model_in_db()
             print('\n')
         elif menu == "3":
-            print("Отключение модели")
-            disable_model()
+            print("Обновление модели")
+            enable_disable_model()
             print('\n')
         elif menu == "4":
             print("Удаление модели")
