@@ -310,7 +310,7 @@ def delete_model():
     cursor.close()
 
 
-def enable_disable_rename_model():
+def update_model():
     """Функция включения и отключения моделей в БД"""
     connect = sqlite3.connect(DATABASE_MODELS)
     cursor = connect.cursor()
@@ -320,17 +320,23 @@ def enable_disable_rename_model():
     column = 'foobar'
 
     model = input("\nВведите имя модели для обработки: ")
-    mode = input("Введите режим работы\n1 - Включение\n2 - Выключение\n3 - Новое имя\nВВОД: ")
+    mode = input("Введите режим работы\n1 - Включение\n2 - Выключение\n3 - Новое имя\n4 - Приоритет\nВВОД: ")
     if mode == '1':
+        print("Включение модели")
         column = 'activity'
         work = 'active'
     elif mode == '2':
+        print("Выключение модели")
         column = 'activity'
         work = 'not_active'
     elif mode == '3':
         new_name = input("Новое имя для модели\nВВОД: ")
         column = 'name'
         work = new_name
+    elif mode == '4':
+        new_priority = input("Приоритет 1, 2 или 3\nВВОД: ")
+        column = 'priority'
+        work = new_priority
 
     try:
         sql_query_update_activity = f"""UPDATE models
@@ -362,7 +368,7 @@ def db_menu():
             print('\n')
         elif menu == "3":
             print("Обновление модели\n")
-            enable_disable_rename_model()
+            update_model()
             print('\n')
         elif menu == "4":
             print("Удаление модели\n")
