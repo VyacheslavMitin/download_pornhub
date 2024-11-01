@@ -284,7 +284,26 @@ def view_db():
 
 def delete_model():
     """Функция удаление моделей"""
-    pass
+    connect = sqlite3.connect(DATABASE_MODELS)
+    cursor = connect.cursor()
+
+    view_db()
+    model = input("\nВведите имя модели для удаления: ")
+
+    try:
+        cursor.execute("""DELETE FROM models WHERE name = ?""", [model])
+    except sqlite3.Error:
+        print("Не правильное имя модели")
+    else:
+        print(f"Модель {model} из БД удалена")
+
+    connect.commit()
+    cursor.close()
+
+
+def disable_model():
+    """Функция отключения модели в БД"""
+
 
 
 def db_menu():
