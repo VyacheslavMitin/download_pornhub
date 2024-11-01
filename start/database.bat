@@ -3,4 +3,4 @@ cd "C:\Users\sonic\PycharmProjects\download_pornhub\"
 
 python3.11 database_module.py
 
-pause
+PAUSE

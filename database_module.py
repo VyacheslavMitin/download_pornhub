@@ -282,8 +282,32 @@ def view_db():
         print("{:<20}{:<10}{:<12}{:<10}{:<10}".format(*item))
 
 
+def delete_model():
+    """Функция удаление моделей"""
+    pass
+
+
+def db_menu():
+    """Функция режима выбора меню работы с БД"""
+    while True:
+        menu = input(
+            "Выбрать режим работы с базой данных\n1 - Добавить запись в БД\n2 - Удалить из БД\n3 - Вывод БД\n\nВВОД: ")
+        if menu == "1":
+            print("Ввод новой модели")
+            insert_new_model_in_db()
+            print('\n')
+        elif menu == "2":
+            print("Удаление модели")
+            delete_model()
+            print('\n')
+        elif menu == "3":
+            print('Содержимое БД\n')
+            view_db()
+            print('\n')
+        else:
+            exit("Не выбрано правильное меню, выход")
+
+
+
 if __name__ == '__main__':
-    print('Содержимое БД\n')
-    view_db()
-    print('\n')
-    insert_new_model_in_db()
+    db_menu()

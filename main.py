@@ -14,7 +14,7 @@ import os
 import sys
 import time
 
-from timedinput import timedinput  # сторонний модуль для ввода с таймаутом
+# from timedinput import timedinput  # сторонний модуль для ввода с таймаутом
 
 from downloader import starting_download
 from telegram_notifications import tg_send_notifications_images, tg_send_notifications_message
@@ -23,7 +23,7 @@ from disk_usage import difference_used_sizes, get_directory_size, human_read_for
 from configs import PATH, WEB_SERVER, PLATFORM
 from system import update_system_title, check_all
 
-__version__ = '7.4'
+__version__ = '7.5'
 
 
 def main():
@@ -33,8 +33,8 @@ def main():
     try:  # проверка параметров запуска
         if sys.argv[1] == '--edit-models':
             print('Модуль загрузки видео с PornHub, правка списков моделей')
-            # changes = input('Необходимы правки списков моделей? y/N: ').lower()
-            changes = timedinput('Необходимы правки списков моделей? y/N: ', timeout=3, default="N")
+            changes = input('Необходимы правки списков моделей? y/N: ').lower()
+            # changes = timedinput('Необходимы правки списков моделей? y/N: ', timeout=3, default="N")
             match changes:
                 case 'y' | 'д' | 'l':
                     from database_module import insert_new_model_in_db
