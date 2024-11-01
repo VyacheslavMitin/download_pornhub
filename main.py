@@ -23,7 +23,7 @@ from disk_usage import difference_used_sizes, get_directory_size, human_read_for
 from configs import PATH, WEB_SERVER, PLATFORM
 from system import update_system_title, check_all
 
-__version__ = '7.7'
+__version__ = '7.8'
 
 
 def main():
@@ -37,8 +37,8 @@ def main():
             # changes = timedinput('Необходимы правки списков моделей? y/N: ', timeout=3, default="N")
             match changes:
                 case 'y' | 'д' | 'l':
-                    from database_module import insert_new_model_in_db
-                    insert_new_model_in_db()
+                    from database_module import insert_new_model
+                    insert_new_model()
                     time.sleep(1)
                     print('Правки выполнены\n\n')
                 case '' | None | 'n' | 'н':
