@@ -107,32 +107,34 @@ def insert_new_model(name=None, role='model', priority=1):
 
     if name is None:  # запрос на ввод данных если они не передаются в параметрах функции
         print("Необходимо ввести данные по новой модели\n")
-        name = input("Имя модели:  ")
-        if name:
-            while True:  # получение от пользователя строки с типом модели
-                role_tuple = ('model', 'pornstar',)
-                role = input("Это 'model' или 'pornstar' (по умолчанию model):  ").lower()
-                if role not in role_tuple and role != '':
-                    print(f'Необходимо ввести правильную роль из {role_tuple}!')
-                elif role == '':
-                    role = 'model'
-                    break
-                else:
-                    break
+        while True:
+            name = input("Имя модели: ")
+            if not name:  # проверка на пустой ввод
+                print("Имя не корректно, ввести заново")
+            if name:
+                break
+        while True:  # получение от пользователя строки с типом модели
+            role_tuple = ('model', 'pornstar',)
+            role = input("Это 'model' или 'pornstar' (по умолчанию model):  ").lower()
+            if role not in role_tuple and role != '':
+                print(f'Необходимо ввести правильную роль из {role_tuple}!')
+            elif role == '':
+                role = 'model'
+                break
+            else:
+                break
 
-            while True:  # получение от пользователя числа с приоритетом для порядка
-                priority_tuple = ('1', '2', '3',)
-                priority = input("Приоритет 1, 2 или 3 (по умолчанию 1):  ")
-                if priority not in priority_tuple and priority != '':
-                    print(f'Необходимо указать корректный порядок - из {priority_tuple}')
-                elif priority == '':
-                    priority = 1
-                    break
-                else:
-                    priority = int(priority)
-                    break
-        else:
-            exit("Пустое имя модели")
+        while True:  # получение от пользователя числа с приоритетом для порядка
+            priority_tuple = ('1', '2', '3',)
+            priority = input("Приоритет 1, 2 или 3 (по умолчанию 1):  ")
+            if priority not in priority_tuple and priority != '':
+                print(f'Необходимо указать корректный порядок - из {priority_tuple}')
+            elif priority == '':
+                priority = 1
+                break
+            else:
+                priority = int(priority)
+                break
 
     try:
         cursor.execute("""INSERT INTO models (name, role, priority)
@@ -286,7 +288,7 @@ def view_db(mode='active'):
     rows_ = [('ИМЯ', 'ТИП', 'АКТИВНОСТЬ', 'ПРИОРИТЕТ', 'ПОПЫТКИ')] + cursor.fetchall()
 
     for item in rows_:
-        print("{:<20}{:<10}{:<12}{:<10}{:<10}".format(*item))
+        print("{:<20}{:<10}{:<12}{:<11}{:<10}".format(*item))
 
 
 def delete_model():
@@ -349,7 +351,7 @@ def db_menu():
     """Функция режима выбора меню работы с БД"""
     while True:
         menu = input(
-            "Выбрать режим работы с базой данных\n1 - Вывод БД\n2 - Добавить запись в БД\n3 - Обновление модели\n4 - Удалить из БД\n\nВВОД: ")
+            "Выбрать режим работы с базой данных\n1 - Вывод БД\n2 - Добавить модель в БД\n3 - Обновление модели\n4 - Удалить из БД\n\nВВОД: ")
         if menu == "1":
             print('Содержимое БД\n')
             view_db()
