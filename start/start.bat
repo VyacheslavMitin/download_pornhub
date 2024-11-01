@@ -1,3 +1,4 @@
+@echo OFF
 cd "C:\Users\sonic\PycharmProjects\download_pornhub\"
 ./start\activate.ps1
 

@@ -91,8 +91,6 @@ def read_db(priority='all',  # not_all
         else:  # без сортировки
             rows = rows_1_2 + rows_3
 
-    # Сохраняем изменения и закрываем соединение
-    # connect.commit()
     cursor.close()
 
     return rows
@@ -110,29 +108,31 @@ def insert_new_model(name=None, role='model', priority=1):
     if name is None:  # запрос на ввод данных если они не передаются в параметрах функции
         print("Необходимо ввести данные по новой модели\n")
         name = input("Имя модели:  ")
+        if name:
+            while True:  # получение от пользователя строки с типом модели
+                role_tuple = ('model', 'pornstar',)
+                role = input("Это 'model' или 'pornstar' (по умолчанию model):  ").lower()
+                if role not in role_tuple and role != '':
+                    print(f'Необходимо ввести правильную роль из {role_tuple}!')
+                elif role == '':
+                    role = 'model'
+                    break
+                else:
+                    break
 
-        while True:  # получение от пользователя строки с типом модели
-            role_tuple = ('model', 'pornstar',)
-            role = input("Это 'model' или 'pornstar' (по умолчанию model):  ").lower()
-            if role not in role_tuple and role != '':
-                print(f'Необходимо ввести правильную роль из {role_tuple}!')
-            elif role == '':
-                role = 'model'
-                break
-            else:
-                break
-
-        while True:  # получение от пользователя числа с приоритетом для порядка
-            priority_tuple = ('1', '2', '3',)
-            priority = input("Приоритет 1, 2 или 3 (по умолчанию 1):  ")
-            if priority not in priority_tuple and priority != '':
-                print(f'Необходимо указать корректный порядок - из {priority_tuple}')
-            elif priority == '':
-                priority = 1
-                break
-            else:
-                priority = int(priority)
-                break
+            while True:  # получение от пользователя числа с приоритетом для порядка
+                priority_tuple = ('1', '2', '3',)
+                priority = input("Приоритет 1, 2 или 3 (по умолчанию 1):  ")
+                if priority not in priority_tuple and priority != '':
+                    print(f'Необходимо указать корректный порядок - из {priority_tuple}')
+                elif priority == '':
+                    priority = 1
+                    break
+                else:
+                    priority = int(priority)
+                    break
+        else:
+            exit("Пустое имя модели")
 
     try:
         cursor.execute("""INSERT INTO models (name, role, priority)
@@ -144,9 +144,9 @@ def insert_new_model(name=None, role='model', priority=1):
         connect.commit()
         cursor.close()
 
-    global DATABASE_CONTENT
-    DATABASE_CONTENT = read_db(priority='all',  # получение столбцов из БД
-                               mixed=True)
+    # global DATABASE_CONTENT
+    # DATABASE_CONTENT = read_db(priority='all',  # получение столбцов из БД
+    #                            mixed=True)
 
 
 def avatar_read_from_bd(model):
@@ -224,7 +224,7 @@ def image_read_from_db(file_name):
     return image
 
 
-def insert_blob_in_db(table, blob, key):
+def insert_blob(table, blob, key):
     """Функция записи файлов в базу данных"""
     if os.path.isfile(blob):
         connect = sqlite3.connect(DATABASE_MODELS)
