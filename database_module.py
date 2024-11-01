@@ -303,25 +303,47 @@ def delete_model():
 
 def disable_model():
     """Функция отключения модели в БД"""
+    connect = sqlite3.connect(DATABASE_MODELS)
+    cursor = connect.cursor()
 
+    view_db()
+    model = input("\nВведите имя модели для отключения: ")
+
+    try:
+        sql_query_update_activity = """UPDATE models
+        SET activity = ?
+        where name == ?"""
+
+        cursor.execute(sql_query_update_activity, ['not_active', model])
+    except sqlite3.Error:
+        print("Не правильное имя модели")
+    else:
+        print(f"Модель {model} в БД отключена")
+
+    connect.commit()
+    cursor.close()
 
 
 def db_menu():
     """Функция режима выбора меню работы с БД"""
     while True:
         menu = input(
-            "Выбрать режим работы с базой данных\n1 - Добавить запись в БД\n2 - Удалить из БД\n3 - Вывод БД\n\nВВОД: ")
+            "Выбрать режим работы с базой данных\n1 - Вывод БД\n2 - Добавить запись в БД\n3 - Отключение модели\n4 - Удалить из БД\n\nВВОД: ")
         if menu == "1":
+            print('Содержимое БД\n')
+            view_db()
+            print('\n')
+        elif menu == "2":
             print("Ввод новой модели")
             insert_new_model_in_db()
             print('\n')
-        elif menu == "2":
+        elif menu == "3":
+            print("Отключение модели")
+            disable_model()
+            print('\n')
+        elif menu == "4":
             print("Удаление модели")
             delete_model()
-            print('\n')
-        elif menu == "3":
-            print('Содержимое БД\n')
-            view_db()
             print('\n')
         else:
             exit("Не выбрано правильное меню, выход")
