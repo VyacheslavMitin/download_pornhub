@@ -16,7 +16,7 @@ def info_after_download(path_to_model, link):
             files.append(i)
     len_files = len(files)
 
-    message = f"🟣 Информация о модели:\nРазмер каталога: {size}\nКоличество роликов: {len_files}\nСсылка: {link}"
+    message = f"\n🟣 Информация о модели:\nРазмер каталога: {size}\nКоличество роликов: {len_files}\nСсылка: {link}"
     print(f"{message}")
     tg_send_notifications_message(message)
 

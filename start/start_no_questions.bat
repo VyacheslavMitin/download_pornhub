@@ -2,7 +2,7 @@
 cd "C:\Users\sonic\PycharmProjects\download_pornhub\"
 ./start\activate.ps1
 
-python3.11 main.py
+python3.11 main.py --no-questions
 
 PAUSE
 

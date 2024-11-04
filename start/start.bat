@@ -2,7 +2,9 @@
 cd "C:\Users\sonic\PycharmProjects\download_pornhub\"
 ./start\activate.ps1
 
-python3.11 main.py --edit-models
+python3.11 main.py
+
+REM python3.11 main.py --edit-models
 
 PAUSE
 

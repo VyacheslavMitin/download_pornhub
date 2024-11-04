@@ -22,13 +22,15 @@ from info_after_download import info_after_download
 COMMAND = "yt-dlp"  # команда для вызова youtube-dl или аналогов, должна находится в PATH
 COMMAND_OPTIONS = [  # параметры для yt-dlp
     '--abort-on-unavailable-fragment',  # отмена загрузки если фрагмент не доступен
-    # yt-dlp --proxy "socks5://127.0.0.1:9150/" - через TOR
     # yt-dlp --proxy socks5://proxy.example.com:1080
     '--proxy', "socks5://127.0.0.1:9150/",  # использование прокси от TOR
     '-P', f'temp:{temp_dir}',  # использование временной папки
     # '--quiet',
     # '--progress',
 ]
+# if sys.argv[1] == '--tor':
+#     COMMAND_OPTIONS.append('--proxy')
+#     COMMAND_OPTIONS.append("socks5://127.0.0.1:9150/")
 
 if COMMAND_OPTIONS_ADD:
     COMMAND_OPTIONS = COMMAND_OPTIONS + COMMAND_OPTIONS_ADD
@@ -128,20 +130,22 @@ def starting_download() -> None:
         if os.path.isfile('cookies.txt'):  # удаление создаваемых в каталогах моделей куки файлов
             os.remove('cookies.txt')
 
+        # высчитывание разницы размеров до и после
         after_size = get_directory_size(path)
         difference_size = difference_used_sizes(after=after_size, before=before_size)
+
+        # проверка дублей
+        check_doubles(path)
+        # инфо по модели
+        info_after_download(path_to_model=path, link=link)
 
         message_finish_model_download = (
                     f"\n{SEPARATOR_END} Окончание загрузки модели {model.upper()} {SEPARATOR_END}\n\n")
         print(message_finish_model_download)
+
         if not difference_size <= 128:        # Сообщение об окончании загрузки
             print(f"Загружено {human_read_format(difference_size)}" + '\n' * 3)
             tg_send_notifications_message(f"🔷 Загружено: {human_read_format(difference_size)}")
-
-        # проверка дублей
-        check_doubles(path)
-
-        info_after_download(path_to_model=path, link=link)
 
         # Запись HTML файла с описанием
         write_html_model(path=path,

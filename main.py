@@ -23,7 +23,7 @@ from disk_usage import difference_used_sizes, get_directory_size, human_read_for
 from configs import PATH, WEB_SERVER, PLATFORM
 from system import update_system_title, check_all
 
-__version__ = '7.12'
+__version__ = '7.14'
 
 
 def main():
@@ -97,30 +97,31 @@ def main():
         f'{models_list_html()}'
     )
 
-    # Вывод в консоль и рассылка уведомлений в Телеграм о старте загрузки роликов
-    print(message_start_print)
-    tg_send_notifications_images(captions=message_start_send,
-                                 images=image_read_from_db('logo'))
-    tg_send_notifications_message(message=message_models_send)
+    while True:
+        # Вывод в консоль и рассылка уведомлений в Телеграм о старте загрузки роликов
+        print(message_start_print)
+        tg_send_notifications_images(captions=message_start_send,
+                                     images=image_read_from_db('logo'))
+        tg_send_notifications_message(message=message_models_send)
 
-    write_html_index()  # Записать Index.html
+        write_html_index()  # Записать Index.html
 
-    # Начало загрузки
-    before_size = get_directory_size(PATH)
-    starting_download()  # ЗАГРУЗКА
-    after_size = get_directory_size(PATH)
-    difference_size = difference_used_sizes(after=after_size, before=before_size)
+        # Начало загрузки
+        before_size = get_directory_size(PATH)
+        starting_download()  # ЗАГРУЗКА
+        after_size = get_directory_size(PATH)
+        difference_size = difference_used_sizes(after=after_size, before=before_size)
 
-    all_done = (f'☑️ Все успешно загружено\n{time.strftime("%d.%m.%Yг., %H:%M:%S")}\n'
-                f'{disk_usage_all_info()}\n'
-                f'Было загружено: {human_read_format(difference_size)}'
-                )
-    print(all_done)
-    update_system_title(f'☑️ Все успешно загружено')
-    tg_send_notifications_images(captions=all_done,
-                                 images=image_read_from_db('done'))
+        all_done = (f'☑️ Все успешно загружено\n{time.strftime("%d.%m.%Yг., %H:%M:%S")}\n'
+                    f'{disk_usage_all_info()}\n'
+                    f'Было загружено: {human_read_format(difference_size)}'
+                    )
+        print(all_done)
+        update_system_title(f'☑️ Цикл загрузок завершен\n\n\n')
+        tg_send_notifications_images(captions=all_done,
+                                     images=image_read_from_db('done'))
 
-    sys.exit(0)  # выход
+    # sys.exit(0)  # выход
 
 
 if __name__ == '__main__':
