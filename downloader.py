@@ -133,6 +133,9 @@ def starting_download() -> None:
         # высчитывание разницы размеров до и после
         after_size = get_directory_size(path)
         difference_size = difference_used_sizes(after=after_size, before=before_size)
+        if not difference_size <= 128:        # Сообщение об окончании загрузки
+            print(f"Загружено {human_read_format(difference_size)}" + '\n' * 3)
+            tg_send_notifications_message(f"🔷 Загружено: {human_read_format(difference_size)}")
 
         # проверка дублей
         check_doubles(path)
@@ -142,10 +145,6 @@ def starting_download() -> None:
         message_finish_model_download = (
                     f"\n{SEPARATOR_END} Окончание загрузки модели {model.upper()} {SEPARATOR_END}\n\n")
         print(message_finish_model_download)
-
-        if not difference_size <= 128:        # Сообщение об окончании загрузки
-            print(f"Загружено {human_read_format(difference_size)}" + '\n' * 3)
-            tg_send_notifications_message(f"🔷 Загружено: {human_read_format(difference_size)}")
 
         # Запись HTML файла с описанием
         write_html_model(path=path,

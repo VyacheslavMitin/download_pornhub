@@ -27,7 +27,7 @@ def check_doubles(path_to_model):
 
     if dict_doub:
         list2 = []
-        print("Обнаружены дубли файлов")
+        print(f"Обнаружены дубли файлов в количестве '{len(dict_doub)}' штук")
         pprint.pprint(dict_doub)
         for i in dict_doub.values():
             *garb, file_doub = i.split('/')
