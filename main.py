@@ -23,7 +23,12 @@ from disk_usage import difference_used_sizes, get_directory_size, human_read_for
 from configs import PATH, WEB_SERVER, PLATFORM
 from system import update_system_title, check_all
 
-__version__ = '7.15'
+__version__ = '7.16'
+
+def info_platform():
+    """Функция вывода удобочитаемого имени платформы"""
+    if sys.platform == 'win32':
+        return 'MS Windows'
 
 
 def main():
@@ -75,18 +80,18 @@ def main():
     message_start_print = ('💦 Загрузка роликов с PornHub'.upper() + '\n' +
                            f'{time.strftime("%d.%m.%Yг., %H:%M:%S")}\n' +  # текущее время
                            f'{disk_usage_all_info()}\n'  # определение свободного места
-                           f'Платформа: {sys.platform}\n'
+                           f'Платформа: {info_platform()}\n'
                            f'Версия Python: {sys.version[:7]}\n' +  # [:-35]
                            f'Версия программы: {__version__}\n' +
                            f'Количество моделей для загрузки: {len(prioritized_model_shuffle):}\n\n' +
                            'Список моделей для загрузки:'.upper() + '\n' +
                            f'{models_list()}'
                            )
-
+    # Отправка в Telegram
     message_start_send = (f'💦 Загрузка роликов с PH\n'
                           f'{time.strftime("%d.%m.%Yг., %H:%M:%S")}\n'  # текущее время
                           f'{disk_usage_all_info()}\n'  # определение свободного места
-                          f'Платформа: {sys.platform}\n'
+                          f'Платформа: {info_platform()}\n'
                           f'Версия Python: {sys.version[:7]}\n' +  # [:-35]
                           f'Версия программы: {__version__}\n'
                           f'Количество моделей для загрузки: {len(prioritized_model_shuffle):}\n\n'

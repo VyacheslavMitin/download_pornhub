@@ -358,17 +358,6 @@ def update_model():
     cursor.close()
 
 
-# def select_model():
-#     dict_ = {}
-#     i = 0
-#     for el in sorted(DATABASE_CONTENT):
-#         # print(el[0])
-#         i = i +1
-#         dict_[el[0]] = i
-#
-#     # print(dict_)
-
-
 def db_menu():
     """Функция режима выбора меню работы с БД"""
     while True:
@@ -405,6 +394,7 @@ def db_menu():
 
 
 if __name__ == '__main__':
-    # select_model()
     print("Работа с базой данных для модуля DownloadPH\n")
+    from main import __version__
+    print("Версия программы ")
     db_menu()

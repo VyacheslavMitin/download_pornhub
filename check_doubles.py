@@ -27,12 +27,12 @@ def check_doubles(path_to_model):
 
     if dict_doub:
         list2 = []
-        print(f"Обнаружены дубли файлов в количестве '{len(dict_doub)}' штук")
+        print(f"\n\nОбнаружены дубли файлов в количестве '{len(dict_doub)}' штук")
         pprint.pprint(dict_doub)
         for i in dict_doub.values():
             *garb, file_doub = i.split('/')
             list2.append(file_doub)
-        tg_send_notifications_message(f"🟨 Обнаружены дубли файлов:\n"
+        tg_send_notifications_message(f"🟨 Обнаружены дубли файлов в количестве '{len(dict_doub)}' штук:\n"
                                       f"{list2}")
 
 
