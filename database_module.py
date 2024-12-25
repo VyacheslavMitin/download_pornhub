@@ -394,7 +394,7 @@ def db_menu():
 
 
 if __name__ == '__main__':
-    print("Работа с базой данных для модуля DownloadPH\n")
+    print("Работа с базой данных для модуля DownloadPH")
     from main import __version__
-    print("Версия программы ")
+    print(f"Версия программы {__version__}\n")
     db_menu()

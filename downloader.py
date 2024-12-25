@@ -25,6 +25,7 @@ COMMAND_OPTIONS = [  # параметры для yt-dlp
     # yt-dlp --proxy socks5://proxy.example.com:1080
     '--proxy', "socks5://127.0.0.1:9150/",  # использование прокси от TOR
     '-P', f'temp:{temp_dir}',  # использование временной папки
+    '--no-mtime',
     # '--quiet',
     # '--progress',
 ]

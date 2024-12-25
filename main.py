@@ -23,12 +23,14 @@ from disk_usage import difference_used_sizes, get_directory_size, human_read_for
 from configs import PATH, WEB_SERVER, PLATFORM
 from system import update_system_title, check_all
 
-__version__ = '7.16'
+__version__ = '7.17'
 
 def info_platform():
     """Функция вывода удобочитаемого имени платформы"""
     if sys.platform == 'win32':
         return 'MS Windows'
+    else:
+        return 'Other'
 
 
 def main():
