@@ -22,8 +22,10 @@ from write_html import write_html_index, models_list_html
 from disk_usage import difference_used_sizes, get_directory_size, human_read_format, disk_usage_all_info
 from configs import PATH, WEB_SERVER, PLATFORM
 from system import update_system_title, check_all
+from mail_sending import send_email
 
-__version__ = '7.18'
+__version__ = '8.0'
+
 
 def info_platform():
     """Функция вывода удобочитаемого имени платформы"""
@@ -79,15 +81,15 @@ def main():
         return models_strings
 
     from database_module import image_read_from_db
-    message_start_print = ('💦 Загрузка роликов с PornHub'.upper() + '\n' +
+    message_start_print = (f'💦 Загрузка роликов с PornHub'.upper() + '\n' +
                            f'{time.strftime("%d.%m.%Yг., %H:%M:%S")}\n' +  # текущее время
                            f'{disk_usage_all_info()}\n'  # определение свободного места
                            f'Платформа: {info_platform()}\n'
                            f'Версия Python: {sys.version[:7]}\n' +  # [:-35]
                            f'Версия программы: {__version__}\n' +
                            f'Количество моделей для загрузки: {len(prioritized_model_shuffle):}\n\n' +
-                           'Список моделей для загрузки:'.upper() + '\n' +
-                           f'{models_list()}'
+                           f'Список моделей для загрузки:'.upper() + '\n' +
+                           f'{models_list()}\n'
                            )
     # Отправка в Telegram
     message_start_send = (f'💦 Загрузка роликов с PH\n'
@@ -122,7 +124,8 @@ def main():
         all_done = (f'☑️ Все успешно загружено\n{time.strftime("%d.%m.%Yг., %H:%M:%S")}\n'
                     f'{disk_usage_all_info()}\n'
                     f'Было загружено: {human_read_format(difference_size)}'
-                    )
+                    '\n\n' + '🔘' * 60 + '\n')
+        send_email(body=message_start_send + all_done)  # высылка письма на почту
         print(all_done)
         update_system_title(f'☑️ Цикл загрузок завершен\n\n\n')
         tg_send_notifications_images(captions=all_done,

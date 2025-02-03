@@ -24,7 +24,7 @@ COMMAND_OPTIONS = [  # параметры для yt-dlp
     '--abort-on-unavailable-fragment',  # отмена загрузки если фрагмент не доступен
     # yt-dlp --proxy socks5://proxy.example.com:1080
     # '--proxy', "socks5://127.0.0.1:9150/",  # использование прокси от TOR
-    '-P', f'temp:{temp_dir}',  # использование временной папки
+    '-P', f'temp:{temp_dir}',  # использование временной папки на локальной машине
     '--no-mtime',
     # '--quiet',
     # '--progress',
@@ -135,16 +135,16 @@ def starting_download() -> None:
         after_size = get_directory_size(path)
         difference_size = difference_used_sizes(after=after_size, before=before_size)
         if not difference_size <= 128:        # Сообщение об окончании загрузки
-            print(f"Загружено {human_read_format(difference_size)}" + '\n' * 3)
-            tg_send_notifications_message(f"🔷 Загружено: {human_read_format(difference_size)}")
+            print(f"\n🟩 Загружено {human_read_format(difference_size)}, модель {model.upper()} 🟩")
+            tg_send_notifications_message(f"🟩 Загружено: {human_read_format(difference_size)}")
 
         # проверка дублей
         check_doubles(path)
         # инфо по модели
-        info_after_download(path_to_model=path, link=link)
+        info_after_download(path_to_model=path, link=link, model_=model)
 
         message_finish_model_download = (
-                    f"\n{SEPARATOR_END} Окончание загрузки модели {model.upper()} {SEPARATOR_END}\n\n")
+                    f"\n{SEPARATOR_END} Окончание загрузки модели {model.upper()} {SEPARATOR_END}\n")
         print(message_finish_model_download)
 
         # Запись HTML файла с описанием
@@ -154,7 +154,6 @@ def starting_download() -> None:
                          now_time=now_time,
                          attempt=attempt,
                          )
-
 
 
 if __name__ == '__main__':

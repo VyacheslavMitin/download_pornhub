@@ -2,4 +2,4 @@ telegram-send==0.34
 python-telegram-bot
 beautifulsoup4
 requests
-timedinput
+# timedinput
