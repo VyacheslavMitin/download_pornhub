@@ -100,11 +100,21 @@ def main():
                           f'Версия программы: {__version__}\n'
                           f'Количество моделей для загрузки: {len(prioritized_model_shuffle):}\n\n'
                           )
-
     message_models_send = (
         f'<a href="{WEB_SERVER}">Список моделей для загрузки:</a>\n\n'
         f'{models_list_html()}'
     )
+    # Отправка электронного письма
+    message_mail_send = (f'💦 Загрузка роликов с PH'.upper() + '\n' +
+                           f'{time.strftime("%d.%m.%Yг., %H:%M:%S")}\n' +  # текущее время
+                           f'{disk_usage_all_info()}\n'  # определение свободного места
+                           f'Платформа: {info_platform()}\n'
+                           f'Версия Python: {sys.version[:7]}\n' +  # [:-35]
+                           f'Версия программы: {__version__}\n' +
+                           f'Количество моделей для загрузки: {len(prioritized_model_shuffle):}\n\n' +
+                           f'Список моделей для загрузки:'.upper() + '\n' +
+                           f'{models_list()}\n'
+                           )
 
     while True:
         # Вывод в консоль и рассылка уведомлений в Телеграм о старте загрузки роликов
@@ -125,7 +135,7 @@ def main():
                     f'{disk_usage_all_info()}\n'
                     f'Было загружено: {human_read_format(difference_size)}'
                     '\n\n' + '🔘' * 60 + '\n')
-        send_email(body=message_start_send + all_done)  # высылка письма на почту
+        send_email(body=message_mail_send + all_done)  # высылка письма на почту
         print(all_done)
         update_system_title(f'☑️ Цикл загрузок завершен\n\n\n')
         tg_send_notifications_images(captions=all_done,
