@@ -8,6 +8,4 @@ cd $PATH_SCRIPT_DIR
 
 clear
 
-$PYTHON_BIN_VER main.py
-# $PYTHON_BIN_VER main.py --edit-models
-# $PYTHON_BIN_VER main.py --no-questions
+$PYTHON_BIN_VER database_module.py

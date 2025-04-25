@@ -50,6 +50,8 @@ def get_directory_size(path) -> int:
                 total_size += size
     except PermissionError as e:
         print(f"Ошибка доступа к папке: {e}")
+    except FileNotFoundError as f:
+        print(f"Ошибка доступа к файлу: {f}")
     return total_size
 
 

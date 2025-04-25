@@ -26,6 +26,8 @@ def return_platform() -> str:
             platform = 'mac'
         case 'Keenetic_Viva':
             platform = 'wifi_router'
+        case 'Keenetic_Ultra':
+            platform = 'wifi_router'
         case 'VYACHESLAV-PC':
             platform = 'win-pc'
     return platform
@@ -50,7 +52,7 @@ def return_paths() -> tuple:
         case 'wifi_router':
             # Путь к каталогу для хранения видео
             path = config.get('SETTINGS',  # получение из конфига пути к каталогу для записи файлов
-                              'path_keenetic_viva')
+                              'path_keenetic')
             # Путь к базе данных
             database_models = os.path.join(abs_path, 'models.db')
         case 'win-pc':

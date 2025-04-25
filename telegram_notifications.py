@@ -1,12 +1,15 @@
 # Модуль рассылки уведомлений
 # Необходимо установить модули нужных версий, для рассылки уведомлений в Telegram
 # https://pypi.org/project/telegram-send/
-# pip install -r requirements.txt
+# ИСПОЛЬЗОВАТЬ ПИТОН 3.11
+# ДЕЛАТЬ НУЖНО В VENV
+# pip3 install -r requirements.txt
 # ИЛИ
 # pip3 install telegram-send
 # pip3 install --force-reinstall -v "telegram-send==0.34"
 # pip3 install --force-reinstall -v "python-telegram-bot==13.5"
 # Настройка привязки бота к системе
+# ЭТО ТОЖЕ ДЕЛАТЬ НУЖНО В VENV
 # telegram-send --configure
 # Необходимо иметь python-telegram-bot==13.5", на свежих не работает модуль telegram-send и python выше 3.11 тоже
 # https://pythonhosted.org/telegram-send/

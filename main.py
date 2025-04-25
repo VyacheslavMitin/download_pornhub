@@ -24,15 +24,20 @@ from configs import PATH, WEB_SERVER, PLATFORM
 from system import update_system_title, check_all
 from mail_sending import send_email
 
-__version__ = '8.0'
+__version__ = '8.1'
 
 
 def info_platform():
     """Функция вывода удобочитаемого имени платформы"""
-    if sys.platform == 'win32':
-        return 'MS Windows'
-    else:
-        return 'Other'
+    match sys.platform:
+        case 'win32':
+            return 'Microsoft Windows'
+        case 'darwin':
+            return 'Apple macOS'
+        case 'linux':
+            return 'Linux'
+        case _:
+            return 'Other'
 
 
 def main():

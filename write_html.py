@@ -4,6 +4,7 @@ import time
 
 from configs import PATH, WEB_SERVER
 from dictionary_processing import prioritized_model_shuffle
+# from disk_usage import get_directory_size
 
 NAME_HTML_MODEL = '+info.html'
 end_line = '\n'
@@ -58,10 +59,15 @@ def write_html_model(path, name, link, now_time, attempt):
     def get_size_file_in_directory():
         """Функция получения размера файлов в каталоге"""
         size = 0
-        for dirpath, dirnames, filenames in os.walk(path):
-            for f in filenames:
-                fp = os.path.join(dirpath, f)
-                size += os.path.getsize(fp)
+        try:
+            for dirpath, dirnames, filenames in os.walk(path):
+                for f in filenames:
+                    fp = os.path.join(dirpath, f)
+                    size += os.path.getsize(fp)
+        except PermissionError as e:
+            print(f"Ошибка доступа к папке: {e}")
+        except FileNotFoundError as f:
+            print(f"Ошибка доступа к файлу: {f}")
         return human_read_format(size)
 
     def amount_files_in_directory():

@@ -43,4 +43,5 @@ if __name__ == '__main__':
     #     if os.path.isdir(f'Y:\\backup\\PornHub\\{item}'):
     #         print(f'Y:\\backup\\PornHub\\{item}')
     #         check_doubles(path_to_model=f'Y:\\backup\\PornHub\\{item}')
-    check_doubles(path_to_model=f'Y:\\backup\\PornHub\\{model}')
+    # check_doubles(path_to_model=f'Y:\\backup\\PornHub\\{model}')
+    check_doubles(path_to_model='/Volumes/Seagate_2TB/backup/PornHub/adaline-star')
