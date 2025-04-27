@@ -144,7 +144,7 @@ def starting_download() -> None:
         info_after_download(path_to_model=path, link=link, model_=model)
 
         message_finish_model_download = (
-                    f"\n{SEPARATOR_END} Окончание загрузки модели {model.upper()} {SEPARATOR_END}\n")
+                    f"\n{SEPARATOR_END} Окончание загрузки модели {model.upper()} {SEPARATOR_END}\n\n\n")
         print(message_finish_model_download)
 
         # Запись HTML файла с описанием

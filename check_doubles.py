@@ -1,8 +1,9 @@
 # Модуль проверки дублирующих роликов по ID
 import os
 import random
-import pprint
+# import pprint
 
+from configs import doubles_log_dir
 from telegram_notifications import tg_send_notifications_message
 
 
@@ -26,12 +27,30 @@ def check_doubles(path_to_model):
                 dict_doub[f"{file_}-{random.randint(100,999)}"] = file
 
     if dict_doub:
+        import datetime
+        current_datetime = datetime.datetime.now()
+        formatted_date = current_datetime.strftime('%Y-%m-%d')
+        # print(formatted_date)
+
         list2 = []
-        print(f"\n\nОбнаружены дубли файлов в количестве '{len(dict_doub)}' штук")
-        pprint.pprint(dict_doub)
+        print(f"\n\nОбнаружены дубли файлов в количестве '{len(dict_doub)}' шт.:")
+        chetchic = 0
         for i in dict_doub.values():
+            chetchic += 1
             *garb, file_doub = i.split('/')
-            list2.append(file_doub)
+            list2.append(f"   {chetchic}. {file_doub}\n")
+        # list2[0] = ' ' + list2[0]  # при выводе в терминал добавить пробел чтобы выравнять строки
+        print(*list2)
+
+        file_path = f'{doubles_log_dir}{formatted_date}.txt'
+
+        with open(file_path, 'a') as file:
+            # file.write(f"Файл с дублями за {datetime.datetime.now().strftime('%d.%m.%Y')}\n\n")
+            file.write(f"Модель: {path_to_model}\n")
+            for el in list2:
+                file.write(el)
+            file.write("\n\n")
+
         tg_send_notifications_message(f"🟨 Обнаружены дубли файлов в количестве '{len(dict_doub)}' штук:\n"
                                       f"{list2}")
 
@@ -44,4 +63,4 @@ if __name__ == '__main__':
     #         print(f'Y:\\backup\\PornHub\\{item}')
     #         check_doubles(path_to_model=f'Y:\\backup\\PornHub\\{item}')
     # check_doubles(path_to_model=f'Y:\\backup\\PornHub\\{model}')
-    check_doubles(path_to_model='/Volumes/Seagate_2TB/backup/PornHub/adaline-star')
+    check_doubles(path_to_model='/Volumes/Seagate_2TB/backup/PornHub/bad-hot-lady')

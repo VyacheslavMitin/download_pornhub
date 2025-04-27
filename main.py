@@ -13,6 +13,7 @@
 import os
 import sys
 import time
+import datetime
 
 # from timedinput import timedinput  # сторонний модуль для ввода с таймаутом
 
@@ -20,11 +21,11 @@ from downloader import starting_download
 from telegram_notifications import tg_send_notifications_images, tg_send_notifications_message
 from write_html import write_html_index, models_list_html
 from disk_usage import difference_used_sizes, get_directory_size, human_read_format, disk_usage_all_info
-from configs import PATH, WEB_SERVER, PLATFORM
+from configs import PATH, WEB_SERVER, PLATFORM, doubles_log_dir
 from system import update_system_title, check_all
 from mail_sending import send_email
 
-__version__ = '8.1'
+__version__ = '8.2'
 
 
 def info_platform():
@@ -121,6 +122,21 @@ def main():
                            f'{models_list()}\n'
                            )
 
+    # # Проверка существует ли такой файл
+    # if os.path.exists(file_path):
+    #     # Удаление файла
+    #     try:
+    #         os.remove(file_path)
+    #         # print(f'Файл "{file_path}" успешно удален.')
+    #         pass
+    #     except Exception as e:
+    #         # print(f"Ошибка при удалении файла: {e}")
+    #         pass
+    #     else:
+    #         # print(f"Файл с путь '{file_path}' не существует.")
+    #         pass
+
+
     while True:
         # Вывод в консоль и рассылка уведомлений в Телеграм о старте загрузки роликов
         print(message_start_print)
@@ -136,11 +152,29 @@ def main():
         after_size = get_directory_size(PATH)
         difference_size = difference_used_sizes(after=after_size, before=before_size)
 
-        all_done = (f'☑️ Все успешно загружено\n{time.strftime("%d.%m.%Yг., %H:%M:%S")}\n'
+        # Проверка дублей
+        current_datetime = datetime.datetime.now()
+        formatted_date = current_datetime.strftime('%Y-%m-%d')
+        if os.path.exists(f'{doubles_log_dir}{formatted_date}.txt'):
+            with open(f'{doubles_log_dir}{formatted_date}.txt', 'r') as file:
+                file_doubles = file.read()
+        else:
+            file_doubles = 'Дублей нет'
+
+        all_done = (f'☑️ Программа отработала успешно\n{time.strftime("%d.%m.%Yг., %H:%M:%S")}\n'
                     f'{disk_usage_all_info()}\n'
                     f'Было загружено: {human_read_format(difference_size)}'
-                    '\n\n' + '🔘' * 60 + '\n')
-        send_email(body=message_mail_send + all_done)  # высылка письма на почту
+                    '\n\n' + '🔘' * 10 + '\n'
+                    )
+
+        all_done_mail = (f'☑️ Программа отработала успешно\n{time.strftime("%d.%m.%Yг., %H:%M:%S")}\n'
+                    f'{disk_usage_all_info()}\n'
+                    f'Было загружено: {human_read_format(difference_size)}'
+                    '\n\n' + '🔘' * 30 + '\n' + f'Дубли если есть: \n\n{file_doubles}'
+                    '\n\n' + '🔘' * 30 + '\n'
+                    )
+
+        send_email(body=message_mail_send + all_done_mail)  # высылка письма на почту
         print(all_done)
         update_system_title(f'☑️ Цикл загрузок завершен\n\n\n')
         tg_send_notifications_images(captions=all_done,

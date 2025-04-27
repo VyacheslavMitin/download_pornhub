@@ -2,7 +2,7 @@
 import sys
 import os
 
-from configs import PATH, DATABASE_MODELS, PLATFORM
+from configs import PATH, DATABASE_MODELS, PLATFORM, doubles_log_dir
 
 REQUIRED_APPS = ('yt-dlp', 'ffmpeg', 'python3.11')
 REQUIRED_MODULES = ('telegram-send', 'python-telegram-bot', 'beautifulsoup4', 'requests')
@@ -11,13 +11,6 @@ REQUIRED_MODULES = ('telegram-send', 'python-telegram-bot', 'beautifulsoup4', 'r
 def check_apps():
     """Функция проверки доступности рекомендуемых приложений"""
     print("Проверка на доступ к требуемым программам\n".upper())
-
-    # for app in REQUIRED_APPS:
-    #     if os.system(f"which '{app}'") is True:
-    #         print(f"Приложение '{app}' не установлено!")
-    #         sys.exit(1)
-    #     else:
-    #         print(f"Приложение '{app}' установлено")
     for app in REQUIRED_APPS:
         if PLATFORM == 'win-pc':
             if os.system(f'where {app}') is True:
@@ -39,17 +32,14 @@ def check_paths():
     """Функция проверки доступности путей"""
     print("Проверка на доступ к требуемым путям\n".upper())
 
-    if os.path.isfile(DATABASE_MODELS) is not True:
-        print(f"Путь к '{DATABASE_MODELS}' не доступен, выход с ошибкой!")
-        sys.exit(1)
-    else:
-        print(f"Путь к '{DATABASE_MODELS}' доступен")
+    list_pats_for_check = (PATH, DATABASE_MODELS, doubles_log_dir)
 
-    if os.path.isdir(PATH) is not True:
-        print(f"Путь к '{PATH}' не доступен, выход с ошибкой!")
-        sys.exit(1)
-    else:
-        print(f"Путь к '{PATH}' доступен")
+    for i in list_pats_for_check:
+        if os.path.isfile(i) is not True:
+            print(f"Путь к '{i}' не доступен, выход с ошибкой!")
+            sys.exit(1)
+        else:
+            print(f"Путь к '{i}' доступен")
 
     print("Проверка на доступ к требуемым путям пройдена\n".upper())
 
