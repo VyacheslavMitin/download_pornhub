@@ -32,14 +32,20 @@ def check_paths():
     """Функция проверки доступности путей"""
     print("Проверка на доступ к требуемым путям\n".upper())
 
-    list_pats_for_check = (PATH, DATABASE_MODELS, doubles_log_dir)
+    list_pats_for_check = (PATH, doubles_log_dir)
 
     for i in list_pats_for_check:
-        if os.path.isfile(i) is not True:
+        if os.path.isdir(i) is not True:
             print(f"Путь к '{i}' не доступен, выход с ошибкой!")
             sys.exit(1)
         else:
             print(f"Путь к '{i}' доступен")
+
+    if os.path.isfile(DATABASE_MODELS) is not True:
+        print(f"Путь к '{DATABASE_MODELS}' не доступен, выход с ошибкой!")
+        sys.exit(1)
+    else:
+        print(f"Путь к '{DATABASE_MODELS}' доступен")
 
     print("Проверка на доступ к требуемым путям пройдена\n".upper())
 
