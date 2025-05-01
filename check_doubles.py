@@ -1,9 +1,10 @@
 # Модуль проверки дублирующих роликов по ID
 import os
 import random
+# from distutils.command.clean import clean
 # import pprint
 
-from configs import doubles_log_dir
+from configs import doubles_log_file
 from telegram_notifications import tg_send_notifications_message
 
 
@@ -27,40 +28,47 @@ def check_doubles(path_to_model):
                 dict_doub[f"{file_}-{random.randint(100,999)}"] = file
 
     if dict_doub:
-        import datetime
-        current_datetime = datetime.datetime.now()
-        formatted_date = current_datetime.strftime('%Y-%m-%d')
-        # print(formatted_date)
-
-        list2 = []
+        list_for_doubles = []
+        list_for_doubles_for_telegram = []
         print(f"\n\nОбнаружены дубли файлов в количестве '{len(dict_doub)}' шт.:")
         chetchic = 0
         for i in dict_doub.values():
             chetchic += 1
             *garb, file_doub = i.split('/')
-            list2.append(f"   {chetchic}. {file_doub}\n")
-        # list2[0] = ' ' + list2[0]  # при выводе в терминал добавить пробел чтобы выравнять строки
-        print(*list2)
+            list_for_doubles.append(f"   {chetchic}. {file_doub}\n")
+            list_for_doubles_for_telegram.append(f"{chetchic}. {file_doub}")
+        # list_for_doubles[0] = ' ' + list_for_doubles[0]  # при выводе в терминал добавить пробел чтобы выравнять строки
+        # Добавление пробела в начало для нормального вывода списка
+        list_for_doubles_for_print = list_for_doubles
+        list_for_doubles_for_print[0] = ' ' + list_for_doubles_for_print[0]
+        # print(*list_for_doubles_for_print)
 
-        file_path = f'{doubles_log_dir}{formatted_date}.txt'
+        list_for_doubles_for_write = list_for_doubles
+        list_for_doubles_for_write[0] = list_for_doubles_for_write[0][1:]
+        # print(list_for_doubles_for_write)
 
-        with open(file_path, 'a') as file:
+        with open(doubles_log_file, 'a') as file:
             # file.write(f"Файл с дублями за {datetime.datetime.now().strftime('%d.%m.%Y')}\n\n")
             file.write(f"Модель: {path_to_model}\n")
-            for el in list2:
+            for el in list_for_doubles_for_write:
                 file.write(el)
             file.write("\n\n")
 
+        # clean_list_for_doubles = list_for_doubles
+        # clean_list_for_doubles = [item[:-5] for item in clean_list_for_doubles]
+        # print(clean_list_for_doubles)
+        # print(list_for_doubles_for_telegram)
+        str_list_for_doubles_for_telegram = '\n'.join(list_for_doubles_for_telegram)
         tg_send_notifications_message(f"🟨 Обнаружены дубли файлов в количестве '{len(dict_doub)}' штук:\n"
-                                      f"{list2}")
+                                      f"{str_list_for_doubles_for_telegram}")
 
 
 if __name__ == '__main__':
-    model = 'blondessa'
+    model = 'adaline-star'
     # dirs = os.path.join('Y:\\backup\\PornHub')
     # for item in os.listdir(dirs):
     #     if os.path.isdir(f'Y:\\backup\\PornHub\\{item}'):
     #         print(f'Y:\\backup\\PornHub\\{item}')
     #         check_doubles(path_to_model=f'Y:\\backup\\PornHub\\{item}')
     # check_doubles(path_to_model=f'Y:\\backup\\PornHub\\{model}')
-    check_doubles(path_to_model='/Volumes/Seagate_2TB/backup/PornHub/bad-hot-lady')
+    check_doubles(path_to_model=f'/Volumes/Seagate_2TB/backup/PornHub/{model}')

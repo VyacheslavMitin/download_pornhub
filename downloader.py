@@ -17,6 +17,7 @@ from configs import WEB_SERVER, temp_dir
 from system import update_system_title
 from check_doubles import check_doubles
 from info_after_download import info_after_download
+from delete_files import deleting_files_for_list, deleting_files_for_mask
 
 
 COMMAND = "yt-dlp"  # команда для вызова youtube-dl или аналогов, должна находится в PATH
@@ -138,8 +139,13 @@ def starting_download() -> None:
             print(f"\n🟩 Загружено {human_read_format(difference_size)}, модель {model.upper()} 🟩")
             tg_send_notifications_message(f"🟩 Загружено: {human_read_format(difference_size)}")
 
+        # проверка на файлы которые нужно стереть и их удаление
+        deleting_files_for_list()
+        deleting_files_for_mask()
+
         # проверка дублей
         check_doubles(path)
+
         # инфо по модели
         info_after_download(path_to_model=path, link=link, model_=model)
 
@@ -148,11 +154,12 @@ def starting_download() -> None:
         print(message_finish_model_download)
 
         # Запись HTML файла с описанием
-        write_html_model(path=path,
-                         name=model,
-                         link=link,
-                         now_time=now_time,
-                         attempt=attempt,
+        write_html_model(
+            path=path,
+            name=model,
+            link=link,
+            now_time=now_time,
+            attempt=attempt,
                          )
 
 

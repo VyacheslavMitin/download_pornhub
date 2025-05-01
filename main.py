@@ -13,7 +13,7 @@
 import os
 import sys
 import time
-import datetime
+# import datetime
 
 # from timedinput import timedinput  # сторонний модуль для ввода с таймаутом
 
@@ -21,11 +21,11 @@ from downloader import starting_download
 from telegram_notifications import tg_send_notifications_images, tg_send_notifications_message
 from write_html import write_html_index, models_list_html
 from disk_usage import difference_used_sizes, get_directory_size, human_read_format, disk_usage_all_info
-from configs import PATH, WEB_SERVER, PLATFORM, doubles_log_dir
+from configs import PATH, WEB_SERVER, PLATFORM, doubles_log_file
 from system import update_system_title, check_all
 from mail_sending import send_email
 
-__version__ = '8.2'
+__version__ = '8.5'
 
 
 def info_platform():
@@ -153,10 +153,10 @@ def main():
         difference_size = difference_used_sizes(after=after_size, before=before_size)
 
         # Проверка дублей
-        current_datetime = datetime.datetime.now()
-        formatted_date = current_datetime.strftime('%Y-%m-%d')
-        if os.path.exists(f'{doubles_log_dir}{formatted_date}.txt'):
-            with open(f'{doubles_log_dir}{formatted_date}.txt', 'r') as file:
+        # current_datetime = datetime.datetime.now()
+        # formatted_date = current_datetime.strftime('%Y-%m-%d')
+        if os.path.exists(doubles_log_file):
+            with open(doubles_log_file, 'r') as file:
                 file_doubles = file.read()
         else:
             file_doubles = 'Дублей нет'
