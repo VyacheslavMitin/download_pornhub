@@ -3,8 +3,12 @@ import os
 import glob
 
 dir_names = ('honey-sasha',)
-file_names = ('JOI. Instructions For Jerking Off. Do What I Tell You And You Will Definitely Cum [66f7eee74759b].mp4',)
-file_masks = ('._*', '.1_*')
+file_names = (
+    'JOI. Instructions For Jerking Off. Do What I Tell You And You Will Definitely Cum [66f7eee74759b].mp4',
+)
+file_masks = (
+    '._*',
+)
 
 
 def deleting_files_for_list():
@@ -16,42 +20,43 @@ def deleting_files_for_list():
                 try:
                     os.remove(file)
                     print(f"Попытка удалить дублирующий файл '{file}'")
-                except FileNotFoundError as e:
-                    print("Файл не найден.")
-                except PermissionError as e:
-                    print("Недостаточно прав для удаления файла.")
-                except IsADirectoryError as e:
-                    print("Путь указывает на каталог.")
-                except OSError as e:
-                    print(f"Ошибка операционной системы: {e}")
+                except Exception as e:  # Общее исключение для всех ошибок
+                    print(f"Ошибка при удалении файла: {e}")
+                except PermissionError as pe:  # Исключение при недостатке прав
+                    print(f"Недостаточно прав для удаления файла: {pe}")
+                except IsADirectoryError as ide:  # Исключение при попытке удалить директорию
+                    print(f"Путь указывает на каталог: {ide}")
+                except FileNotFoundError as fe:  # Исключение при несуществующем файле
+                    print(f"Файл не найден: {fe}")
+                except OSError as oe:  # Общее исключение для операционных систем
+                    print(f"Ошибка операционной системы: {oe}")
     else:
         # print(f"Не в каталоге по списку")
         pass
 
 
 def deleting_files_for_mask():
-    """Удаление файлов по маске"""
+    """Функция удаления файлов по маске"""
     current_directory = os.path.abspath(os.getcwd())
-    # Получаем список всех файлов в указанной директории
-    # file_list = [f for f in os.listdir(current_directory) if os.path.isfile(os.path.join(current_directory, f))]
 
     glob_files = []
     for el in file_masks:
         glob_files += glob.glob(os.path.join(current_directory, el))
-    # print(glob_files)
 
     for file in glob_files:
         if os.path.isfile(file):
             try:
                 os.remove(file)
-            except FileNotFoundError:
-                pass
-            except PermissionError:
-                pass
-            except IsADirectoryError:
-                pass
-            except OSError:
-                pass
+            except Exception as e:  # Общее исключение для всех ошибок
+                print(f"Ошибка при удалении файла: {e}")
+            except PermissionError as pe:  # Исключение при недостатке прав
+                print(f"Недостаточно прав для удаления файла: {pe}")
+            except IsADirectoryError as ide:  # Исключение при попытке удалить директорию
+                print(f"Путь указывает на каталог: {ide}")
+            except FileNotFoundError as fe:  # Исключение при несуществующем файле
+                print(f"Файл не найден: {fe}")
+            except OSError as oe:  # Общее исключение для операционных систем
+                print(f"Ошибка операционной системы: {oe}")
 
 
 if __name__ == '__main__':

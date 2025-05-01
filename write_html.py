@@ -35,7 +35,7 @@ def write_html_index(root=PATH):
     {models_list_html().replace(end_line, '<br>')}</p>
     </body>
     </html>"""
-    #     {get_files_sizes_dates().replace('#####', '<br>')}</p>
+
     file.write(html)
     file.close()
 
@@ -113,7 +113,7 @@ def write_html_model(path, name, link, now_time, attempt):
     {get_files_sizes_dates().replace(end_line, '<br>')}</p>
     </body>
     </html>"""
-    # message = "test"
+
     file.write(message)
     file.close()
 

@@ -1,4 +1,4 @@
-# Программа для пакетной загрузки роликов с pornhub, в зависимостях yt-dlp как отдельная программа в PATH.
+# Программа для пакетной загрузки роликов с PH, в зависимостях yt-dlp и ffmpeg как отдел программы в PATH.
 # Установка зависимостей pip install -r requirements.txt
 # Используется база данных для хранения настроек, аватарок, приоритетов и прочего, а так же файл ini для хранения путей
 # Включен модуль рассылки уведомлений через telegram (telegram _send)
@@ -7,15 +7,12 @@
 # Включена рассылка через Telegram, подробнее о рассылке в соответствующем модуле
 # Для моделей где требуется "дружба" необходимо подложить куки через команду 'yt-dlp --cookies cookies.txt'
 # Подробное об аутентификации и авторизации в соответствующем модуле
-# Из-за очередной блокировки PH пришлось перейти на TOR в proxy, мост, но лучше использовать VPN:
+# Из-за очередной блокировки PH пришлось перейти на TOR в proxy, мост, но лучше использовать VPN или SpoofDPI:
 # obfs4 122.199.22.246:5342 B74D6031E64A7EF8E362395A7D85E3E02E8C2EF8 cert=uQLASVwr7ysdti/7oxYIy3ntn3U1Spx4Bk9Jesec7gYrAjmK4oP/GEz2s3zeVvy3NHf5bA iat-mode=0
 
 import os
 import sys
 import time
-# import datetime
-
-# from timedinput import timedinput  # сторонний модуль для ввода с таймаутом
 
 from downloader import starting_download
 from telegram_notifications import tg_send_notifications_images, tg_send_notifications_message
@@ -25,7 +22,7 @@ from configs import PATH, WEB_SERVER, PLATFORM, doubles_log_file
 from system import update_system_title, check_all
 from mail_sending import send_email
 
-__version__ = '8.5'
+__version__ = '8.6'
 
 
 def info_platform():
@@ -122,21 +119,6 @@ def main():
                            f'{models_list()}\n'
                            )
 
-    # # Проверка существует ли такой файл
-    # if os.path.exists(file_path):
-    #     # Удаление файла
-    #     try:
-    #         os.remove(file_path)
-    #         # print(f'Файл "{file_path}" успешно удален.')
-    #         pass
-    #     except Exception as e:
-    #         # print(f"Ошибка при удалении файла: {e}")
-    #         pass
-    #     else:
-    #         # print(f"Файл с путь '{file_path}' не существует.")
-    #         pass
-
-
     while True:
         # Вывод в консоль и рассылка уведомлений в Телеграм о старте загрузки роликов
         print(message_start_print)
@@ -144,17 +126,16 @@ def main():
                                      images=image_read_from_db('logo'))
         tg_send_notifications_message(message=message_models_send)
 
-        write_html_index()  # Записать Index.html
+        write_html_index()  # Записать index.html
 
         # Начало загрузки
         before_size = get_directory_size(PATH)
         starting_download()  # ЗАГРУЗКА
         after_size = get_directory_size(PATH)
         difference_size = difference_used_sizes(after=after_size, before=before_size)
+        if difference_size < 0:
+            difference_size = 0
 
-        # Проверка дублей
-        # current_datetime = datetime.datetime.now()
-        # formatted_date = current_datetime.strftime('%Y-%m-%d')
         if os.path.exists(doubles_log_file):
             with open(doubles_log_file, 'r') as file:
                 file_doubles = file.read()
@@ -175,12 +156,25 @@ def main():
                     )
 
         send_email(body=message_mail_send + all_done_mail)  # высылка письма на почту
+
+        if os.path.isfile(doubles_log_file):  # удаление файла с дублями чтобы не дополнял его
+            try:
+                os.remove(doubles_log_file)
+            except Exception as e:  # Общее исключение для всех ошибок
+                print(f"Ошибка при удалении файла: {e}")
+            except PermissionError as pe:  # Исключение при недостатке прав
+                print(f"Недостаточно прав для удаления файла: {pe}")
+            except IsADirectoryError as ide:  # Исключение при попытке удалить директорию
+                print(f"Путь указывает на каталог: {ide}")
+            except FileNotFoundError as fe:  # Исключение при несуществующем файле
+                print(f"Файл не найден: {fe}")
+            except OSError as oe:  # Общее исключение для операционных систем
+                print(f"Ошибка операционной системы: {oe}")
+
         print(all_done)
         update_system_title(f'☑️ Цикл загрузок завершен\n\n\n')
         tg_send_notifications_images(captions=all_done,
                                      images=image_read_from_db('done'))
-
-    # sys.exit(0)  # выход
 
 
 if __name__ == '__main__':
