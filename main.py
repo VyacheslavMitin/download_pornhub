@@ -22,7 +22,7 @@ from configs import PATH, WEB_SERVER, PLATFORM, doubles_log_file
 from system import update_system_title, check_all
 from mail_sending import send_email
 
-__version__ = '8.6'
+__version__ = '8.8'
 
 
 def info_platform():

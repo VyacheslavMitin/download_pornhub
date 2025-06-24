@@ -5,6 +5,11 @@ import glob
 dir_names = ('honey-sasha',)
 file_names = (
     'JOI. Instructions For Jerking Off. Do What I Tell You And You Will Definitely Cum [66f7eee74759b].mp4',
+    'Kisankanna [ph5f42be50225fe].mp4',
+    'Belle-mére en bas résille suce et se fait baiser son énorme cul chez moi! [ph5f4a44d33ab18].mp4',
+    'belle-mère Française laisse son fils puceaux lui baiser son gros cul. [ph5f54cbba250ed].mp4',
+    'Une gameuse joue, suce une bite et se fait prendre par derriere ! [ph5e36fbbfd4402].mp4',
+    'Je baise le gros cul de ma Belle Mere et film! [ph5e6e4d053669f].mp4',
 )
 file_masks = (
     '._*',
@@ -13,7 +18,13 @@ file_masks = (
 
 def deleting_files_for_list():
     """Функция удаления файлов по списку имен"""
-    current_directory = os.path.basename(os.getcwd())  # получение имени текущего каталога
+    # current_directory = os.path.basename(os.getcwd())  # получение имени текущего каталога
+    current_directory = ''
+    try:
+        current_directory = os.path.basename(os.getcwd())
+    except FileNotFoundError as fe:  # Исключение при несуществующем файле
+        print(f"Каталог не найден: {fe}")
+
     if current_directory in dir_names:
         for file in file_names:
             if os.path.isfile(file):
@@ -37,7 +48,12 @@ def deleting_files_for_list():
 
 def deleting_files_for_mask():
     """Функция удаления файлов по маске"""
-    current_directory = os.path.abspath(os.getcwd())
+    # current_directory = os.path.abspath(os.getcwd())
+    current_directory = ''
+    try:
+        current_directory = os.path.basename(os.getcwd())
+    except FileNotFoundError as fe:  # Исключение при несуществующем файле
+        print(f"Каталог не найден: {fe}")
 
     glob_files = []
     for el in file_masks:

@@ -92,10 +92,11 @@ def starting_download() -> None:
                                               f" модель {model.upper()},"
                                               f" попытка {attempt} {SEPARATOR_START}\n"
                                               )
-
+        # Отправка уведомления в ТГ о начале загрузки модели
         message_start_model_download_send = (f"🟢 Началась загрузка {progress}\n"
                                              f"{now_time}\n"
-                                             f"Модель <a href='{WEB_SERVER}/{model}/{NAME_HTML_MODEL}'>{model.upper()}"
+                                             # f"Модель <a href='{WEB_SERVER}/{model}/{NAME_HTML_MODEL}'>{model.upper()}"
+                                             f"Модель <a href='{link}videos'>{model.upper()}"
                                              f"</a>\n"
                                              # f"Модель {model.upper()}\n"
                                              f"Попытка {attempt}\n"
@@ -154,13 +155,13 @@ def starting_download() -> None:
         print(message_finish_model_download)
 
         # Запись HTML файла с описанием
-        write_html_model(
-            path=path,
-            name=model,
-            link=link,
-            now_time=now_time,
-            attempt=attempt,
-                         )
+        # write_html_model(
+        #     path=path,
+        #     name=model,
+        #     link=link,
+        #     now_time=now_time,
+        #     attempt=attempt,
+        #                  )
 
 
 if __name__ == '__main__':
