@@ -23,7 +23,7 @@ def return_platform() -> str:
             platform = 'mac'
         case s if s.startswith('Keenetic_'):
             platform = 'wifi_router'
-        case s if s.endswitch('-PC'):
+        case s if s.endswith('-PC'):
             platform = 'win-pc'
     return platform
 

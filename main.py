@@ -16,13 +16,13 @@ import time
 
 from downloader import starting_download
 from telegram_notifications import tg_send_notifications_images, tg_send_notifications_message
-from write_html import write_html_index, models_list_html
+from write_html import write_html_index, models_list_html, models_list_html2
 from disk_usage import difference_used_sizes, get_directory_size, human_read_format, disk_usage_all_info
 from configs import PATH, WEB_SERVER, PLATFORM, doubles_log_file
 from system import update_system_title, check_all
 from mail_sending import send_email
 
-__version__ = '8.8'
+__version__ = '8.9'
 
 
 def info_platform():
@@ -104,8 +104,10 @@ def main():
                           f'Количество моделей для загрузки: {len(prioritized_model_shuffle):}\n\n'
                           )
     message_models_send = (
-        f'<a href="{WEB_SERVER}">Список моделей для загрузки:</a>\n\n'
-        f'{models_list_html()}'
+        # f'<a href="{WEB_SERVER}">Список моделей для загрузки:</a>\n\n'
+        # f'{models_list_html()}'
+        f'<a href="https://www.pornhub.org">Список моделей для загрузки:</a>\n\n'
+        f'{models_list_html2()}'
     )
     # Отправка электронного письма
     message_mail_send = (f'💦 Загрузка роликов с PH'.upper() + '\n' +

@@ -3,7 +3,7 @@ import os
 import time
 
 from configs import PATH, WEB_SERVER
-from dictionary_processing import prioritized_model_shuffle
+from dictionary_processing import prioritized_model_shuffle, dict_link
 # from disk_usage import get_directory_size
 
 NAME_HTML_MODEL = '+info.html'
@@ -17,6 +17,19 @@ def models_list_html() -> str:
     for item in prioritized_model_shuffle:
         count += 1
         model_string = f'{count:2} ~ <a href="{WEB_SERVER}/{item}/{NAME_HTML_MODEL}">{item}</a>'
+        models_strings += model_string + '\n'
+    return models_strings
+
+
+def models_list_html2() -> str:
+    """Функция подготовки текстового массива с моделями и их нумерацией"""
+    count = 0  # вывод списка моделей построчно с указанием номера в списке очередности
+    models_strings = ''
+    for item in prioritized_model_shuffle:
+        link = dict_link.get(item)
+        count += 1
+        # model_string = f'{count:2} ~ <a href="{WEB_SERVER}/{item}/{NAME_HTML_MODEL}">{item}</a>'
+        model_string = f'{count:2} ~ <a href="{link}">{item}</a>'
         models_strings += model_string + '\n'
     return models_strings
 
@@ -119,4 +132,5 @@ def write_html_model(path, name, link, now_time, attempt):
 
 
 if __name__ == '__main__':
-    write_html_index()
+    # write_html_index()
+    print(models_list_html())
