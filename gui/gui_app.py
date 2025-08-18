@@ -1,35 +1,34 @@
 import sys
 from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout, QWidget, QHBoxLayout
 
-from gui_working_catalogs import open_catalog
-# print(DICT_)
-
-from test_dict import test_dict
+from gui_working_catalogs import open_catalog, dict_for_buttons
+DICT_ = dict_for_buttons()
+# from test_dict import test_dict
+# DICT_ = test_dict
 
 # Создание приложения
 app = QApplication(sys.argv)
 
 # Создание главного окна
 central_widget = QWidget()
-central_widget.setWindowTitle("интерфейс PH каталогов")
+central_widget.setWindowTitle("Интерфейс PH каталогов")
 central_widget.setGeometry(200, 200, 300, 100)
 
 # Создание макета и добавление кнопки в него
-layout = QHBoxLayout()
-# layout = QVBoxLayout()
+layout = QVBoxLayout()
 
-for i in range(3):  # Создаем три колонки
-    column = QVBoxLayout()  # Вертикальный контейнер для каждой колонки
+def open_catalog_values(key_):
+    path_ = DICT_.get(key_)[0]
+    open_catalog(path_)
+    # return path_
 
-    for j in range(5):
-        button = QPushButton(f"Кнопка {j + (i * 5)}")  # Создаем кнопку и добавляем ее в вертикальный контейнер
-        column.addWidget(button)
+opn_cat = lambda path: open_catalog_values(path)
 
-    layout.addLayout(column)  # Добавляем колонки в основной горизонтальный контейнер
-
-for key, values in test_dict.items():
-    button = QPushButton(f"{key} ({values[1]})")
-    button.clicked.connect(lambda checked, name=key: open_catalog(values[0]))
+for key, value in DICT_.items():
+    button = QPushButton(f"{key} ({value[1]})")  # имя кнопки вида 'model (10,5 ГБ)'
+    # button.clicked.connect(lambda checked, name=values: open_catalog_values(key_=key))
+    button.clicked.connect(lambda checked, path=key: opn_cat(path))
+    # button.clicked(open_catalog_values(key_=key))
     layout.addWidget(button)
 
 
