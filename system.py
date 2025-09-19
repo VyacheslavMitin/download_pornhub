@@ -13,13 +13,13 @@ def check_apps():
     print("Проверка на доступ к требуемым программам\n".upper())
     for app in REQUIRED_APPS:
         if PLATFORM == 'win-pc':
-            if os.system(f'where {app}') is True:
+            if os.system(f'where {app}'):
                 print(f"Приложение '{app}' не установлено!")
                 sys.exit(1)
             else:
                 print(f"Приложение '{app}' установлено")
         else:
-            if os.system(f'which {app}') is True:
+            if os.system(f'which {app}'):
                 print(f"Приложение '{app}' не установлено!")
                 sys.exit(1)
             else:

@@ -2,7 +2,7 @@
 import os
 import random
 
-from configs import doubles_log_file
+from configs import doubles_log_file, doubles_log_dir
 from telegram_notifications import tg_send_notifications_message, tg_send_notifications_images
 from database_module import avatar_read_from_bd, image_read_from_db, update_attempts
 
@@ -10,6 +10,10 @@ from database_module import avatar_read_from_bd, image_read_from_db, update_atte
 def check_doubles(path_to_model):
     """Модуль ддя поиска дублей роликов в каталогах по коду [ID]"""
     list1 = []
+
+    if not os.path.isdir(os.path.normpath(doubles_log_dir)):
+        # print('Создаем временный каталог для файлов\n')
+        os.makedirs(os.path.normpath(doubles_log_dir), exist_ok=True)  # создание каталога для дублей
 
     for obj in os.listdir(path_to_model):
         # print(obj)

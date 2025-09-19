@@ -21,6 +21,8 @@ def return_platform() -> str:
     match hostname:
         case s if s.startswith('Mac-'):
             platform = 'mac'
+        case s if s.startswith('MacBook-'):
+            platform = 'mac'
         case s if s.startswith('Keenetic_'):
             platform = 'wifi_router'
         case s if s.endswith('-PC'):

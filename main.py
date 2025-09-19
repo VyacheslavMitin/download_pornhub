@@ -22,7 +22,7 @@ from configs import PATH, WEB_SERVER, PLATFORM, doubles_log_file
 from system import update_system_title, check_all
 from mail_sending import send_email
 
-__version__ = '8.9'
+__version__ = '8.10'
 
 
 def info_platform():
@@ -33,7 +33,7 @@ def info_platform():
         case 'darwin':
             return 'Apple macOS'
         case 'linux':
-            return 'Linux'
+            return 'GNU/Linux'
         case _:
             return 'Other'
 
