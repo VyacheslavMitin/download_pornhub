@@ -10,6 +10,15 @@ abs_path = os.path.abspath(os.curdir)
 config = configparser.ConfigParser()
 config.read('config.ini')
 
+SYS_DIR = config.get('SETTINGS',
+                    'sys_dir')
+
+MODELS_DB = config.get('SETTINGS',
+                    'models')
+
+MODELS_TEST_DB = config.get('SETTINGS',
+                    'models_test')
+
 WEB_SERVER = config.get('SETTINGS',
                         'web_server')
 
@@ -44,26 +53,31 @@ def return_paths() -> tuple:
             path = config.get('SETTINGS',  # получение из конфига пути к каталогу для записи файлов
                               'path_mac')
             # Путь к базе данных
-            database_models = config.get('SETTINGS',  # получение из конфига пути к каталогу для записи файлов
-                                         'path_database_for_mac')
+            # database_models = config.get('SETTINGS',  # получение из конфига пути к каталогу для записи файлов
+            #                              'path_database_for_mac')
+            database_models = f'{path}{os.sep}{SYS_DIR}{os.sep}{MODELS_DB}'
+            database_models_test = f'{path}{os.sep}{SYS_DIR}{os.sep}{MODELS_TEST_DB}'
         case 'wifi_router':
             # Путь к каталогу для хранения видео
             path = config.get('SETTINGS',  # получение из конфига пути к каталогу для записи файлов
                               'path_keenetic')
             # Путь к базе данных
-            database_models = os.path.join(abs_path, 'models.db')
+            # TODO переделать путь по роутеру
+            database_models = os.path.join(abs_path,
+                                           'models.db')
         case 'win-pc':
             # Путь к каталогу для хранения видео
             path = config.get('SETTINGS',  # получение из конфига пути к каталогу для записи файлов
                               'path_win')
             # Путь к базе данных
+            # TODO переделать путь по винде
             database_models = config.get('SETTINGS',  # получение из конфига пути к каталогу для записи файлов
                                          'path_database_for_win')
 
-    return path, database_models
+    return path, database_models, database_models_test
 
 
-PATH, DATABASE_MODELS = return_paths()
+PATH, DATABASE_MODELS, DATABASE_MODELS_TEST = return_paths()
 # Путь к каталогу для временных файлов в каталоге программы, пока не используется
 temp_dir = os.path.join(abs_path, 'tmp/')
 
@@ -75,8 +89,8 @@ doubles_log_dir = os.path.join(abs_path, 'doubles/')  # путь к катало
 doubles_log_file = f'{doubles_log_dir}{formatted_date}.txt'
 
 if __name__ == '__main__':
+    print(SYS_DIR)
     print(WEB_SERVER)
-    # print(type(WEB_SERVER))
     print(f"Платформа: '{PLATFORM}'")
     print(f"Путь к каталогу для сохранения данных '{PATH}'")
     print(f"Путь к базе данных '{DATABASE_MODELS}'")

@@ -2,7 +2,7 @@
 import os
 import time
 
-from configs import PATH, WEB_SERVER
+from configs import PATH, WEB_SERVER, SYS_DIR
 from dictionary_processing import prioritized_model_shuffle, dict_link
 # from disk_usage import get_directory_size
 
@@ -36,7 +36,8 @@ def models_list_html2() -> str:
 
 def write_html_index(root=PATH):
     """Функция создания HTML index.html"""
-    file = open(f"{root}{os.sep}index.html", 'w')
+    path_to_index_html = f'{root}{os.sep}{SYS_DIR}{os.sep}index.html'
+    file = open(path_to_index_html, 'w')
 
     html = f"""<html>
     <meta http-equiv="content-type" content="text/html; charset=utf-8">

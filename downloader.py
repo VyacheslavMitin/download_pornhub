@@ -95,6 +95,7 @@ def starting_download() -> None:
         # Отправка уведомления в ТГ о начале загрузки модели
         message_start_model_download_send = (f"🟢 Началась загрузка {progress}\n"
                                              f"{now_time}\n"
+                                             # f"{time.strftime("%d.%m.%Yг., %H:%M:%S")}\n"
                                              # f"Модель <a href='{WEB_SERVER}/{model}/{NAME_HTML_MODEL}'>{model.upper()}"
                                              f"Модель <a href='{link}videos'>{model.upper()}"
                                              f"</a>\n"

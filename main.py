@@ -22,7 +22,7 @@ from configs import PATH, WEB_SERVER, PLATFORM, doubles_log_file
 from system import update_system_title, check_all
 from mail_sending import send_email
 
-__version__ = '8.10'
+__version__ = '8.11'
 
 
 def info_platform():
@@ -64,9 +64,11 @@ def main():
 
         for i in range(2):
             if PLATFORM == 'win-pc':
-                os.system('cls')
+                # os.system('cls')
+                pass
             else:
-                os.system('clear')
+                # os.system('clear')
+                pass
 
     except IndexError:  # обработка отсутствия передаваемого параметра
         pass
@@ -110,15 +112,16 @@ def main():
         f'{models_list_html2()}'
     )
     # Отправка электронного письма
-    message_mail_send = (f'💦 Загрузка роликов с PH'.upper() + '\n' +
-                           f'{time.strftime("%d.%m.%Yг., %H:%M:%S")}\n' +  # текущее время
-                           f'{disk_usage_all_info()}\n'  # определение свободного места
-                           f'Платформа: {info_platform()}\n'
-                           f'Версия Python: {sys.version[:7]}\n' +  # [:-35]
-                           f'Версия программы: {__version__}\n' +
-                           f'Количество моделей для загрузки: {len(prioritized_model_shuffle):}\n\n' +
-                           f'Список моделей для загрузки:'.upper() + '\n' +
-                           f'{models_list()}\n'
+    message_mail_send = (
+        f'💦 Загрузка роликов с PH'.upper() + '\n' +
+        f'{time.strftime("%d.%m.%Yг., %H:%M:%S")}\n' +  # текущее время
+        f'{disk_usage_all_info()}\n'  # определение свободного места
+        f'Платформа: {info_platform()}\n'
+        f'Версия Python: {sys.version[:7]}\n' +  # [:-35]
+        f'Версия программы: {__version__}\n' +
+        f'Количество моделей для загрузки: {len(prioritized_model_shuffle):}\n\n' +
+        f'Список моделей для загрузки:'.upper() + '\n' +
+        f'{models_list()}\n'
                            )
 
     while True:
