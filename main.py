@@ -21,8 +21,10 @@ from disk_usage import difference_used_sizes, get_directory_size, human_read_for
 from configs import PATH, WEB_SERVER, PLATFORM, doubles_log_file
 from system import update_system_title, check_all
 from mail_sending import send_email
+from zip_db import zip_and_move
 
-__version__ = '8.11'
+
+__version__ = '8.12'
 
 
 def info_platform():
@@ -72,6 +74,8 @@ def main():
 
     except IndexError:  # обработка отсутствия передаваемого параметра
         pass
+
+    zip_and_move(verbose=False)  # создание архива с базами данных и копирование в каталог скрипта
 
     from dictionary_processing import prioritized_model_shuffle
 

@@ -5,7 +5,7 @@ import sqlite3
 import os
 import sys
 
-from configs import DATABASE_MODELS
+from configs import DATABASE_MODELS, DATABASE_MODELS_TEST
 # TODO сделать общую точка входа в базу данных
 
 
@@ -68,6 +68,8 @@ def make_db():
 def read_db(priority='all',  # not_all
             mixed=True):
     """Функция чтения данных из базы данных"""
+    from system import check_all
+    check_all()
     connect = sqlite3.connect(DATABASE_MODELS)
     cursor = connect.cursor()
     # Получение моделей с приоритетами 1 и 2

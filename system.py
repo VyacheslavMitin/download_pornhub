@@ -2,7 +2,7 @@
 import sys
 import os
 
-from configs import PATH, DATABASE_MODELS, PLATFORM, doubles_log_dir
+from configs import PATH, DATABASE_MODELS, DATABASE_MODELS_TEST, PLATFORM, doubles_log_dir
 
 REQUIRED_APPS = ('yt-dlp', 'ffmpeg', 'python3.11')
 REQUIRED_MODULES = ('telegram-send', 'python-telegram-bot', 'beautifulsoup4', 'requests')
@@ -32,20 +32,23 @@ def check_paths():
     """Функция проверки доступности путей"""
     print("Проверка на доступ к требуемым путям\n".upper())
 
-    list_pats_for_check = (PATH, doubles_log_dir)
+    list_paths_for_check = (PATH, doubles_log_dir)
 
-    for i in list_pats_for_check:
-        if os.path.isdir(i) is not True:
+    for i in list_paths_for_check:
+        if not os.path.isdir(i):
             print(f"Путь к '{i}' не доступен, выход с ошибкой!")
             sys.exit(1)
         else:
             print(f"Путь к '{i}' доступен")
 
-    if os.path.isfile(DATABASE_MODELS) is not True:
-        print(f"Путь к '{DATABASE_MODELS}' не доступен, выход с ошибкой!")
-        sys.exit(1)
-    else:
-        print(f"Путь к '{DATABASE_MODELS}' доступен")
+    list_files_for_check = (DATABASE_MODELS, DATABASE_MODELS_TEST)
+
+    for y in list_files_for_check:
+        if not os.path.isfile(y):
+            print(f"Путь к '{y}' не доступен, выход с ошибкой!")
+            sys.exit(1)
+        else:
+            print(f"Путь к '{y}' доступен")
 
     print("Проверка на доступ к требуемым путям пройдена\n".upper())
 

@@ -89,8 +89,8 @@ doubles_log_dir = os.path.join(abs_path, 'doubles/')  # путь к катало
 doubles_log_file = f'{doubles_log_dir}{formatted_date}.txt'
 
 if __name__ == '__main__':
-    print(SYS_DIR)
-    print(WEB_SERVER)
+    print(f"Путь к каталогу с системными файлами: '{SYS_DIR}'")
+    print(f"Веб сервер: '{WEB_SERVER}'")
     print(f"Платформа: '{PLATFORM}'")
     print(f"Путь к каталогу для сохранения данных '{PATH}'")
     print(f"Путь к базе данных '{DATABASE_MODELS}'")
