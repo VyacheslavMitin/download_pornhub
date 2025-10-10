@@ -68,8 +68,6 @@ def make_db():
 def read_db(priority='all',  # not_all
             mixed=True):
     """Функция чтения данных из базы данных"""
-    from system import check_all
-    check_all()
     connect = sqlite3.connect(DATABASE_MODELS)
     cursor = connect.cursor()
     # Получение моделей с приоритетами 1 и 2
@@ -396,6 +394,8 @@ def db_menu():
 
 
 if __name__ == '__main__':
+    from system import check_all
+    check_all()
     print("Работа с базой данных для модуля DownloadPH")
     from main import __version__
     print(f"Версия программы {__version__}\n")
