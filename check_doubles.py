@@ -110,6 +110,7 @@ def check_doubles(path_to_model):
 if __name__ == '__main__':
     # model = 'adaline-star'
     # check_doubles(path_to_model=f'/Volumes/Seagate_2TB/backup/PornHub/{model}')
+    print("Запущена проверка дублей...")
     from dictionary_processing import dict_path
     for obj in dict_path:
         check_doubles(path_to_model=f'/Volumes/Seagate_2TB/backup/PornHub/{obj}')

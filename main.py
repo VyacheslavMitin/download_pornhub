@@ -24,7 +24,7 @@ from mail_sending import send_email
 from zip_db import zip_and_move
 
 
-__version__ = '8.12'
+__version__ = '8.13'
 
 
 def info_platform():
