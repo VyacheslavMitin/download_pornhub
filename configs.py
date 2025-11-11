@@ -34,6 +34,8 @@ def return_platform() -> str:
             platform = 'mac'
         case s if s.startswith('Keenetic_'):
             platform = 'wifi_router'
+        case s if s.startswith('Netcraze_'):
+            platform = 'wifi_router'
         case s if s.endswith('-PC'):
             platform = 'win-pc'
     return platform
@@ -62,9 +64,8 @@ def return_paths() -> tuple:
             path = config.get('SETTINGS',  # получение из конфига пути к каталогу для записи файлов
                               'path_keenetic')
             # Путь к базе данных
-            # TODO переделать путь по роутеру
-            database_models = os.path.join(abs_path,
-                                           'models.db')
+            database_models = f'{path}{os.sep}{SYS_DIR}{os.sep}{MODELS_DB}'
+            database_models_test = f'{path}{os.sep}{SYS_DIR}{os.sep}{MODELS_TEST_DB}'
         case 'win-pc':
             # Путь к каталогу для хранения видео
             path = config.get('SETTINGS',  # получение из конфига пути к каталогу для записи файлов

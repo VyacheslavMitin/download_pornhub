@@ -22,9 +22,10 @@ from configs import PATH, WEB_SERVER, PLATFORM, doubles_log_file
 from system import update_system_title, check_all
 from mail_sending import send_email
 from zip_db import zip_and_move
+from check_versions import version_info_yt_dlp
 
 
-__version__ = '8.13'
+__version__ = '8.14'
 
 
 def info_platform():
@@ -95,6 +96,7 @@ def main():
                            f'{disk_usage_all_info()}\n'  # определение свободного места
                            f'Платформа: {info_platform()}\n'
                            f'Версия Python: {sys.version[:7]}\n' +  # [:-35]
+                           f'Версия YT-dlp: {version_info_yt_dlp}\n' +
                            f'Версия программы: {__version__}\n' +
                            f'Количество моделей для загрузки: {len(prioritized_model_shuffle):}\n\n' +
                            f'Список моделей для загрузки:'.upper() + '\n' +
@@ -106,6 +108,7 @@ def main():
                           f'{disk_usage_all_info()}\n'  # определение свободного места
                           f'Платформа: {info_platform()}\n'
                           f'Версия Python: {sys.version[:7]}\n' +  # [:-35]
+                          f'Версия YT-dlp: {version_info_yt_dlp}\n' +
                           f'Версия программы: {__version__}\n'
                           f'Количество моделей для загрузки: {len(prioritized_model_shuffle):}\n\n'
                           )
