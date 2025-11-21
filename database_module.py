@@ -114,8 +114,8 @@ def insert_new_model(name=None, role='model', priority=1):
             if name:
                 break
         while True:  # получение от пользователя строки с типом модели
-            role_tuple = ('model', 'pornstar',)
-            role = input("Это 'model' или 'pornstar' (по умолчанию model):  ").lower()
+            role_tuple = ('model', 'pornstar', 'channels',)
+            role = input("Это 'model', 'pornstar' или 'channels', (по умолчанию 'model'):  ").lower()
             if role not in role_tuple and role != '':
                 print(f'Необходимо ввести правильную роль из {role_tuple}!')
             elif role == '':

@@ -22,11 +22,12 @@ from delete_files import deleting_files_for_list, deleting_files_for_mask
 
 COMMAND = "yt-dlp"  # команда для вызова youtube-dl или аналогов, должна находится в PATH
 COMMAND_OPTIONS = [  # параметры для yt-dlp
+    # '-vU', # полный вывод информации работы yt-dlp
     '--abort-on-unavailable-fragment',  # отмена загрузки если фрагмент не доступен
     # yt-dlp --proxy socks5://proxy.example.com:1080
-    # '--proxy', "socks5://127.0.0.1:9150/",  # использование прокси от TOR
+    # '--proxy', "socks5://127.0.0.1:9150/",  # использование прокси от локального TOR
     '-P', f'temp:{temp_dir}',  # использование временной папки на локальной машине
-    '--no-mtime',
+    '--no-mtime',  # не записывать в файл дату из сайта, а брать текущее системное время
     # '--quiet',
     # '--progress',
 ]
@@ -34,8 +35,9 @@ COMMAND_OPTIONS = [  # параметры для yt-dlp
 #     COMMAND_OPTIONS.append('--proxy')
 #     COMMAND_OPTIONS.append("socks5://127.0.0.1:9150/")
 
-if COMMAND_OPTIONS_ADD:
-    COMMAND_OPTIONS = COMMAND_OPTIONS + COMMAND_OPTIONS_ADD
+# Работа с куками, сейчас бесполезна на PH
+# if COMMAND_OPTIONS_ADD:
+#     COMMAND_OPTIONS = COMMAND_OPTIONS + COMMAND_OPTIONS_ADD
 
 SEPARATOR_START = '🔶' * 5
 SEPARATOR_END = '🔷' * 5

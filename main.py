@@ -25,7 +25,7 @@ from zip_db import zip_and_move
 from check_versions import version_info_yt_dlp
 
 
-__version__ = '8.14'
+__version__ = '8.15'
 
 
 def info_platform():
